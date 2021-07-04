@@ -1,9 +1,8 @@
 import { useState } from "react";
-import useGetDate from "./useGetDate";
-
-const useGetValueDay = () => {
-	const {today, nextWeek, tommorow, nextWeekend} = useGetDate();
+import useGetDate from "./useGetDate"
+const useGetDay = () => {
 	const [isSelectDayOpen, setIsSelectDayOpen] = useState(false);
+	const {today, nextWeek, tommorow, nextWeekend} = useGetDate();
 	const [date, setDate] = useState(today());
 	const [isDay, setIsDay] = useState('Today');
 	const [isDayClass, setIsDayClass] = useState('fas fa-calendar-week');
@@ -20,16 +19,22 @@ const useGetValueDay = () => {
 		setDate(date);
 		setIsSelectDayOpen(false);
 	}
+	function handlerDayOpen(val){
+		setIsSelectDayOpen(val);
+	}
+	function handlerSetDate(day){
+		setDate(day);
+	}
 	return {
+		handlerDayOpen,
+		handlerSelectValueDay,
 		date,
 		isDayClass,
 		isSelectDayOpen,
+		handlerSetDate,
 		isDay,
 		isSelectDay,
-		setIsSelectDayOpen: (val) => setIsSelectDayOpen(val),
-		setDate: (val) => setDate(val),
-		handlerSelectValueDay
 	}
 }
  
-export default useGetValueDay;
+export default useGetDay;

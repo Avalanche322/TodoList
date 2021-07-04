@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {auth} from '../firebase'
+import firebase from '../firebase'
 
 const AuthContext = React.createContext()
 
@@ -12,7 +12,7 @@ export function AuthProvider ({children}){
 	const [loading, setLoading] = useState(true);
 
 	function singup(email,password,name,img){
-		return (auth.createUserWithEmailAndPassword(email, password)
+		return (firebase.auth().createUserWithEmailAndPassword(email, password)
 		.then((u) => {
 			return u.user.updateProfile({
 				displayName: name,
@@ -21,13 +21,13 @@ export function AuthProvider ({children}){
 		}))		
 	}
 	function singin(email,password){
-		return auth.signInWithEmailAndPassword(email, password)
+		return firebase.auth().signInWithEmailAndPassword(email, password)
 	}
 	function logout() {
-    return auth.signOut()
+    return firebase.auth().signOut()
   }
 	useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {		 
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {		 
 			setCurrentUser(user);
 			setLoading(false);
     })

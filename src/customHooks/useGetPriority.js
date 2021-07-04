@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 const useGetPriority = () => {
 	const [isSelectPriorityOpen, setIsSelectPriorityOpen] = useState(false);
 	const [isPriorityClass, setIsPriorityClass] = useState('');
@@ -10,19 +9,21 @@ const useGetPriority = () => {
 		{id:3, priority:3, classValue:"priority-3"},
 		{id:4, priority:4, classValue:""}
 	])
+	function handlerPriorityOpen(val){
+		setIsSelectPriorityOpen(val)
+	}
 	function handlerSelectValuePriority(classValue, priority){
 		setIsPriorityClass(classValue);
 		setPriority(priority);
-		setIsSelectPriorityOpen(false);
+		handlerPriorityOpen(false);
 	}
-
 	return {
-		isSelectPriorityOpen,
-		isPriorityClass,
+		handlerSelectValuePriority,
 		priority,
 		isSelecPriority,
-		setIsSelectPriorityOpen: (val) => setIsSelectPriorityOpen(val),
-		handlerSelectValuePriority
+		isPriorityClass,
+		handlerPriorityOpen,
+		isSelectPriorityOpen,
 	}
 }
  

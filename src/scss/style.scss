@@ -733,7 +733,7 @@ body{
 		background: $shadowOfDarkBlue;
 		color: $shadowOfLightBlue;
 		padding: 10px 10px 50px 10px;
-		&:focus + .home-add-task-form__bottom, &:focus{
+		&:focus + .main-add-task-form__bottom, &:focus{
 			border-color: $lightestBlue;
 		}
 	}
@@ -1147,7 +1147,7 @@ body{
 		background: $shadowOfDarkBlue;
 		color: $shadowOfLightBlue;
 		padding: 10px 10px 50px 10px;
-		&:focus + .home-add-task-form__bottom, &:focus{
+		&:focus + .main-add-task-form__bottom, &:focus{
 			border-color: $lightestBlue;
 		}
 	}

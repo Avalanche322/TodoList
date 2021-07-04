@@ -736,7 +736,7 @@ body {
   color: #EEFBFB;
   padding: 10px 10px 50px 10px;
 }
-.main-add-task-form__text:focus + .home-add-task-form__bottom, .main-add-task-form__text:focus {
+.main-add-task-form__text:focus + .main-add-task-form__bottom, .main-add-task-form__text:focus {
   border-color: #4DA8DA;
 }
 .main-add-task-form__bottom {
@@ -1136,7 +1136,7 @@ body {
   color: #EEFBFB;
   padding: 10px 10px 50px 10px;
 }
-.tasks-add-task-form__text:focus + .home-add-task-form__bottom, .tasks-add-task-form__text:focus {
+.tasks-add-task-form__text:focus + .main-add-task-form__bottom, .tasks-add-task-form__text:focus {
   border-color: #4DA8DA;
 }
 .tasks-add-task-form__bottom {
