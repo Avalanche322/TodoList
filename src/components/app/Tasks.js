@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ContextMenuTrigger } from "react-contextmenu";
 import CustomContexMenu from "../CustomContexMenu";
-import useCompletedTask from "../../customHooks/useCompletedTask";
+import useCompletedTask from "../../customHooks/API/useCompletedTask";
 const Tasks = ({tasks}) => {
 	const {completedTask} = useCompletedTask();
 	const [id, setId] = useState(); // this id for context menu

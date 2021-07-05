@@ -1,11 +1,14 @@
-import logo from '../img/logo.png'
 import { useAuth } from '../contexts/AuthContext';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import logo from '../img/logo.png'
+import googleIcon from '../img/google-icon.png';
+import apppleIcon from '../img/apple-icon.png';
+import facebookleIcon from '../img/facebook-icon.png';
 
 const SingIn = () => {
-	const {singin} = useAuth();
+	const {singin,singInWithGoogle,singInWithFacebook} = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
@@ -20,9 +23,26 @@ const SingIn = () => {
 			await singin(email,password);
 			history.push('/');
 		} catch(e){
-			console.log(e.message);
 			setLoading(false);
 			setError('Email or password incorrect')
+		}
+	}
+	async function handleSubmitWithGoogle(){
+		try{
+			setLoading(true);
+			await singInWithGoogle();
+			history.push('/');
+		} catch(e){
+			setLoading(false);
+		}
+	}
+	async function handleSubmitWithFacebook(){
+		try{
+			setLoading(true);
+			await singInWithFacebook();
+			history.push('/');
+		} catch(e){
+			setLoading(false);
 		}
 	}
 	return (
@@ -34,6 +54,17 @@ const SingIn = () => {
 					</div>
 					<h2 className="sing-in__title title">Sing In</h2>
 					{error && <strong className="fas fa-exclamation-circle denger">{error}</strong>}
+				</div>
+				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithGoogle.bind()} disabled={loading}>
+						<img className="sing-in__img-social" src={googleIcon} alt="Google Icon" />
+						Continue with Google
+				</button>
+				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithFacebook.bind()} disabled={loading}>
+						<img className="sing-in__img-social" src={facebookleIcon} alt="Facebook Icon" />
+						Continue with Fecebook
+				</button>
+				<div className="sing-in__or">
+					<span>OR</span>
 				</div>
 				<form onSubmit={handleSubmit} className="sing-in__form">
 					<div className="sing-in__group">

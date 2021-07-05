@@ -1,7 +1,7 @@
 import { ContextMenu, MenuItem } from "react-contextmenu";
 import useGetPriority from "../customHooks/useGetPriority";
 import useGetDay from "../customHooks/useGetDay";
-import useCompletedTask from "../customHooks/useCompletedTask";
+import useCompletedTask from "../customHooks/API/useCompletedTask";
 import firebase from "../firebase";
 import { useAuth } from '../contexts/AuthContext';
 

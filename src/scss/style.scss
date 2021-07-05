@@ -375,9 +375,9 @@ body{
 		width: 40px;
 		height: 40px;
 		object-fit: cover;
-		border-radius: 100%;
 		margin-right: 10px;
 		img{
+			border-radius: 50%;
 			width: 100%;
 			height: 100%;
 		}
@@ -502,7 +502,7 @@ body{
 		}
 	}
 	&__body{
-		max-width: 400px;
+		width: 400px;
 		border-radius: 12px;
 		background: $shadowOfDarkBlue;
 		padding: 20px;
@@ -534,6 +534,29 @@ body{
 		font-weight: 500;
 		font-size: 16px;
 		//background: $lighterBlue;
+	}
+	&__btn-social{
+		width: 100%;
+		color: $darkBlue;
+		background: $shadowOfLightBlue;
+		margin-bottom: 10px;
+	}
+	&__img-social{
+		margin-right: 10px;
+	}
+	&__or{
+		text-align: center;
+		border-bottom: 1px solid $lighterBlue;
+		position: relative;
+		margin: 20px 0px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		span{
+			padding: 0px 15px;
+			background: $shadowOfDarkBlue;
+			position: absolute;
+		}
 	}
 	&__link-sing-in,&__link-sing-up{
 		width: 100%;
@@ -950,420 +973,6 @@ body{
 	}
 }
 .main-day-of{
-	&__logo{
-		font-size: 60px;
-		margin-bottom: 20px;
-	}
-	&__text{
-		font-size: 16px;
-	}
-	&__sub-text{
-		font-weight: 300;
-		margin-top: 10px;
-		color: $lighterBlue;
-	}
-}
-/*======================Tasks======================*/
-.tasks{
-	width: 100%;
-	padding: 0px 30px 50px;
-	margin-top: 20px;
-	&__header{
-		position: relative;
-		border-bottom: 1px groove $lighterBlue;
-		padding-bottom: 12px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-	&__title{
-		span{
-			font-size: 24px;
-			font-weight: 500;
-		}
-		small{
-			font-weight: 300;
-			color: $lighterBlue;
-			margin-left: 8px;
-		}
-	}
-	&__task{
-		margin: 12px 0px;
-		position: relative;
-		border-bottom: 1px groove $lighterBlue;
-		padding-bottom: 12px;
-		display: flex;
-		width: 100%;
-		cursor: pointer;
-		&:last-child{
-			margin-bottom: 0px;
-		}
-	}
-	&__checkbox{
-		position: relative;
-		cursor: pointer;
-		appearance: none;
-		color: $shadowOfLightBlue;
-		width: 15px;
-		outline: none;
-		font-family: "Font Awesome 5 Free";
-		transition: 0.3s ease-out;
-		margin: 3px 10px 0px 0px;
-		&::after {
-			content: '\f111';
-			display: inline-block;
-			text-align: center;
-			font-size: 15px;
-			width: 15px;
-		}
-		&:checked::after{
-			font-weight: 900;
-			color: $lighterBlue;
-			content: '\f058'; 
-			width: 15px;
-		}
-		 &:hover::after{
-			font-weight: 900;
-			content: '\f058'; 
-			opacity: 0.5;
-			width: 15px;
-		}
-		&:active {
-			transform: scale(.6);
-		}
-	}
-	&__text{
-		user-select: none;
-		line-height: 21px;
-		word-wrap: break-word;
-		word-break: break-word;
-		max-height: 65px;
-		overflow: hidden;
-	}
-	&__add-task{
-		margin-top: 12px;
-	}
-	&__day-of{
-		height: 100%;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
-}
-.tasks-sort{
-	&__btn{
-		background: transparent;
-		color: $shadowOfLightBlue;
-		transition: all 0.3s ease;
-		padding: 5px;
-		border-radius: 4px;
-		&::before{
-			position: relative;
-			bottom: -1px;
-			font-size: 18px;
-			margin-right: 8px;
-		}
-		&:hover,&:focus{
-			background: rgba($color: $lighterBlue, $alpha: 0.5);
-		}
-	}
-	&__list{
-		position: absolute;
-		border-radius: 4px;
-		box-shadow: 0px 8px 14px 1px rgba(0,0,0,0.44);
-		min-width: 250px;
-		right: 0;
-		top: 80%;
-		background-color: $shadowOfDarkBlue;
-		z-index: 1;
-		
-		li{
-			width: 100%;
-			cursor: pointer;
-			position: relative;
-			line-height: 30px;
-			&:hover{
-				background: rgba($color: $lightestBlue, $alpha: 0.2);
-			}
-			&:before{
-				content: '';
-				position: absolute;
-				display: block;
-				width: 100%;
-				height: 100%;
-			}
-			&:first-child{
-				border-top-right-radius: 4px;
-				border-top-left-radius: 4px;
-			}
-			&:last-child{
-				border-bottom-right-radius: 4px;
-				border-bottom-left-radius: 4px;
-			}
-		}
-	}
-	&__text{
-		&:before{
-			margin-right: 10px;
-		}
-	}
-	&__item{
-		display: flex;
-		align-items: center;
-		padding: 8px 10px;
-		justify-content: space-between;
-	}
-	&__item-active{
-		background:rgba($color: $lightestBlue, $alpha: 0.2);
-	}
-}
-.tasks-add-task{
-	&__btn{
-		width: 100%;
-		text-align: left;
-		background: transparent;
-		color: $shadowOfLightBlue;
-		transition: color 0.3s ease;
-		&:hover{
-			color: $lighterBlue;
-		}
-		i{
-			margin-right: 10px;
-		}
-	}
-}
-.tasks-add-task-form{
-	&__edit{
-		position: relative;
-	}
-	&__text{
-		width: 100%;
-		resize: none;
-		line-height: 20px;
-		border-radius: 12px;
-		border: 1px solid $lighterBlue;
-		background: $shadowOfDarkBlue;
-		color: $shadowOfLightBlue;
-		padding: 10px 10px 50px 10px;
-		&:focus + .main-add-task-form__bottom, &:focus{
-			border-color: $lightestBlue;
-		}
-	}
-	&__bottom{
-		position: absolute;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-		bottom: 0;
-		left: 0;
-		background: $shadowOfDarkBlue;
-		color: $shadowOfLightBlue;
-		border: 1px solid $lighterBlue;
-		border-bottom-left-radius: 12px;
-		border-bottom-right-radius: 12px;
-		border-top: transparent;
-		padding: 10px;
-		padding-top: 0;
-	}
-	&__btn-submit,&__btn-cancel{
-		color: $shadowOfLightBlue;
-		background: transparent;
-	}
-	&__action{
-		margin-top: 12px;
-	}
-	&__group{
-		display: flex;
-		align-items: center;
-	}
-}
-.tasks-add-task-form-day{
-	&__btn{
-		background: transparent;
-		color: $shadowOfLightBlue;
-		border-radius: 8px;
-		border: 1px solid rgba($color: $lighterBlue, $alpha: 0.6);
-		padding: 8px;
-		transition: all 0.3s ease;
-		&:hover, &:focus{
-			border-color: rgba($color: $lighterBlue, $alpha: 0.5);
-			background: rgba($color: $lighterBlue, $alpha: 0.5);
-		}
-		&:before{
-			margin-right: 10px;
-		}
-	}
-	&__list{
-		position: absolute;
-		border-radius: 4px;
-		box-shadow: 0px 8px 14px 1px rgba(0,0,0,0.44);
-		min-width: 250px;
-		left: 0;
-		top: 80%;
-		background-color: $shadowOfDarkBlue;
-		z-index: 1;
-		li{
-			width: 100%;
-			cursor: pointer;
-			position: relative;
-			&:not(:first-child){
-				line-height: 30px;
-				&:hover{
-					background: rgba($color: $lightestBlue, $alpha: 0.2);
-				}
-				&:before{
-					content: '';
-					position: absolute;
-					display: block;
-					width: 100%;
-					height: 100%;
-				}
-			}
-			&:first-child{
-				line-height: 35px;
-				border-bottom: 1px solid $lighterBlue;
-				margin-bottom: 5px;
-				border-top-right-radius: 4px;
-				border-top-left-radius: 4px;
-			}
-			&:last-child{
-				border-bottom-right-radius: 4px;
-				border-bottom-left-radius: 4px;
-			}
-		}
-	}
-	&__date{
-		color: $lighterBlue;
-		float: right;
-		margin-right: 10px;
-	}
-	&__day{
-		margin-left: 10px;
-		&:before{
-			margin-right: 10px;
-		}
-	}
-	&__input{
-		background: transparent;
-		width: 100%;
-		height: 100%;
-		padding-left: 10px;
-		color: $shadowOfLightBlue;
-	}
-}
-.tasks-add-task-form-priority{
-	&__btn{
-		background: transparent;
-		color: $shadowOfLightBlue;
-		background: transparent;
-		border-radius: 8px;
-		padding: 8px;
-		transition: all 0.3s ease;
-		margin-right: 10px;
-		&:hover, &:focus{
-			background: rgba($color: $lighterBlue, $alpha: 0.5);
-		}
-	}
-	&__list{
-		position: absolute;
-		border-radius: 4px;
-		box-shadow: 0px 8px 14px 1px rgba(0,0,0,0.44);
-		min-width: 250px;
-		right: 0;
-		top: 80%;
-		background-color: $shadowOfDarkBlue;
-		z-index: 1;
-		
-		li{
-			width: 100%;
-			cursor: pointer;
-			position: relative;
-			line-height: 30px;
-			&:hover{
-				background: rgba($color: $lightestBlue, $alpha: 0.2);
-			}
-			&:before{
-				content: '';
-				position: absolute;
-				display: block;
-				width: 100%;
-				height: 100%;
-			}
-			&:first-child{
-				border-top-right-radius: 4px;
-				border-top-left-radius: 4px;
-			}
-			&:last-child{
-				border-bottom-right-radius: 4px;
-				border-bottom-left-radius: 4px;
-			}
-		}
-	}
-	&__priority{
-		&:before{
-			margin-right: 10px;
-		}
-	}
-	&__item{
-		display: flex;
-		align-items: center;
-		padding: 8px 10px;
-		justify-content: space-between;
-	}
-	&__item-active{
-		background:rgba($color: $lightestBlue, $alpha: 0.2);
-	}
-}
-.tasks-add-task-form-comment{
-	&__btn{
-		background: transparent;
-		color: $shadowOfLightBlue;
-		background: transparent;
-		border-radius: 8px;
-		padding: 8px;
-		transition: all 0.3s ease;
-		&:hover, &:focus{
-			background: rgba($color: $lighterBlue, $alpha: 0.5);
-		}
-	}
-	&__dialog{
-		position: absolute;
-		border-radius: 4px;
-		box-shadow: 0px 8px 14px 1px rgba(0,0,0,0.44);
-		min-width: 350px;
-		padding: 15px;
-		right: -5%;
-		top: 80%;
-		background-color: $shadowOfDarkBlue;
-		z-index: 1;
-	}
-	&__header{
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 10px;
-	}
-	&__title{
-		pointer-events: none;
-		font-size: 16px;
-	}
-	&__text{
-		width: 100%;
-		resize: none;
-		line-height: 20px;
-		border-radius: 4px;
-		border: 1px solid $lighterBlue;
-		background: $shadowOfDarkBlue;
-		color: $shadowOfLightBlue;
-		padding: 10px 10px 50px 10px;
-		&:focus{
-			border-color: $lightestBlue;
-		}
-	}
-}
-.tasks-day-of{
 	&__logo{
 		font-size: 60px;
 		margin-bottom: 20px;

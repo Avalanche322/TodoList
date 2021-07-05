@@ -23,6 +23,12 @@ export function AuthProvider ({children}){
 	function singin(email,password){
 		return firebase.auth().signInWithEmailAndPassword(email, password)
 	}
+	function singInWithGoogle(){
+		return firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
+	}
+	function singInWithFacebook(){
+		return firebase.auth().signInWithPopup(new firebase.auth.FacebookAuthProvider())
+	}
 	function logout() {
     return firebase.auth().signOut()
   }
@@ -39,6 +45,8 @@ export function AuthProvider ({children}){
 		currentUser,
 		singup,
 		singin,
+		singInWithGoogle,
+		singInWithFacebook,
 		logout
 	}
 

@@ -1,28 +1,18 @@
 import Tasks from "../components/app/Tasks";
 import AddTask from "../components/app/AddTask";
 import useGetDate from "../customHooks/useGetDate";
-import { useEffect, useState } from "react";
-import firebase from "../firebase";
-import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from "react";
+import useFetchTasks from "../customHooks/API/useFetchTasks";
+import useGetCountTasks from "../customHooks/useGetCountTasks";
 
 const Home = () => {
 	const {today} = useGetDate();
-	const {currentUser} = useAuth();
-	const [taskList, setTaskList] = useState();
+	const {taskListToday} = useFetchTasks();
+	const {countTaskToday} = useGetCountTasks();
 	useEffect(() => {
 		// title for page
 		document.title = "Home | TodoList"
-
-		const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
-		taskRef.on('value', (snapshot) =>{
-			const tasks = snapshot.val();
-			const taskList = [];
-			for (const id in tasks) {
-				taskList.push({id,...tasks[id]});
-			}
-			setTaskList(taskList);
-		})
-	}, [currentUser.uid])
+	}, [])
 	return (
 		<main className="main">
 			<div className="main__content container">
@@ -32,9 +22,16 @@ const Home = () => {
 						<small>{today()}</small>
 					</h1>
 				</div>
-				{taskList && <Tasks tasks={taskList}/>}
+				{taskListToday && <Tasks tasks={taskListToday}/>}
 				<AddTask/>
 			</div>
+			{!countTaskToday ? 
+				<div className="main__day-of">
+					<i className="far fa-smile main-day-of__logo"></i>
+					<p className="main-day-of__text">Enjoy your day off</p>
+				</div> 
+				: null
+			}
 		</main>
 	);
 }

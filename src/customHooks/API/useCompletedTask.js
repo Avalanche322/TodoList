@@ -1,5 +1,5 @@
-import firebase from "../firebase";
-import { useAuth } from '../contexts/AuthContext';
+import firebase from "../../firebase";
+import { useAuth } from '../../contexts/AuthContext';
 
 const useCompletedTask = () => {
 	const {currentUser} = useAuth();

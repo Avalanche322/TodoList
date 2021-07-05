@@ -24,14 +24,14 @@ const NonLandingPages  = () => {
 				</React.Suspense> 
 				}/>
 				<PrivateRoute 
-				exact path="/" 
+				exact path="/inbox" 
 				component={() => 
 				<React.Suspense fallback={ <Loader/>}>
 					<Inbox/> {/* Inbox */}
 				</React.Suspense> 
 				}/>
 				<PrivateRoute 
-				exact path="/" 
+				exact path="/settings" 
 				component={() => 
 				<React.Suspense fallback={ <Loader/>}>
 					<Settings/> {/* Settings */}

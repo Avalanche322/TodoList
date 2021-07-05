@@ -1,12 +1,15 @@
-import logo from '../img/logo.png'
 import { useAuth } from '../contexts/AuthContext';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import logo from '../img/logo.png'
 import profileImg from '../img/user2.png';
+import googleIcon from '../img/google-icon.png';
+import apppleIcon from '../img/apple-icon.png';
+import facebookleIcon from '../img/facebook-icon.png';
 
 const SingUp = () => {
-	const {singup} = useAuth();
+	const {singup,singInWithGoogle,singInWithFacebook} = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [name, setName] = useState('');
@@ -40,6 +43,24 @@ const SingUp = () => {
 			setError(error.message)		
 		}
 	}
+	async function handleSubmitWithGoogle(){
+		try{
+			setLoading(true);
+			await singInWithGoogle();
+			history.push('/');
+		} catch(e){
+			setLoading(false);
+		}
+	}
+	async function handleSubmitWithFacebook(){
+		try{
+			setLoading(true);
+			await singInWithFacebook();
+			history.push('/');
+		} catch(e){
+			setLoading(false);
+		}
+	}
 	return (
 		<div className="sing-up">
 			<div className="sing-up__body">
@@ -49,6 +70,17 @@ const SingUp = () => {
 					</div>
 					<h2 className="sing-up__title title">Sing Up</h2>
 					{error && <strong className="fas fa-exclamation-circle denger">{error}</strong>}
+				</div>
+				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithGoogle.bind()} disabled={loading}>
+						<img className="sing-in__img-social" src={googleIcon} alt="Google Icon" />
+						Continue with Google
+				</button>
+				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithFacebook.bind()} disabled={loading}>
+						<img className="sing-in__img-social" src={facebookleIcon} alt="Fecebook Icon" />
+						Continue with Fecebook
+				</button>
+				<div className="sing-up__or">
+					<span>OR</span>
 				</div>
 				<form onSubmit={handleSubmit} className="sing-up__form">
 					<div className="sing-up__group">
