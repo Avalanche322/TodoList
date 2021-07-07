@@ -5,7 +5,7 @@ const Day = ({handlerDayOpen,isDayClass,isSelectDayOpen,isDay,date,handlerSetDat
 	useEffect(() =>{		
 		let hendler = (event) =>{
 			if(!selectDayRef.current.contains(event.target)){
-				handlerDayOpen(false);				
+				handlerDayOpen(false);
 			}
 		}
 		document.addEventListener("mousedown", hendler)
@@ -18,7 +18,7 @@ const Day = ({handlerDayOpen,isDayClass,isSelectDayOpen,isDay,date,handlerSetDat
 			<button 
 				className={`main-add-task-form-day__btn ${isDayClass}`} 
 				type="button"
-				onClick={() => handlerDayOpen(!isSelectDayOpen)}>
+				onClick={handlerDayOpen.bind(null,!isSelectDayOpen)}>
 			{isDay}
 			</button>
 			<ul className={`main-add-task-form-day__list ${isSelectDayOpen ? "open" : "hidden"}`}>

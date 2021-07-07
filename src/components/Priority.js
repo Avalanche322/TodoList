@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import ReactTooltip from "react-tooltip";
 
 const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,setIsSelectPriorityOpen,isSelectPriorityOpen}) => {
 	let selectPriorityRef = useRef();
@@ -17,6 +18,7 @@ const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,se
 		<div ref={selectPriorityRef}  className="main-add-task-form-priority">
 			<button 
 				type="button"
+				data-tip="Set a priority"
 				className={`main-add-task-form-priority__btn fas fa-flag ${isPriorityClass}`}
 				onClick={() => setIsSelectPriorityOpen(!isSelectPriorityOpen)}>
 			</button>
@@ -38,6 +40,11 @@ const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,se
 					</li>)
 				})}		
 		</ul>
+		<ReactTooltip 
+			effect="solid" 
+			place="bottom" 
+			className="tooltip"
+			arrowColor="transparent" />
 		</div>
 	);
 }

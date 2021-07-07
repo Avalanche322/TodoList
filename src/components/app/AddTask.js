@@ -2,9 +2,9 @@ import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import firebase from "../../firebase";
 import { useAuth } from '../../contexts/AuthContext';
-import Comment from "./Comment";
-import Priority from "./Priority";
-import Day from "./Day";
+import Comment from "../Comment";
+import Priority from "../Priority";
+import Day from "../Day";
 import useGetPriority from "../../customHooks/useGetPriority";
 import useGetDay from "../../customHooks/useGetDay";
 import useGetDate from "../../customHooks/useGetDate";
@@ -59,7 +59,7 @@ const AddTask = () => {
 							onChange={(e) => setBody(e.target.value)}>
 						</TextareaAutosize>
 						<div className="main-add-task-form__bottom">
-							<Day 
+							<Day
 								handlerDayOpen={handlerDayOpen} 
 								isDayClass={isDayClass} 
 								isSelectDayOpen={isSelectDayOpen}
@@ -85,7 +85,14 @@ const AddTask = () => {
 							type="submit"
 							disabled={!body.trim()}>
 						Add task</button>
-						<button className="main-add-task-form__btn-cancel btn-cancel" onClick={() => setAddForm(false)}>Cancel</button>
+						<button 
+							className="main-add-task-form__btn-cancel btn-cancel"
+							type="button"
+							onClick={() =>{
+								setAddForm(false);
+								handlerDefault();}
+							}>
+						Cancel</button>
 					</div>
 				</form>
 			}

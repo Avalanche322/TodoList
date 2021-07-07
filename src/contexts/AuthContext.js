@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import firebase from '../firebase'
+import profileImg from '../img/user2.png';
 
 const AuthContext = React.createContext()
 
@@ -11,12 +12,12 @@ export function AuthProvider ({children}){
 	const [currentUser, setCurrentUser] = useState();
 	const [loading, setLoading] = useState(true);
 
-	function singup(email,password,name,img){
+	function singup(email,password,name){
 		return (firebase.auth().createUserWithEmailAndPassword(email, password)
 		.then((u) => {
 			return u.user.updateProfile({
 				displayName: name,
-				photoURL: img
+				photoURL: profileImg
 			})
 		}))		
 	}

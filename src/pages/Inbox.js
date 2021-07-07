@@ -20,7 +20,7 @@ const Inbox = () => {
 				{taskListAll && <Tasks tasks={taskListAll}/>}
 				<AddTask/>
 			</div>
-			{!countTaskAll ? 
+			{taskListAll && !countTaskAll ? 
 				<div className="main__day-of">
 					<i className="fas fa-poo main-day-of__logo"></i>
 					<p className="main-day-of__text">All clear</p>

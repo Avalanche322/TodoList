@@ -19,6 +19,7 @@ const Comment = ({comment, setComment}) => {
 		<div ref={selectCommentRef} className="main-add-task-form-comment">
 			<button 
 				type="button"
+				data-tip="Add a comment"
 				className={`main-add-task-form-comment__btn ${comment.length > 0 ? 'fas' : 'far'} fa-comment-alt`}
 				onClick={() => setIsSelectCommentOpen(!isSelectCommentOpen)}>		
 			</button>

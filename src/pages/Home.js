@@ -9,6 +9,7 @@ const Home = () => {
 	const {today} = useGetDate();
 	const {taskListToday} = useFetchTasks();
 	const {countTaskToday} = useGetCountTasks();
+	const page = "Home"
 	useEffect(() => {
 		// title for page
 		document.title = "Home | TodoList"
@@ -22,10 +23,10 @@ const Home = () => {
 						<small>{today()}</small>
 					</h1>
 				</div>
-				{taskListToday && <Tasks tasks={taskListToday}/>}
+				{taskListToday && <Tasks tasks={taskListToday} page={page}/>}
 				<AddTask/>
 			</div>
-			{!countTaskToday ? 
+			{taskListToday && !countTaskToday ? 
 				<div className="main__day-of">
 					<i className="far fa-smile main-day-of__logo"></i>
 					<p className="main-day-of__text">Enjoy your day off</p>

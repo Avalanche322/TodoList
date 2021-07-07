@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import logo from '../img/logo.png'
 import googleIcon from '../img/google-icon.png';
-import apppleIcon from '../img/apple-icon.png';
-import facebookleIcon from '../img/facebook-icon.png';
 
 const SingIn = () => {
-	const {singin,singInWithGoogle,singInWithFacebook} = useAuth();
+	const {singin,singInWithGoogle} = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
@@ -36,15 +34,6 @@ const SingIn = () => {
 			setLoading(false);
 		}
 	}
-	async function handleSubmitWithFacebook(){
-		try{
-			setLoading(true);
-			await singInWithFacebook();
-			history.push('/');
-		} catch(e){
-			setLoading(false);
-		}
-	}
 	return (
 		<div className="sing-in">
 			<div className="sing-in__body">
@@ -58,10 +47,6 @@ const SingIn = () => {
 				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithGoogle.bind()} disabled={loading}>
 						<img className="sing-in__img-social" src={googleIcon} alt="Google Icon" />
 						Continue with Google
-				</button>
-				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithFacebook.bind()} disabled={loading}>
-						<img className="sing-in__img-social" src={facebookleIcon} alt="Facebook Icon" />
-						Continue with Fecebook
 				</button>
 				<div className="sing-in__or">
 					<span>OR</span>

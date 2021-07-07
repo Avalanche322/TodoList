@@ -2,9 +2,13 @@ import { useState } from "react";
 import { ContextMenuTrigger } from "react-contextmenu";
 import CustomContexMenu from "../CustomContexMenu";
 import useCompletedTask from "../../customHooks/API/useCompletedTask";
-const Tasks = ({tasks}) => {
+//import useGetDay from "../../customHooks/useGetDay";
+//import Day from "../Day"
+const Tasks = ({tasks,page}) => {
 	const {completedTask} = useCompletedTask();
 	const [id, setId] = useState(); // this id for context menu
+	/* Select day*/
+	//const {handlerDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,handlerSetDate,isDay,isSelectDay,} = useGetDay();	
 	return (
 		<ul className="main__tasks">
 			{tasks.map(task =>{
@@ -18,6 +22,7 @@ const Tasks = ({tasks}) => {
 								/>
 								<div>
 									<p className="main__text">{task.body}</p>
+									{page === "Home" ? null : <p>{task.date}</p>}
 								</div>
 							</div>
 						</ContextMenuTrigger>

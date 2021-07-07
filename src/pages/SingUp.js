@@ -3,13 +3,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import logo from '../img/logo.png'
-import profileImg from '../img/user2.png';
 import googleIcon from '../img/google-icon.png';
-import apppleIcon from '../img/apple-icon.png';
-import facebookleIcon from '../img/facebook-icon.png';
 
 const SingUp = () => {
-	const {singup,singInWithGoogle,singInWithFacebook} = useAuth();
+	const {singup,singInWithGoogle} = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [name, setName] = useState('');
@@ -36,7 +33,7 @@ const SingUp = () => {
 		try{
 			setError('');
 			setLoading(true);
-			await singup(email,password,name,profileImg);
+			await singup(email,password,name);
 			history.push('/');
 		} catch(error){
 			setLoading(false);
@@ -47,15 +44,6 @@ const SingUp = () => {
 		try{
 			setLoading(true);
 			await singInWithGoogle();
-			history.push('/');
-		} catch(e){
-			setLoading(false);
-		}
-	}
-	async function handleSubmitWithFacebook(){
-		try{
-			setLoading(true);
-			await singInWithFacebook();
 			history.push('/');
 		} catch(e){
 			setLoading(false);
@@ -74,10 +62,6 @@ const SingUp = () => {
 				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithGoogle.bind()} disabled={loading}>
 						<img className="sing-in__img-social" src={googleIcon} alt="Google Icon" />
 						Continue with Google
-				</button>
-				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithFacebook.bind()} disabled={loading}>
-						<img className="sing-in__img-social" src={facebookleIcon} alt="Fecebook Icon" />
-						Continue with Fecebook
 				</button>
 				<div className="sing-up__or">
 					<span>OR</span>
