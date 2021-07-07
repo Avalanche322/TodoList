@@ -10,25 +10,25 @@ const useFetchTasks = () => {
 	const [taskListToday, setTaskListToday] = useState();
 	const [loader, setLoader] = useState(true);
 	const [error, setEroor] = useState('');
-	useEffect(() => {
-		
-			try{
-				const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
-				taskRef.on('value', (snapshot) =>{
-					const tasks = snapshot.val();
-					const taskListAll = [];
-					for (const id in tasks) {
-						taskListAll.push({id,...tasks[id]});
-					}
-					setTaskListAll(taskListAll);
-					setTaskListToday(taskListAll.filter(t => t.date === today()));
-					setLoader(false);
-				})
-			} catch(e){
+	useEffect(() => {		
+		try{
+			const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
+			const listener = taskRef.on('value', (snapshot) =>{
+				const tasks = snapshot.val();
+				const taskListAll = [];
+				for (const id in tasks) {
+					taskListAll.push({id,...tasks[id]});
+				}
+				setTaskListAll(taskListAll);
+				setTaskListToday(taskListAll.filter(t => t.date === today()));
 				setLoader(false);
-				setEroor(e.message);
-			}
-		console.log('no');
+			})
+			console.log('e');
+			return () => taskRef.off('value', listener);
+		} catch(e){
+			setLoader(false);
+			setEroor(e.message);
+		}
 	}, [])
 	return {
 		taskListAll,

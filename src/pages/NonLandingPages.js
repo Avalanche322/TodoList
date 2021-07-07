@@ -8,9 +8,11 @@ import PrivateRoute from "../components/PrivateRoute";
 import useWindowSize from '../customHooks/useWindowSize';
 import useFetchTasks from "../customHooks/API/useFetchTasks"
 import Loader from "../components/app/Loader";
+import Home from "../pages/Home";
+import Inbox from "../pages/Inbox"
 
-const Home = React.lazy(() => import("../pages/Home"));
-const Inbox = React.lazy(() => import("../pages/Inbox"));
+//const Home = React.lazy(() => import("../pages/Home"));
+//const Inbox = React.lazy(() => import("../pages/Inbox"));
 const Settings = React.lazy(() => import("../pages/Settings"));
 const NotFound = React.lazy(() => import("../pages/NotFound"));
 
@@ -27,18 +29,10 @@ const NonLandingPages  = () => {
 			{taskListAll && <Switch location={background || location}>
 				<PrivateRoute 
 				exact path="/" 
-				component={() => 
-				<React.Suspense fallback={ <Loader/>}>
-					<Home/> {/* Home */}
-				</React.Suspense> 
-				}/>
+				component={Home}/>
 				<PrivateRoute 
 				path="/inbox" 
-				component={() => 
-				<React.Suspense fallback={ <Loader/>}>
-					<Inbox/> {/* Inbox */}
-				</React.Suspense> 
-				}/>
+				component={Inbox}/>
 				<PrivateRoute 
 				path="*" 
 				component={() => 
