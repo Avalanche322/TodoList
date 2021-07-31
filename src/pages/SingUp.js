@@ -1,34 +1,35 @@
-import { useAuth } from '../contexts/AuthContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import logo from '../img/logo.png'
 import googleIcon from '../img/google-icon.png';
+import { useAuth } from '../contexts/AuthContext';
 
 const SingUp = () => {
 	const {singup,singInWithGoogle} = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [name, setName] = useState('');
-	const [passwordConfirm, setPasswordConfirm] = useState('');
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const history = useHistory();
+	const [isShowPassword, setIsShowPassword] = useState(false);
 
+	useEffect(() => {
+		// title for page
+		document.title = "SingUp | TodoList"
+	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();
 
-		if(!password && !name && !passwordConfirm){
+		if(!password && !name){
 			return setError('All fields must be filled')
 		}
-		else if(!(/^[A-Za-z\s]+$/.test(name))){
+		else if(name.length < 3){
 			return setError('The name must not have a number or special character')
 		}
-		else if(!(/[^A-Za-z0-9]/.test(password)) && !(password.length > 8)){
+		else if(!(/^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(password))){
 			return setError('password must be at least 8 characters long contain a number and an uppercase letter')
-		}
-		else if(password !== passwordConfirm){
-			return setError('Passwords do not match')
 		}
 		try{
 			setError('');
@@ -69,43 +70,42 @@ const SingUp = () => {
 				<form onSubmit={handleSubmit} className="sing-up__form">
 					<div className="sing-up__group">
 						<label className="sing-up__label" htmlFor="email">Email</label>
-						<input 
-							className="sing-up__input" 
-							onChange={(e) => setEmail(e.target.value)}
-							type="email" 
-							id="email" 
-							name="email"/>
+						<div className="sing-up__input input">
+							<input 
+								onChange={(e) => setEmail(e.target.value)}
+								type="email" 
+								id="email" 
+								name="email"/>
+						</div>
 					</div>
 					<div className="sing-up__group">
 						<label className="sing-up__label" htmlFor="name">Your Name</label>
-						<input 
-							className="sing-up__input" 
-							onChange={(e) => setName(e.target.value)}
-							type="text" 
-							id="name" 
-							name="name"/>
+						<div className="sing-up__input input" >
+							<input 
+								onChange={(e) => setName(e.target.value)}
+								type="text" 
+								id="name" 
+								name="name"/>
+						</div>
 					</div>
 					<div className="sing-up__group">
 						<label className="sing-up__label" htmlFor="password">Password</label>
-						<input 
-							className="sing-up__input" 
-							onChange={(e) => setPassword(e.target.value)}
-							type="password" 
-							id="password" 
-							name="password"/>
-					</div>
-					<div className="sing-up__group">
-						<label className="sing-up__label" htmlFor="password-confirm">Password Confirmation</label>
-						<input 
-							className="sing-up__input" 
-							onChange={(e) => setPasswordConfirm(e.target.value)}
-							type="password" 
-							id="password-confirm" 
-							name="password-confirm"/>
+						<div className="input">
+							<input 
+								onChange={(e) => setPassword(e.target.value)}
+								type={isShowPassword ? "text" : "password"} 
+								id="password" 
+								name="password" />
+							<button 
+								type="button" 
+								className={`${isShowPassword ? "far fa-eye" : "far fa-eye-slash"} btn-password`}
+								onClick={setIsShowPassword.bind(null,!isShowPassword)}></button>
+						</div>
 					</div>
 					<button type="submit" className="btn-submit sing-up__btn-submit" disabled={loading}>Sing Up</button>
 				</form>
-				<p className="sing-up__link-sing-in">Already have account? <Link to="/singin">Sing In</Link></p>
+				<p className="sing-up__link">Already have account? <Link to="/singin" className="link-reset-password">Sing In</Link></p>
+				<p className="sing-up__link"><Link to="/forgotPassword" className="link-reset-password">Forgot your password?</Link></p>
 			</div>
 		</div>
 	);

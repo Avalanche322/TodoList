@@ -1,5 +1,5 @@
 import { useAuth } from '../contexts/AuthContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import logo from '../img/logo.png'
@@ -12,7 +12,11 @@ const SingIn = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const history = useHistory();
-
+	const [isShowPassword, setIsShowPassword] = useState(false);
+	useEffect(() => {
+		// title for page
+		document.title = "SignIn | TodoList"
+	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();
 		try{
@@ -54,25 +58,32 @@ const SingIn = () => {
 				<form onSubmit={handleSubmit} className="sing-in__form">
 					<div className="sing-in__group">
 						<label className="sing-up__label" htmlFor="email">Email</label>
-						<input 
-							className="sing-in__input" 
-							onChange={(e) => setEmail(e.target.value)}
-							type="email" 
-							id="email" 
-							name="email" />
+						<div className="input">
+							<input 
+								onChange={(e) => setEmail(e.target.value)}
+								type="email" 
+								id="email" 
+								name="email"/>
+						</div>
 					</div>
 					<div className="sing-in__group">
 						<label className="sing-ip__label" htmlFor="password">Password</label>
-						<input 
-							className="sing-in__input" 
-							onChange={(e) => setPassword(e.target.value)}
-							type="password" 
-							id="password" 
-							name="password" />
+						<div className="input">
+							<input 
+								onChange={(e) => setPassword(e.target.value)}
+								type={isShowPassword ? "text" : "password"} 
+								id="password" 
+								name="password" />
+							<button 
+								type="button" 
+								className={`${isShowPassword ? "far fa-eye" : "far fa-eye-slash"} btn-password`}
+								onClick={setIsShowPassword.bind(null,!isShowPassword)}></button>
+						</div>
 					</div>
 					<button type="submit" className="btn-submit sing-in__btn-submit" disabled={loading}>Sing In</button>
 				</form>
-				<p className="sing-in__link-sing-up">Need an account? <Link to="/singup">Sing Up</Link></p>
+				<p className="sing-in__link">Need an account? <Link to="/singup" className="link-reset-password">Sing Up</Link></p>
+				<p className="sing-in__link"><Link to="/forgotPassword" className="link-reset-password">Forgot your password?</Link></p>
 			</div>
 		</div>
 	);

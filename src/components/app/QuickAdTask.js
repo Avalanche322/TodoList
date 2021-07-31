@@ -1,15 +1,17 @@
 import { useEffect, useState, React, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import firebase from "../../firebase";
-import { useAuth } from '../../contexts/AuthContext';
 import Comment from "../Comment";
 import Priority from "../Priority";
 import Day from "../Day";
 import useGetPriority from "../../customHooks/useGetPriority";
 import useGetDay from "../../customHooks/useGetDay";
 import useGetDate from "../../customHooks/useGetDate";
+import useAddTask from "../../customHooks/API/useAddTask";
+import { useTranslation } from "react-i18next";
 
 const QuickAddTask = ({isOpen, handlerIsOpen}) => {
+	/*hook add task*/
+	const {addTask} = useAddTask();
 	/* Select day*/
 	const {handlerDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,handlerSetDate,isDay,isSelectDay,} = useGetDay();	
 	/* Select priority*/
@@ -23,8 +25,9 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 	const {today} = useGetDate();
 	const [body, setBody] = useState('');
 	let quickAddTasRef = useRef();
+	const [error, setError] = useState('');
+	const { t } = useTranslation();
 	
-	const {currentUser} = useAuth();
 	function handlerDefault() {
 		setBody('');
 		handlerSelectValueDay('Today',today(),'fas fa-calendar-week');
@@ -33,17 +36,14 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 	}
 	function handlerSubmit(e){
 		e.preventDefault();
-		const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
-		const task = {
-			body,
-			completed: false,
-			date,
-			priority,
-			comment
+		try{
+			addTask(body,date,priority,comment);
+			handlerIsOpen(false);
+			handlerDefault();
+		} catch(e){
+			setError(e.message);
+			alert(error);
 		}
-		taskRef.push(task);
-		handlerIsOpen(false);
-		handlerDefault();
 	}
 	useEffect(() =>{
 		if(isOpen){
@@ -64,25 +64,25 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 				<div className="quick-add">
 					<div ref={quickAddTasRef} className="quick-add__body">
 						<div className="quick-add__header">
-							<h3 className="quick-add__title">Quick Add Task</h3>
+							<h3 className="quick-add__title">{t("quickAddTask")}</h3>
 							<span className="fas fa-times quick-add__close close" onClick={() =>{
 								handlerIsOpen(false);
 								handlerDefault();
 							}}>
 							</span>
 						</div>
-						<form className="main-add-task__form" onSubmit={handlerSubmit}>
-							<div className="main-add-task-form__edit">
+						<form className="main-editor-task__form" onSubmit={handlerSubmit}>
+							<div className="main-editor-task-form__edit">
 								<TextareaAutosize 
-									className="main-add-task-form__text" 
+									className="main-editor-task-form__text" 
 									maxRows="6" 
 									minRows="1" 
 									autoFocus 
-									placeholder="Task name"
+									placeholder={t("taskName")}
 									value={body}
 									onChange={(e) => setBody(e.target.value)}>
 								</TextareaAutosize>
-								<div className="main-add-task-form__bottom">
+								<div className="main-editor-task-form__bottom">
 									<Day 
 									handlerDayOpen={handlerDayOpen} 
 									isDayClass={isDayClass} 
@@ -92,7 +92,7 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 									handlerSetDate={handlerSetDate}
 									isSelectDay={isSelectDay}
 									handlerSelectValueDay={handlerSelectValueDay}/>
-								<div className="main-add-task-form__group">
+								<div className="main-editor-task-form__group">
 									<Priority 
 										isSelecPriority={isSelecPriority} 
 										isPriorityClass={isPriorityClass} 
@@ -103,12 +103,12 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 									</div>
 								</div>
 							</div>
-							<div className="main-add-task-form__action">
+							<div className="main-editor-task-form__action">
 								<button 
-									className="main-add-task-form__btn-submit btn-submit" 
+									className="main-editor-task-form__btn-submit btn-submit" 
 									disabled={!body.trim()}
 									type="submit">
-								Add task</button>
+								{t("addTask")}</button>
 							</div>
 						</form>
 					</div>

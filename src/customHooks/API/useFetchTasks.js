@@ -8,8 +8,9 @@ const useFetchTasks = () => {
 	const {currentUser} = useAuth();
 	const [taskListAll, setTaskListAll] = useState();
 	const [taskListToday, setTaskListToday] = useState();
+	const [taskNoCompleted,setTaskNoCompleted] = useState();
 	const [loader, setLoader] = useState(true);
-	const [error, setEroor] = useState('');
+	const [error, setError] = useState('');
 	useEffect(() => {		
 		try{
 			const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
@@ -21,18 +22,20 @@ const useFetchTasks = () => {
 				}
 				setTaskListAll(taskListAll);
 				setTaskListToday(taskListAll.filter(t => t.date === today()));
+				setTaskNoCompleted(taskListAll.filter(t => new Date(t.date) < new Date(today())))
 				setLoader(false);
 			})
-			console.log('e');
 			return () => taskRef.off('value', listener);
 		} catch(e){
 			setLoader(false);
-			setEroor(e.message);
+			setError(e.message);
 		}
+	// eslint-disable-next-line
 	}, [])
 	return {
 		taskListAll,
 		taskListToday,
+		taskNoCompleted,
 		loader,
 		error
 	}

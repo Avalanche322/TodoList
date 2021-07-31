@@ -24,6 +24,7 @@ const useGetPriority = () => {
 		isPriorityClass,
 		handlerPriorityOpen,
 		isSelectPriorityOpen,
+		setIsPriorityClass,
 	}
 }
  

@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
+import Context from "../../contexts/context";
 import TextareaAutosize from "react-textarea-autosize";
-import firebase from "../../firebase";
-import { useAuth } from '../../contexts/AuthContext';
 import Comment from "../Comment";
 import Priority from "../Priority";
 import Day from "../Day";
 import useGetPriority from "../../customHooks/useGetPriority";
 import useGetDay from "../../customHooks/useGetDay";
 import useGetDate from "../../customHooks/useGetDate";
+import useAddTask from "../../customHooks/API/useAddTask";
+import { useTranslation } from "react-i18next";
 
 const AddTask = () => {
+	/*hook add task*/
+	const {addTask} = useAddTask();
 	/* Select day*/
 	const {handlerDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,handlerSetDate,isDay,isSelectDay,} = useGetDay();	
 	/* Select priority*/
@@ -20,11 +23,20 @@ const AddTask = () => {
 		setComment(text);
 	}
 	/*Common*/
+	const { addForm, setAddForm,setTaskEdit } = useContext(Context);
 	const {today} = useGetDate();
-	const [addForm, setAddForm] = useState(false);
 	const [body, setBody] = useState('');
-	
-	const {currentUser} = useAuth();
+	const [error, setError] = useState('');
+	const { t } = useTranslation();
+
+	function handelTextArea(e){
+		if(e.nativeEvent.inputType === "insertLineBreak"){
+			handlerSubmit(e);
+			return
+		};
+		setBody(e.target.value);
+	}
+
 	function handlerDefault() {
 		setBody('');
 		handlerSelectValueDay('Today',today(),'fas fa-calendar-week');
@@ -33,32 +45,37 @@ const AddTask = () => {
 	}
 	function handlerSubmit(e){
 		e.preventDefault();
-		const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
-		const task = {
-			body,
-			completed: false,
-			date,
-			priority,
-			comment
+		try{
+			addTask(body,date,priority,comment);
+			handlerDefault();
+		} catch(e){
+			setError(e.message);
+			alert(error);
 		}
-		taskRef.push(task);
+	}
+	function handelCancel() {
+		setAddForm(false);
 		handlerDefault();
 	}
+	function handelAddTask() {
+		setAddForm(true);
+		setTaskEdit({id:null});
+	}
 	return (
-		<div className="main__add-task">
+		<div className="main__editor-task">
 			{addForm && 
-				<form className="main-add-task__form" onSubmit={handlerSubmit}>
-					<div className="main-add-task-form__edit">
+				<form className="main-editor-task__form" onSubmit={handlerSubmit}>
+					<div className="main-editor-task-form__edit">
 						<TextareaAutosize 
-							className="main-add-task-form__text" 
+							className="main-editor-task-form__text" 
 							maxRows="6" 
 							minRows="1" 
 							autoFocus 
 							placeholder="Task name"
 							value={body}
-							onChange={(e) => setBody(e.target.value)}>
+							onChange={(e) => handelTextArea(e)}>
 						</TextareaAutosize>
-						<div className="main-add-task-form__bottom">
+						<div className="main-editor-task-form__bottom">
 							<Day
 								handlerDayOpen={handlerDayOpen} 
 								isDayClass={isDayClass} 
@@ -68,7 +85,7 @@ const AddTask = () => {
 								handlerSetDate={handlerSetDate}
 								isSelectDay={isSelectDay}
 								handlerSelectValueDay={handlerSelectValueDay}/>
-							<div className="main-add-task-form__group">
+							<div className="main-editor-task-form__group">
 								<Priority 
 									isSelecPriority={isSelecPriority} 
 									isPriorityClass={isPriorityClass} 
@@ -79,30 +96,26 @@ const AddTask = () => {
 							</div>
 						</div>
 					</div>
-					<div className="main-add-task-form__action">
+					<div className="main-editor-task-form__action">
 						<button 
-							className="main-add-task-form__btn-submit btn-submit" 
+							className="main-editor-task-form__btn-submit btn-submit" 
 							type="submit"
 							disabled={!body.trim()}>
-						Add task</button>
+						{t("addTask")}</button>
 						<button 
-							className="main-add-task-form__btn-cancel btn-cancel"
+							className="main-editor-task-form__btn-cancel btn-cancel"
 							type="button"
-							onClick={() =>{
-								setAddForm(false);
-								handlerDefault();}
-							}>
-						Cancel</button>
+							onClick={handelCancel.bind(null)}>
+						{t("cancel")}</button>
 					</div>
 				</form>
 			}
 			{!addForm && 
-			<button 
-				className="main-add-task__btn" 
-				onClick={() => setAddForm(true)}>
-				<i className="fas fa-plus"></i>
-				<span>Add task</span>
-			</button>}
+				<button className="main-editor-task__btn" onClick={handelAddTask.bind(null)}>
+					<i className="fas fa-plus"></i>
+					<span>{t("addTask")}</span>
+				</button>
+			}
 		</div>
 	);
 }
