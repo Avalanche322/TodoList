@@ -31,6 +31,10 @@ Open folder
 
 `cd TodoList`
 
+Install node modules:
+
+`npm install`  
+
 To Start Server:
 
 `npm run start`  
