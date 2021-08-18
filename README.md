@@ -29,7 +29,7 @@ Clone repository
 
 Open folder
 
-`cd TodoList-master`
+`cd TodoList`
 
 To Start Server:
 
