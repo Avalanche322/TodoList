@@ -19,7 +19,9 @@ This project is currently in development. Users can sing up and sing in with Goo
 
 ## Installation and Setup Instructions
 
-Clone down this repository. You will need `node` and `npm` installed globally on your machine.  
+Open [https://todol-dev.firebaseapp.com/](https://todol-dev.firebaseapp.com/) to view it in the browser.
+
+Clone down this repository. You will need firebase account and `node`, `npm` installed globally on your machine.
 
 Installation:
 
@@ -33,7 +35,11 @@ Open folder
 
 Install node modules:
 
-`npm install`  
+`npm install`
+
+To create .env.local (API Google Firebase)
+
+
 
 To Start Server:
 
