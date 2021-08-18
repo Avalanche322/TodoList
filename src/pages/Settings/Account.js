@@ -1,13 +1,16 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, memo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import profileImg from "../../img/user2.png";
 import googleIcon from "../../img/google-icon.png";
 import { useTranslation, Trans } from "react-i18next";
+import { useContext } from "react";
+import Context from "../../contexts/context";
 
-const Account = ({close,handelActiveSidebar}) => {
+const Account = ({close,handlerActiveSidebar}) => {
 	const {currentUser,changeName,uploadAvatar,removeAvatar,error:err,LinkInGoogle,isProviderPasswordUser,isProviderGoogle,unlinkGoogle,googleAccount} 
 	= useAuth();
+	const {settings} = useContext(Context);
 	const [userAvatar, setUserAvatar] = useState(currentUser.photoURL);
 	const [userName, setUserName] = useState(currentUser.displayName);
 	const [isUploadPhoto, setIsUploadPhoto] = useState(false);
@@ -26,21 +29,24 @@ const Account = ({close,handelActiveSidebar}) => {
 	useEffect(() =>{
 		setIsGoogleProvider(isProviderGoogle());
 		setIsPasswordProvider(isProviderPasswordUser());
-	},[isProviderGoogle, isProviderPasswordUser])
+	},[loading,isProviderGoogle,isProviderPasswordUser])
 
 	// Upload photo and hidden input type file
 	const hiddenFileInput = useRef(null);
 	const handleClick = () => {
+		setError("");
 		hiddenFileInput.current.click();
 	};
 	const handleUpdateAvatar = async event => {
+		if(settings.vibration) navigator.vibrate(10); // togle vibration
 		setError("");
 		setLoading(true);
-		const fileUploaded = event.target.files[0];
-		await uploadAvatar(fileUploaded);
+		const fileUploadded = event.target.files[0];
+		await uploadAvatar(fileUploadded);
 		setUserAvatar(currentUser.photoURL);
 		setIsUploadPhoto(true);
 		setLoading(false);
+		if(settings.vibration) navigator.vibrate(15); // togle vibration
   	};
 	useEffect(() =>{
 		if(profileImg !== userAvatar){
@@ -50,39 +56,46 @@ const Account = ({close,handelActiveSidebar}) => {
 	// Remove photo
 	const handleRemoveAvatar = async () =>{
 		setError("");
+		if(settings.vibration) navigator.vibrate(10); // togle vibration
 		setLoading(true);
 		setIsUploadPhoto(false);
 		await removeAvatar();
 		setUserAvatar(currentUser.photoURL);
 		setLoading(false);
+		if(settings.vibration) navigator.vibrate(15); // togle vibration
 	}
- 	// change name
- 	function handlerChangeName(name){
+	const handlerChangeName = useCallback((e) => {
 		setError("");
-	  	setUserName(name);
-		if(currentUser.displayName !== name){
+		setUserName(e.target.value);
+		if(currentUser.displayName !== e.target.value.trim()){
 			setIsUpdate(true);
 		} else{
 			setIsUpdate(false);
 		}
-  }
+	},[currentUser.displayName])
   	// submit
   	async function Update(e){
 		e.preventDefault();
 		setError("");
-		await	changeName(userName);
-		setIsUpdate(false);
+		try{
+			if(settings.vibration) navigator.vibrate(10); // togle vibration
+			await	changeName(userName);
+			setIsUpdate(false);
+		} catch(e){
+			setIsUpdate(false);
+			setError(e.message);
+		}
 	}
 	// link google account
 	async function handleLogInWithGoogle(){
 		setLoading(true);
 		try{
+			if(settings.vibration) navigator.vibrate(8); // togle vibration
 			setError("");
 			await LinkInGoogle();
 			setLoading(false);
 		} catch(e){
 			setLoading(false);
-			console.log(e.message);
 			setError(e.message);
 		}
 	}
@@ -90,6 +103,7 @@ const Account = ({close,handelActiveSidebar}) => {
 	async function handleDisconectGoogle(){
 		setLoading(true);
 		try{
+			if(settings.vibration) navigator.vibrate(8); // togle vibration
 			setError("");
 			await unlinkGoogle();
 			setLoading(false);
@@ -101,13 +115,17 @@ const Account = ({close,handelActiveSidebar}) => {
 	// cancel
 	const handlerCancel = () =>{
 		setError("");
+		if(settings.vibration) navigator.vibrate(10); // togle vibration
 		setIsUpdate(false);
 		setUserName(currentUser.displayName);
+	}
+	function handlerLinkVibration(){
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
 	return (
 		<form className="settings__form" onSubmit={Update}>
 			<header className="settings__header">
-				<span className="fas fa-arrow-left main-back" onClick={handelActiveSidebar.bind(null, true)}></span>
+				<span className="fas fa-arrow-left main-back" onClick={handlerActiveSidebar.bind(null, true)}></span>
 				<h2 className="settings__title">{t("account")}</h2>
 				<span className="fas fa-times close" onClick={close}></span>
 			</header>
@@ -152,7 +170,7 @@ const Account = ({close,handelActiveSidebar}) => {
 								name="name" 
 								id="name"
 								value={userName}
-								onChange={(e) =>handlerChangeName(e.target.value)} />
+								onChange={handlerChangeName} />
 						</div>
 					</div>
 				</div>
@@ -161,13 +179,21 @@ const Account = ({close,handelActiveSidebar}) => {
 					<h3 className="settings__subtitle">{t("email")}</h3>
 					<div className="settings-account__group settings__group">
 						<span className="settings__text">{currentUser.email}</span>
-						<Link to="/settings/account/email" className="settings-account__btn">{t("changeEmail")}</Link>
+						<Link 
+							to="/settings/account/email" 
+							className="settings-account__btn"
+							onClick={handlerLinkVibration}
+						>{t("changeEmail")}</Link>
 					</div>
 				</div>
 				{/**Password*/}
 				<div className="settings-account__block settings__block">
 					<h3 className="settings__subtitle">{t("password")}</h3>
-						<Link to="/settings/account/password" className="settings-account__btn">{t("changePassword")}</Link>
+						<Link 
+							to="/settings/account/password" 
+							className="settings-account__btn"
+							onClick={handlerLinkVibration}
+						>{t("changePassword")}</Link>
 				</div>
 				{/*Connected accounts*/}
 				<div className="settings-account__block settings__block">
@@ -206,7 +232,11 @@ const Account = ({close,handelActiveSidebar}) => {
 					<h3 className="settings__subtitle">{t("permanentlyDeleteAccount")}</h3>
 					<div className="settings-account__group settings__group">
 						<span className="settings__text">{t("permanentlyDeleteAccountText")}</span>
-						<Link to="/settings/account/delete" className="settings-account__btn btn-red">{t("permanentlyDeleteAccount")}</Link>
+						<Link 
+							to="/settings/account/delete" 
+							className="settings-account__btn btn-red"
+							onClick={handlerLinkVibration}
+						>{t("permanentlyDeleteAccount")}</Link>
 					</div>
 				</div>
 			</div>
@@ -218,4 +248,4 @@ const Account = ({close,handelActiveSidebar}) => {
 	);
 }
  
-export default Account;
+export default memo(Account);

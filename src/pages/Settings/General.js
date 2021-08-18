@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/AuthContext";
 import { useContext } from "react";
 import Context from "../../contexts/context";
 
-const General = ({close,handelActiveSidebar}) => {
+const General = ({close,handlerActiveSidebar}) => {
 	const {t} = useTranslation();
+	const {setTheme,theme} = useContext(Context);
 	const [settings, setSettings] = useState(JSON.parse(localStorage.getItem('settings')));
 	const currentSettings = JSON.parse(localStorage.getItem('settings'));
 	const themes = JSON.parse(localStorage.getItem('themes'));
 	const [isUpdate, setIsUpdate] = useState(false);
-	const {updateLanguage,updateTheme, error:err} = useAuth();
+	const [iSSupportedVibration, SetIsSupportedVibration] = useState(true);
+	const {updateSettings, error:err} = useAuth();
 	const [error, setError] = useState(err);
-	const {setTheme,theme} = useContext(Context);
 	const [selectedThemeName, setSelectedThemeName] = useState(theme.name);
 	useEffect(() => {
 		// title for page
@@ -20,6 +21,7 @@ const General = ({close,handelActiveSidebar}) => {
 	// eslint-disable-next-line
 	}, [])
 	const handlerChangeLanguege = (e) =>{
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
 		setSettings(prevState => ({
 			...prevState,
 			language: e.target.value
@@ -32,44 +34,95 @@ const General = ({close,handelActiveSidebar}) => {
 	}
 	const submit = async (e) => {
 		e.preventDefault();
+		if(settings.vibration) navigator.vibrate(15); // togle vibration
 		try{
-			updateLanguage(settings.language);
-			updateTheme(settings.theme);
+			updateSettings(settings);
 			localStorage.setItem('settings', JSON.stringify(settings));
 			setIsUpdate(false);
-			for (const key in themes) {
-				if(themes[key].name === settings.theme){
-					setTheme(themes[key]);
-				}
-			}
+			
 		}catch(e){
 			setError(e.message);
 		}
 	}
 	const handlerCancel = () =>{
+		if(settings.vibration) navigator.vibrate(10); // togle vibration
 		setIsUpdate(false);
 		setSelectedThemeName(theme.name);
 		setSettings({
 			theme: currentSettings.theme,
 			language: currentSettings.language
 		});
+		for (const key in themes) {
+			if(themes[key].name === currentSettings.theme){
+				setTheme(themes[key]);
+			}
+		}
 	}
 	const handlerChangeTheme = (themeKey) =>{
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
 		setSelectedThemeName(themeKey);
 		setSettings(prevState => ({
 			...prevState,
 			theme: themeKey
 		}));
+		for (const key in themes) {
+			if(themes[key].name === themeKey){
+				setTheme(themes[key]);
+			}
+		}
 		if(currentSettings.theme !== themeKey){
 			setIsUpdate(true);
 		} else{
 			setIsUpdate(false);
 		}
 	}
+	const handlerVibration = (e) =>{
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setSettings(prevState => ({
+			...prevState,
+			vibration: !prevState.vibration
+		}));
+		if(currentSettings.vibration !== e.target.checked){
+			setIsUpdate(true);
+		} else{
+			setIsUpdate(false);
+		}
+	}
+	const handlerSoundDesctop = (e) =>{
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setSettings(prevState => ({
+			...prevState,
+			completed_sound_desktop: !prevState.completed_sound_desktop
+		}));
+		if(currentSettings.completed_sound_desktop !== e.target.checked){
+			setIsUpdate(true);
+		} else{
+			setIsUpdate(false);
+		}
+	}
+	const handlerSoundMobile = (e) =>{
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setSettings(prevState => ({
+			...prevState,
+			completed_sound_mobile: !prevState.completed_sound_mobile
+		}));
+		if(currentSettings.completed_sound_mobile !== e.target.checked){
+			setIsUpdate(true);
+		} else{
+			setIsUpdate(false);
+		}
+	}
+	useEffect(() => {
+		if ("vibrate" in navigator) {
+			SetIsSupportedVibration(true);
+		} else {
+			SetIsSupportedVibration(false);
+		}
+	},[])
 	return (
 		<form className="settings__form" onSubmit={submit}>
 			<header className="settings__header">
-				<span className="fas fa-arrow-left main-back" onClick={handelActiveSidebar.bind(null, true)}></span>
+				<span className="fas fa-arrow-left main-back" onClick={handlerActiveSidebar.bind(null, true)}></span>
 				<h2 className="settings__title">{t("general")}</h2>
 				<span className="fas fa-times close" onClick={close}></span>
 			</header>
@@ -128,8 +181,33 @@ const General = ({close,handelActiveSidebar}) => {
 						})}
 					</div>
 				</div>
+				<div className="settings__block">
+					<h3 className="settings__subtitle">{t("SoundAndVibration")}</h3>
+					<div className="settings__group settings-general__group">
+						<input
+							id="s1" type="checkbox" className="switch" 
+							checked={settings.vibration}
+							onChange={handlerVibration}
+							disabled={!iSSupportedVibration}/>
+						<label htmlFor="s1">{t("VibrationMobile")}</label>
+					</div>
+					{!iSSupportedVibration &&  <p className="settings__subtext">{t("browserDoesntSupportVibration")}</p>}
+					<div className="settings__group">
+						<input id="s2" type="checkbox" className="switch"
+							checked={settings.completed_sound_desktop}
+							onChange={handlerSoundDesctop}/>
+   					 <label htmlFor="s2">{t("DesktopTaskCompleteTone")}</label>
+					</div>
+					<div className="settings__group settings-general__group">
+						<input id="s3" type="checkbox" className="switch"
+							checked={settings.completed_sound_mobile}
+							onChange={handlerSoundMobile}/>
+   					 <label htmlFor="s3">{t("MobileTaskCompleteTone")}</label>
+					</div>
+					<p className="settings__subtext">{t("PlaySoundWhenTaskCompleted")}</p>
+				</div>
 				<div className="settings__group">
-					{ error && <div className="denger">{ error }</div> }
+					{error && <strong className="fas fa-exclamation-circle denger">{error}</strong>}
 				</div>
 			</div>
 			{isUpdate && <footer className="settings__footer">
@@ -140,4 +218,4 @@ const General = ({close,handelActiveSidebar}) => {
 	);
 }
  
-export default General;
+export default memo(General);

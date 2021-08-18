@@ -8,10 +8,11 @@ const useFetchSettings = () => {
 	function fetchSettings(user){
 		try{
 			const settingsRef = firebase.database().ref(`users/${user.uid}/settings`);
-			let listener = settingsRef.on('value', async (snapshot) => {
-				const settingsVal = await snapshot.val();	
+			let listener = settingsRef.once('value', (snapshot) => {
+				const settingsVal = snapshot.val();	
 				if(settingsVal){
 					i18n.changeLanguage(settingsVal.language);
+					document.documentElement.lang = settingsVal.language; 
 					localStorage.setItem('settings', JSON.stringify(settingsVal));
 				}
 			})

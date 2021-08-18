@@ -4,14 +4,15 @@ import { useAuth } from '../../contexts/AuthContext';
 import useGetDate from "../useGetDate";
 
 const useFetchTasks = () => {
-	const {today} = useGetDate();
+	const {today,converToShortDate} = useGetDate();
 	const {currentUser} = useAuth();
 	const [taskListAll, setTaskListAll] = useState();
 	const [taskListToday, setTaskListToday] = useState();
 	const [taskNoCompleted,setTaskNoCompleted] = useState();
 	const [loader, setLoader] = useState(true);
 	const [error, setError] = useState('');
-	useEffect(() => {		
+	
+	useEffect(() =>{
 		try{
 			const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
 			const listener = taskRef.on('value', (snapshot) =>{
@@ -21,8 +22,9 @@ const useFetchTasks = () => {
 					taskListAll.push({id,...tasks[id]});
 				}
 				setTaskListAll(taskListAll);
-				setTaskListToday(taskListAll.filter(t => t.date === today()));
-				setTaskNoCompleted(taskListAll.filter(t => new Date(t.date) < new Date(today())))
+				//localStorage.setItem('tasks', JSON.stringify(taskListAll));
+				setTaskListToday(taskListAll.filter(t => converToShortDate(t.date) <= converToShortDate(today()) ));
+				setTaskNoCompleted(taskListAll.filter(t => converToShortDate(t.date) < converToShortDate(today()) ))
 				setLoader(false);
 			})
 			return () => taskRef.off('value', listener);
@@ -31,7 +33,7 @@ const useFetchTasks = () => {
 			setError(e.message);
 		}
 	// eslint-disable-next-line
-	}, [])
+	},[])
 	return {
 		taskListAll,
 		taskListToday,

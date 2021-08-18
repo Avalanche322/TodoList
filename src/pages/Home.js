@@ -1,11 +1,14 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState, memo } from "react";
+import { useTranslation } from "react-i18next";
+import DataSort from "react-data-sort";
 import Context from "../contexts/context";
 import Tasks from "../components/app/Tasks";
 import AddTask from "../components/app/AddTask";
 import useGetDate from "../customHooks/useGetDate";
 import useFetchTasks from "../customHooks/API/useFetchTasks";
 import useGetCountTasks from "../customHooks/useGetCountTasks";
-import { useTranslation } from "react-i18next";
+import Sort from "../components/Sort";
+import SubSort from "../components/SubSort";
 
 const Home = () => {
 	const {today,converToFullDate} = useGetDate();
@@ -13,14 +16,16 @@ const Home = () => {
 	const {countTaskToday} = useGetCountTasks();
 	const { addForm } = useContext(Context);
 	const stats = JSON.parse(localStorage.getItem('stats'));
-	const countCompletedToday = (stats &&  stats.days_items.total_completed + "");
-	const page = "Home";
+	const countCompletedToday = (stats && stats.days_items.total_completed + "");
+	const { t } = useTranslation();
+	const page = "home";
+	// for sort
+	const [selectItemSort,setSelectItemSort] = useState(JSON.parse(localStorage.getItem('sort')));
+	
 	useEffect(() => {
 		// title for page
 		document.title = `${t("home")} | TodoList`
-	// eslint-disable-next-line
-	}, [])
-	const { t } = useTranslation();
+	})
 	return (
 		<main className="main">
 			<div className="main__content container">
@@ -29,9 +34,23 @@ const Home = () => {
 						<span>{t("today")}</span>
 						<small>{converToFullDate(today())}</small>
 					</h1>
-					<h2 className="main__count-task">Completed tasks today: {countCompletedToday ?? "0"}</h2>
+					<Sort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
 				</div>
-				{taskListToday && <Tasks tasks={taskListToday} page={page}/>}
+					{selectItemSort.home && 
+						<SubSort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
+					}			
+				{taskListToday && 
+				<DataSort
+					data={taskListToday.length > 0 ? taskListToday : [{0:null}]}
+					defaultSortBy={selectItemSort.home?.sorted_by}
+					sortBy = {selectItemSort.home?.sorted_by === 'alphabetically' ? 'body' : selectItemSort.home?.sorted_by}
+					direction= {selectItemSort.home?.sort_order}
+					render={({data}) => {
+						return (
+							<Tasks tasks={data} page={page}/>
+						)
+					}}/>
+				}
 				<AddTask/>
 			</div>
 			{taskListToday && !countTaskToday && !addForm ? 
@@ -46,4 +65,4 @@ const Home = () => {
 	);
 }
  
-export default Home;
+export default memo(Home);

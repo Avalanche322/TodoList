@@ -25,9 +25,6 @@ const SingUp = () => {
 		if(!password && !name){
 			return setError('All fields must be filled')
 		}
-		else if(name.length < 3){
-			return setError('The name must not have a number or special character')
-		}
 		else if(!(/^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(password))){
 			return setError('password must be at least 8 characters long contain a number and an uppercase letter')
 		}
@@ -49,6 +46,18 @@ const SingUp = () => {
 		} catch(e){
 			setLoading(false);
 		}
+	}
+	function handlerInputEmail (e){
+		setError('');
+		setEmail(e.target.value);
+	}
+	function handlerInputName (e){
+		setError('');
+		setName(e.target.value);
+	}
+	function handlerInputPass (e){
+		setError('');
+		setPassword(e.target.value);
 	}
 	return (
 		<div className="sing-up">
@@ -72,7 +81,7 @@ const SingUp = () => {
 						<label className="sing-up__label" htmlFor="email">Email</label>
 						<div className="sing-up__input input">
 							<input 
-								onChange={(e) => setEmail(e.target.value)}
+								onChange={handlerInputEmail}
 								type="email" 
 								id="email" 
 								name="email"/>
@@ -82,7 +91,7 @@ const SingUp = () => {
 						<label className="sing-up__label" htmlFor="name">Your Name</label>
 						<div className="sing-up__input input" >
 							<input 
-								onChange={(e) => setName(e.target.value)}
+								onChange={handlerInputName}
 								type="text" 
 								id="name" 
 								name="name"/>
@@ -92,7 +101,7 @@ const SingUp = () => {
 						<label className="sing-up__label" htmlFor="password">Password</label>
 						<div className="input">
 							<input 
-								onChange={(e) => setPassword(e.target.value)}
+								onChange={handlerInputPass}
 								type={isShowPassword ? "text" : "password"} 
 								id="password" 
 								name="password" />

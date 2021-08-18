@@ -9,7 +9,7 @@ const useTheme = () => {
 	const {currentUser} = useAuth();
 	const [error, setError] = useState('');
 	/*
-		fetch settings from firebase and set in local is slow and if settings local is loaded we use them else we fetch thme
+		fetch settings from firebase and set in local is slow and if settings local is loadded we use them else we fetch thme
 	*/
 	useEffect(() =>{
 		if(currentSettings){

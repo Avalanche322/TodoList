@@ -1,38 +1,102 @@
-import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { memo, useContext } from "react";
+import { useHistory, useLocation } from "react-router";
 import Context from "../../contexts/context";
 import { ContextMenuTrigger } from "react-contextmenu";
+import { useTranslation } from "react-i18next";
+import ReactTooltip from "react-tooltip";
 import useCompletedTask from "../../customHooks/API/useCompletedTask";
+import Day from "../Day";
+import firebase from "../../firebase";
+import { useAuth } from "../../contexts/AuthContext";
+import useGetDay from "../../customHooks/useGetDay";
 import useGetDate from "../../customHooks/useGetDate";
+import useWindowSize from "../../customHooks/useWindowSize";
 
-const Task = ({task,page,setSelectTask}) => {
-	const { setTaskEdit,setAddForm } = useContext(Context);
+const Task = ({task,page,setSelectTask,selectTask}) => {
+	const { setTaskEdit,setAddForm,comments } = useContext(Context);
 	const {completedTask} = useCompletedTask();
-	const {today,converToFullDate} = useGetDate();
-	const handelTaskEdit = () =>{
+	const {currentUser} = useAuth();
+	const location = useLocation();
+	const {today,converToShortDate} = useGetDate();
+	const {isTouchDevice} = useWindowSize();
+	const history = useHistory();
+	const commentsCount = comments.filter(com => com.posted_uid === task.id).length;
+	const { t } = useTranslation();
+	const handlerTaskEdit = () =>{
 		setTaskEdit(task);
 		setAddForm(false);
 	}
-	return (
-		<li>
-			<ContextMenuTrigger id="contextmenu" holdToDisplay={-1}>
-				<div className="main__task" onContextMenu={() => setSelectTask(task)}>
-					<div className="main__task-action">
-						<button onClick={handelTaskEdit.bind(null)} className="far fa-edit main-task-action__btn"></button>
+	const handlerLinkToDetails = () => {
+		history.push({
+			pathname: `task/${task.id}`,
+			state: { background: location, prevPath: location.pathname }
+		})
+	}
+	function changeDay(date){
+		const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`).child(task.id);
+		taskRef.update({
+			date
+		});
+	}
+
+	/* Select day*/
+	const {isSelectDayOpen,isSelectDay,isDay,handlerSelectValueDay,setIsDay,setIsDayClass,setIsSelectDayOpen} = useGetDay();
+
+	return (		
+		<>
+			<ContextMenuTrigger id="contextmenu" holdToDisplay={isTouchDevice ? 700 : -1} collect={() => setSelectTask(task)}>
+				<div className={`main__task ${selectTask?.id === task.id ? 'main__task-focus' : ''}`}>
+						<input className="task__inp-cbx" id={`cbx${task.id}`} type="checkbox" style={{display: "none"}} />
+						<label className="task__cbx" htmlFor={`cbx${task.id}`} onClick={completedTask.bind(null,task)}>
+							<span className={`priority-cbx-${task.priority}`}>
+								<svg width="8px" height="8px" viewBox="0 0 12 9">
+								<polyline points="1 5 4 8 11 1"></polyline>
+								</svg>
+							</span>
+						</label>
+					<div className="main__group-task">
+						<div type="button" onClick={handlerLinkToDetails.bind(null)} className="main__link">
+							<p className={`task__text main__text ${task.completed ? "completed" : ""}`}>{task.body}</p>
+						</div>
+						<div className="main__group">
+							{(page === "home" && converToShortDate(task.date) === converToShortDate(today())) ? null : 
+								<Day
+									isDayClass={"fas fa-calendar-week"}
+									isSelectDayOpen={isSelectDayOpen}
+									isDay={isDay}
+									setIsSelectDayOpen={setIsSelectDayOpen}
+									date={task.date}
+									handlerSetDate={changeDay}
+									isSelectDay={isSelectDay}
+									handlerSelectValueDay={handlerSelectValueDay}
+									setIsDay={setIsDay}
+									setIsDayClass={setIsDayClass}/>
+							}
+							{commentsCount ? <Link to={{	
+								pathname: `task/${task.id}/comments`, 
+								state: { background: location, prevPath: location.pathname }}} 
+								type="button" 
+								className="far fa-comment-alt btn"
+							>{commentsCount}</Link> : null}
+						</div>
 					</div>
-					<input className={`main__checkbox priority-${task.priority}`} 
-						type="checkbox"
-						checked={task.completed}
-						onChange={completedTask.bind(null,task)}/>
-					<div>
-						<p className={`main__text ${task.completed ? "completed" : ""}`}>{task.body}</p>
-						{page === "Home" ? null : 
-							<p className={new Date(task.date) < new Date(today()) ? "denger" : ''}>{converToFullDate(task.date)}</p>
-						}
+					<div className="main__task-action">
+						<button 
+							data-tip={t("editTask")} 
+							onClick={handlerTaskEdit.bind(null)} 
+							className="far fa-edit btn-action"
+						></button>
 					</div>
 				</div>
 			</ContextMenuTrigger>
-		</li>	
+			<ReactTooltip 
+				effect="solid" 
+				place="bottom" 
+				className="tooltip"
+				arrowColor="transparent" />
+		</>
 	);
 }
  
-export default Task;
+export default memo(Task);

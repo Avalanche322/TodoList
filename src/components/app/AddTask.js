@@ -1,4 +1,6 @@
-import { useState,useContext } from "react";
+import { useState,useContext, useRef, memo } from "react";
+import { useTranslation } from "react-i18next";
+import { CSSTransition } from "react-transition-group";
 import Context from "../../contexts/context";
 import TextareaAutosize from "react-textarea-autosize";
 import Comment from "../Comment";
@@ -8,13 +10,12 @@ import useGetPriority from "../../customHooks/useGetPriority";
 import useGetDay from "../../customHooks/useGetDay";
 import useGetDate from "../../customHooks/useGetDate";
 import useAddTask from "../../customHooks/API/useAddTask";
-import { useTranslation } from "react-i18next";
 
 const AddTask = () => {
 	/*hook add task*/
-	const {addTask} = useAddTask();
+	const {addTask, error: err} = useAddTask();
 	/* Select day*/
-	const {handlerDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,handlerSetDate,isDay,isSelectDay,} = useGetDay();	
+	const {setIsSelectDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,handlerSetDate,isDay,isSelectDay,setIsDay,setIsDayClass} = useGetDay();	
 	/* Select priority*/
 	const {handlerSelectValuePriority,priority,isSelecPriority,isPriorityClass,handlerPriorityOpen,isSelectPriorityOpen,} = useGetPriority();
 	/* Select comment*/
@@ -23,23 +24,25 @@ const AddTask = () => {
 		setComment(text);
 	}
 	/*Common*/
-	const { addForm, setAddForm,setTaskEdit } = useContext(Context);
+	const { addForm, setAddForm,setTaskEdit, settings } = useContext(Context);
 	const {today} = useGetDate();
 	const [body, setBody] = useState('');
-	const [error, setError] = useState('');
+	const [error, setError] = useState(err);
 	const { t } = useTranslation();
-
-	function handelTextArea(e){
-		if(e.nativeEvent.inputType === "insertLineBreak"){
-			handlerSubmit(e);
+	const nodeRef = useRef(null);
+	const timeout = 500;
+	function handlerTextArea(e){ // submit using Enter
+		if(e.which === 13){
+			if(body.trim()){
+				handlerSubmit(e);
+			}
 			return
 		};
-		setBody(e.target.value);
 	}
 
 	function handlerDefault() {
 		setBody('');
-		handlerSelectValueDay('Today',today(),'fas fa-calendar-week');
+		handlerSelectValueDay(t("today"),today(),'fas fa-calendar-week');
 		handlerSelectValuePriority('', 4);
 		setComment('');
 	}
@@ -53,46 +56,66 @@ const AddTask = () => {
 			alert(error);
 		}
 	}
-	function handelCancel() {
+	function handlerCancel() {
 		setAddForm(false);
 		handlerDefault();
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
-	function handelAddTask() {
+	function handlerAddTask() {
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
 		setAddForm(true);
 		setTaskEdit({id:null});
 	}
+
 	return (
 		<div className="main__editor-task">
-			{addForm && 
-				<form className="main-editor-task__form" onSubmit={handlerSubmit}>
-					<div className="main-editor-task-form__edit">
+			<CSSTransition 
+			in={addForm}
+			classNames="height" 
+			timeout={timeout}
+			nodeRef={nodeRef}
+			unmountOnExit
+			onEnter={() => setAddForm(true)}
+			onExited={() => setAddForm(false)}>
+				<form ref={nodeRef} className="main-editor-task__form" onSubmit={handlerSubmit}>
+					<div className="textarea__body">
 						<TextareaAutosize 
-							className="main-editor-task-form__text" 
+							className="textarea__text" 
 							maxRows="6" 
-							minRows="1" 
+							minRows="2" 
 							autoFocus 
 							placeholder="Task name"
 							value={body}
-							onChange={(e) => handelTextArea(e)}>
+							onChange={(e) => setBody(e.target.value)}
+							onKeyDown={(e) => handlerTextArea(e)}>
 						</TextareaAutosize>
-						<div className="main-editor-task-form__bottom">
-							<Day
-								handlerDayOpen={handlerDayOpen} 
-								isDayClass={isDayClass} 
-								isSelectDayOpen={isSelectDayOpen}
-								isDay={isDay}
-								date={date}
-								handlerSetDate={handlerSetDate}
-								isSelectDay={isSelectDay}
-								handlerSelectValueDay={handlerSelectValueDay}/>
-							<div className="main-editor-task-form__group">
-								<Priority 
-									isSelecPriority={isSelecPriority} 
-									isPriorityClass={isPriorityClass} 
-									handlerSelectValuePriority={handlerSelectValuePriority}
-									setIsSelectPriorityOpen={handlerPriorityOpen}
-									isSelectPriorityOpen={isSelectPriorityOpen}/>
-								<Comment comment={comment} setComment={handlerSetComment}/>
+						<div className="textarea__bottom">
+						{body.length > 500 ? 
+						<div className="denger limit">{t("taskNameCharacterLimit")} {body.length} / 500</div> : 
+						comment.length > 500 ?
+						 <div className="denger limit">{t("commentNameCharacterLimit")} {comment.length} / 500</div> 
+						 : null}
+							<div className="textarea__block">
+								<Day
+									setIsSelectDayOpen={setIsSelectDayOpen}
+									isDayClass={isDayClass} 
+									isSelectDayOpen={isSelectDayOpen}
+									isDay={isDay}
+									date={date}
+									handlerSetDate={handlerSetDate}
+									isSelectDay={isSelectDay}
+									handlerSelectValueDay={handlerSelectValueDay}
+									setIsDay={setIsDay}
+									setIsDayClass={setIsDayClass}/>
+								<div className="textarea__group">
+									<Priority 
+										isSelecPriority={isSelecPriority} 
+										isPriorityClass={isPriorityClass} 
+										handlerSelectValuePriority={handlerSelectValuePriority}
+										setIsSelectPriorityOpen={handlerPriorityOpen}
+										isSelectPriorityOpen={isSelectPriorityOpen}/>
+									<Comment comment={comment} setComment={handlerSetComment}/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -100,18 +123,18 @@ const AddTask = () => {
 						<button 
 							className="main-editor-task-form__btn-submit btn-submit" 
 							type="submit"
-							disabled={!body.trim()}>
+							disabled={body.length > 500 || comment.length > 500 || !body.trim()}>
 						{t("addTask")}</button>
 						<button 
 							className="main-editor-task-form__btn-cancel btn-cancel"
 							type="button"
-							onClick={handelCancel.bind(null)}>
+							onClick={handlerCancel.bind(null)}>
 						{t("cancel")}</button>
 					</div>
 				</form>
-			}
+			</CSSTransition>
 			{!addForm && 
-				<button className="main-editor-task__btn" onClick={handelAddTask.bind(null)}>
+				<button className="main-editor-task__btn" onClick={handlerAddTask.bind(null)}>
 					<i className="fas fa-plus"></i>
 					<span>{t("addTask")}</span>
 				</button>
@@ -120,4 +143,4 @@ const AddTask = () => {
 	);
 }
  
-export default AddTask;
+export default memo(AddTask);

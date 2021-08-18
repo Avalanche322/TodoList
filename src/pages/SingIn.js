@@ -38,6 +38,14 @@ const SingIn = () => {
 			setLoading(false);
 		}
 	}
+	function handlerInputEmail (e){
+		setError('');
+		setEmail(e.target.value);
+	}
+	function handlerInputPass (e){
+		setError('');
+		setPassword(e.target.value);
+	}
 	return (
 		<div className="sing-in">
 			<div className="sing-in__body">
@@ -60,7 +68,7 @@ const SingIn = () => {
 						<label className="sing-up__label" htmlFor="email">Email</label>
 						<div className="input">
 							<input 
-								onChange={(e) => setEmail(e.target.value)}
+								onChange={handlerInputEmail}
 								type="email" 
 								id="email" 
 								name="email"/>
@@ -70,7 +78,7 @@ const SingIn = () => {
 						<label className="sing-ip__label" htmlFor="password">Password</label>
 						<div className="input">
 							<input 
-								onChange={(e) => setPassword(e.target.value)}
+								onChange={handlerInputPass}
 								type={isShowPassword ? "text" : "password"} 
 								id="password" 
 								name="password" />

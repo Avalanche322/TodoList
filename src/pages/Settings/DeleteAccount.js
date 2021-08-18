@@ -1,10 +1,12 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect, memo, useContext } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
 import { useHistory } from "react-router";
+import Context from "../../contexts/context";
 
 const DeleteAccount = ({close,back}) => {
+	const {settings} = useContext(Context);
 	const history = useHistory();
 	const {deleteAccount,error: err} = useAuth();
 	const [error, setError] = useState(err);
@@ -19,16 +21,23 @@ const DeleteAccount = ({close,back}) => {
 	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();
+		setError("");
 		try{
 			setLoading(true);
-			await deleteAccount(currentPassword);
+			const isDeletedAccount = await deleteAccount(currentPassword);
 			setCurrentPassword("");
-			setError("");
-			history.push('/singin');
+			if(isDeletedAccount){
+				if(settings.vibration) navigator.vibrate(500); // togle vibration
+				history.push('/singin');
+			}
 		} catch(e){
 			setLoading(false);
 			setError(e.message);
 		}
+	}
+	function handlerShowPass(){
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setIsShowPassword(!isShowPassword);
 	}
 	return (
 		<form onSubmit={handleSubmit} className="settings__form">
@@ -61,7 +70,7 @@ const DeleteAccount = ({close,back}) => {
 								<button 
 									type="button" 
 									className={`${isShowPassword ? "far fa-eye" : "far fa-eye-slash"} btn-password`}
-									onClick={setIsShowPassword.bind(null,!isShowPassword)}></button>
+									onClick={handlerShowPass.bind(null)}></button>
 						</div>
 					</div>
 					<div className="settings__group settings-delete__group">
@@ -84,4 +93,4 @@ const DeleteAccount = ({close,back}) => {
 	);
 }
  
-export default DeleteAccount;
+export default memo(DeleteAccount);

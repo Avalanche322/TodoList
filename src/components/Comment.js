@@ -18,23 +18,23 @@ const Comment = ({comment, setComment}) => {
 		};	
 	});
 	return (
-		<div ref={selectCommentRef} className="main-editor-task-form-comment">
+		<div ref={selectCommentRef} className="comment">
 			<button 
 				type="button"
 				data-tip={t("addComment")}
-				className={`main-editor-task-form-comment__btn ${comment.length > 0 ? 'fas' : 'far'} fa-comment-alt`}
+				className={`comment__btn ${comment.length > 0 ? 'fas' : 'far'} fa-comment-alt`}
 				onClick={() => setIsSelectCommentOpen(!isSelectCommentOpen)}>		
 			</button>
-			<div className={`main-editor-task-form-comment__dialog ${isSelectCommentOpen ? "open" : "hidden"}`}>
-				<div className="main-editor-task-form-comment__header">
-					<h3 className="main-editor-task-form-comment__title">{t("quickComment")}</h3>
+			<div className={`comment__dialog ${isSelectCommentOpen ? "open" : "hidden"}`}>
+				<div className="comment__header">
+					<h3 className="comment__title">{t("quickComment")}</h3>
 					<span 
-						className="fas fa-times main-editor-task-form-comment__close close" 
+						className="fas fa-times comment__close close" 
 						onClick={() => setIsSelectCommentOpen(false)}>
 					</span>
 				</div>
 				<TextareaAutosize 
-					className="main-editor-task-form-comment__text" 
+					className="comment__text" 
 					maxRows="3" 
 					minRows="1" 
 					autoFocus 

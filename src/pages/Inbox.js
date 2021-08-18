@@ -1,31 +1,44 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import DataSort from "react-data-sort";
 import Context from "../contexts/context";
 import Tasks from "../components/app/Tasks";
 import AddTask from "../components/app/AddTask";
 import useFetchTasks from "../customHooks/API/useFetchTasks";
 import useGetCountTasks from "../customHooks/useGetCountTasks";
-import { useTranslation } from "react-i18next";
+import Sort from "../components/Sort";
+import SubSort from "../components/SubSort";
 
 const Inbox = () => {
 	const {taskListAll} = useFetchTasks();
 	const {countTaskAll} = useGetCountTasks();
 	const { addForm } = useContext(Context);
-	const stats = JSON.parse(localStorage.getItem('stats'));
-	const countCompletedAll = stats.completed_count + "";
+	const page = "inbox";
+	// for sort
+	const [selectItemSort,setSelectItemSort] = useState(JSON.parse(localStorage.getItem('sort')));
 	useEffect(() => {
 		// title for page
 		document.title = `${t("inbox")} | TodoList`;
-	// eslint-disable-next-line
-	}, [])
+	})
 	const { t } = useTranslation();
 	return (
 		<main className="main">
 			<div className="main__content container">
 				<div className="main__header">
 					<h1 className="main__title"><span>{t("inbox")}</span></h1>
-					<h2 className="main__count-task">Completed all tasks: {countCompletedAll ?? "0"}</h2>
+					<Sort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
 				</div>
-				{taskListAll && <Tasks tasks={taskListAll}/>}
+				{selectItemSort.inbox && <SubSort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />}
+				{taskListAll && 
+				<DataSort
+					data={taskListAll.length > 0 ? taskListAll : [{0:null}]}
+					defaultSortBy={selectItemSort.inbox?.sorted_by}
+					sortBy = {selectItemSort.inbox?.sorted_by === 'alphabetically' ? 'body' : selectItemSort.inbox?.sorted_by}
+					direction= {selectItemSort.inbox?.sort_order}
+					render={({data}) => (
+						<Tasks tasks={data} page={page}/>
+					)}
+				/>}
 				<AddTask/>
 			</div>
 			{taskListAll && !countTaskAll && !addForm ? 
