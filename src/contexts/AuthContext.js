@@ -25,7 +25,7 @@ export function AuthProvider ({children}){
 			body: "Hello my dear friend. Your first task today is to complete !!!",
 			completed: false,
 			date_added: today(),
-			date: converToShortDate(today()),
+			date: today(),
 			priority: 3,
 		};
 		const settings = {
@@ -62,7 +62,6 @@ export function AuthProvider ({children}){
 		await settingsRef.update(settings);
 		await statsRef.update(stats);
 		await sortRef.update(sort);
-		localStorage.setItem('comments', JSON.stringify([comment]));
 		localStorage.setItem('stats', JSON.stringify(stats));
 		localStorage.setItem('settings', JSON.stringify(settings));
 		localStorage.setItem('sort', JSON.stringify(sort));

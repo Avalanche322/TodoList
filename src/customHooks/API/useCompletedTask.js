@@ -35,7 +35,8 @@ const useCompletedTask = () => {
 			playAudio();
 			for (const comment of comments) {
 				if(comment.posted_uid === task.id){
-					deleteTaskComment(comment);
+					//deleteTaskComment(comment);
+					console.log(comment);
 				}
 			}
 						
