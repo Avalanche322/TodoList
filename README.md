@@ -1,70 +1,61 @@
-# Getting Started with Create React App
+# The best TodoList
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An application use Firebase for hosting and datebase, built with React, JavaScript, and SCSS.
 
-## Available Scripts
+## Project Status
 
-In the project directory, you can run:
+This project is currently done. Users can sing up and sing in with Google or email and passwod, can mix them, change theme and language, turn on and of vibration and sound, name, password, avatar, add, delete or edit tasks with date, priority and comments, sort tasks. For mobile added swipe sidebar, vibration and sound.
 
-### `npm start`
+## Project Screen Shots
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![home page](src/img/readmi/Screenshot_1.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+![quick add task](src/img/readmi/quick-add-task.gif)
 
-### `npm test`
+![settings](src/img/readmi/settings.gif)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![context menu](src/img/readmi/context-menu.gif)
 
-### `npm run build`
+![task details](src/img/readmi/task-details.gif)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![swipe sidebar](src/img/swipe-menu.gif)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation and Setup Instructions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Open [https://todol-dev.firebaseapp.com/](https://todol-dev.firebaseapp.com/) to view it in the browser.
 
-### `npm run eject`
+Clone down this repository. You will need firebase account and `node`, `npm` installed globally on your machine.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Installation:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Clone repository
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+`git clone https://github.com/Avalanche322/TodoList.git`  
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Open folder
 
-## Learn More
+`cd TodoList`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Install node modules:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+`npm install`
 
-### Code Splitting
+To create `.env.local` (API Google Firebase)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+You must open your IDE and create `.env.local` in root folder.
 
-### Analyzing the Bundle Size
+`REACT_APP_API_KEY= API KEY
+REACT_APP_AUTH_DOMAIN= AUTH DOMAIN
+REACT_APP_PROJECT_ID= PROJECT ID
+REACT_APP_STORAGE_BUCKET= STORAGE BUCKET
+REACT_APP_MESSAGING_SENDER_ID= MESSAGING SENDER ID
+REACT_APP_APP_ID= APP ID
+REACT_APP_MEASUREMENT_ID= MEASUREMENT ID`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To Start Server:
 
-### Making a Progressive Web App
+`npm run start`  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+To Visit App:
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`http://localhost:3000` 

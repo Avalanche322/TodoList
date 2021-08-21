@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import firebase from '../firebase';
 import profileImg from '../img/user2.png';
 import useGetDate from '../customHooks/useGetDate';
-import { useTranslation } from 'react-i18next';
 import themes from "../theme/schema.json";
-import useFetchSettings from '../customHooks/API/useFetchSettings';
-import useFetchStats from '../customHooks/API/useFetchStats';
+import useFetchData from '../customHooks/API/useFetchData';
 
 const AuthContext = React.createContext()
 
@@ -14,41 +13,60 @@ export function useAuth(){
 }
 
 export function AuthProvider ({children}){
-	const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('User')));	
-	const {today} = useGetDate();
 	const {i18n} = useTranslation();
-	const {fetchSettings} = useFetchSettings();
-	const {fetchStats} = useFetchStats()
+	const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('User')));	
+	const {fetchData,loader} = useFetchData();
+	const {today,converToShortDate} = useGetDate();
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState();
 	const [googleAccount, setGoogleAccount] = useState();
+	const [isNewUserDialog, setIsNewUserDialog] = useState(false);
 	async function defaultValue(u){
 		const task = {
 			body: "Hello my dear friend. Your first task today is to complete !!!",
 			completed: false,
-			date: today(),
+			date_added: today(),
+			date: converToShortDate(today()),
 			priority: 3,
-			comment: "This is comment. Try and u add comment"
 		};
-		const settings ={
+		const settings = {
 			language: "en",
-			theme: "blueDark"
+			theme: "blueDark",
+			vibration: true,
+			completed_sound_desktop: false,
+			completed_sound_mobile: true,
 		};
+		const sort = {
+			home: {},
+			inbox: {}
+		}
+		const stats = {
+			completed_count: 0,
+			days_items: {
+				date: today(),
+				total_completed: 0
+			}
+		}
 		const taskRef = firebase.database().ref(`users/${u.user.uid}/tasks`);
-		const statsDaysItemsRef = firebase.database().ref(`users/${u.user.uid}/stats/days_items`);
+		const insertData = await taskRef.push(task);
+		
+		const comment = {text: "This is comment. Try and u add comment",posted_uid: insertData.key, date_posted: today()};
+		const taskCommentRef = firebase.database().ref(`users/${u.user.uid}/comments`);
+
 		const statsRef = firebase.database().ref(`users/${u.user.uid}/stats`);
+		
 		const settingsRef = firebase.database().ref(`users/${u.user.uid}/settings`);
-		await taskRef.push(task);
+
+		const sortRef = firebase.database().ref(`users/${u.user.uid}/sort`);
+		
+		await taskCommentRef.push(comment)
 		await settingsRef.update(settings);
-		await statsDaysItemsRef.update({
-			date: today(),
-			total_completed: 0
-		})
-		await statsRef.update({
-			completed_count: 0
-		})
+		await statsRef.update(stats);
+		await sortRef.update(sort);
+		localStorage.setItem('comments', JSON.stringify([comment]));
+		localStorage.setItem('stats', JSON.stringify(stats));
+		localStorage.setItem('settings', JSON.stringify(settings));
+		localStorage.setItem('sort', JSON.stringify(sort));
 	}
-	
 	function isProviderGoogle(){
 		for (const i of currentUser.providerData) {
 			if(i.providerId === "google.com"){
@@ -71,152 +89,110 @@ export function AuthProvider ({children}){
 		return currentUser.reauthenticateWithCredential(cred)
 	}
 	async function unlinkGoogle(){
-		setError("");
-		try{
-			for (const i of currentUser.providerData) {
-				if(i.providerId === "google.com"){
-					await currentUser.unlink(i.providerId);
-					setGoogleAccount(null);
-				}
+		for (const i of currentUser.providerData) {
+			if(i.providerId === "google.com"){
+				await currentUser.unlink(i.providerId);
+				setGoogleAccount(null);
+				//break
 			}
-		} catch(e){
-			setError(e.message);
 		}
 	}
 	async function LinkInGoogle(){
-		setError("");
-		try{
-			let provider = new firebase.auth.GoogleAuthProvider();
-			await firebase.auth().currentUser.linkWithPopup(provider);
-		} catch(e){
-			setError(e.message);
-		}
+		let provider = new firebase.auth.GoogleAuthProvider();
+		await firebase.auth().currentUser.linkWithPopup(provider);
 	}
 	async function singup(email,password,name){
-		setError("");
 		const u = await firebase.auth().createUserWithEmailAndPassword(email, password);
 		await u.user.updateProfile({
 			displayName: name,
 			photoURL: profileImg
 		})
 		defaultValue(u);
+		setIsNewUserDialog(true);
 	}
 	async function singInWithGoogle(){
-		setError("");
 		const u = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
 		if (u.additionalUserInfo.isNewUser) {
 			defaultValue(u);
+			setIsNewUserDialog(true);
 		}
 	}
 	const singin = async (email,password) => await firebase.auth().signInWithEmailAndPassword(email, password);
 	const logout = async () => await firebase.auth().signOut();
 	const resetPassword = async email => await firebase.auth().sendPasswordResetEmail(email);
 	async function changeName(name){
-		setError("");
 		const user = JSON.parse(localStorage.getItem('User'));
 		user.displayName = name;
 		localStorage.setItem('User', JSON.stringify(user));
-		await currentUser.updateProfile({displayName: name});		
+		await currentUser.updateProfile({displayName: name});	
 	};
 	async function changePassword(currentPassword, newPassword){
-		setError("");
 		if(!isProviderPasswordUser()){
-			try{
-				currentUser.linkWithCredential(firebase.auth.EmailAuthProvider.credential(currentUser.email, newPassword)).then((u)=>{
-					setCurrentUser(u.user);
-					localStorage.setItem('User', JSON.stringify(u.user))
-				});
-			} catch(e){
-				setError(e.message);
-			}
+			await firebase.auth().currentUser.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
+			const u = await currentUser.linkWithCredential(firebase.auth.EmailAuthProvider.credential(currentUser.email, newPassword))
+			setCurrentUser(u.user);
+			localStorage.setItem('User', JSON.stringify(u.user))
 		}	
 		else{
-			try{
-				await reauthenticate(currentPassword);
-				await currentUser.updatePassword(newPassword);
-			} catch(e){
-				setError(e.message);
-			}
+			await reauthenticate(currentPassword);
+			await currentUser.updatePassword(newPassword);
 		}
 	}
 	async function deleteAccount(currentPassword){
-		setError("");
-		try{
-			reauthenticate(currentPassword);
-			removeAvatar();
-			await currentUser.delete();
-			await firebase.database().ref(`users/${currentUser.uid}`).remove();
-		} catch(e){
-			setError(e.message);
-		}
+		await reauthenticate(currentPassword);
+		await removeAvatar();
+		await currentUser.delete();
+		await firebase.database().ref(`users/${currentUser.uid}`).remove();
 	}
 	async function changeEmail(currentPassword, newEmail){
-		try{
-			setError("");
-			reauthenticate(currentPassword);
-			await currentUser.updateEmail(newEmail);
-		} catch(e){
-			setError(e.message)
+		await reauthenticate(currentPassword);
+		await currentUser.updateEmail(newEmail);
+	}
+	async function updateSettings(settings){
+		const currentSettings = JSON.parse(localStorage.getItem('settings'));
+		const settingsRef = firebase.database().ref(`users/${currentUser.uid}/settings`);
+		await settingsRef.update(settings);
+		if(currentSettings.language !== settings.language){
+			i18n.changeLanguage(settings.language);
 		}
 	}
-	async function updateLanguage(lng){
-		setError("");
-		const settingsRef = firebase.database().ref(`users/${currentUser.uid}/settings`);
-		await settingsRef.update({
-			language: lng
-		})
-		i18n.changeLanguage(lng);
-	}
-	async function updateTheme(themeName){
-		setError("");
-		const settingsRef = firebase.database().ref(`users/${currentUser.uid}/settings`);
-		await settingsRef.update({
-			theme: themeName
-		})
+	async function updateSort(sort){
+		const sortRef = firebase.database().ref(`users/${currentUser.uid}/sort`);
+		await sortRef.update(sort);
+		localStorage.setItem('sort', JSON.stringify(sort))
 	}
 	async function uploadAvatar(img){
-		setError("");
-		if(img.size <= 4194304){
-			const storageRef = firebase.storage().ref();
-			const fileRef = storageRef.child(currentUser.uid);
-			await fileRef.put(img);
-			const user = JSON.parse(localStorage.getItem('User'));
-			user.photoURL = await fileRef.getDownloadURL();
-			localStorage.setItem('User', JSON.stringify(user));
-			await currentUser.updateProfile({
-				photoURL: await fileRef.getDownloadURL()
-			})
-		} else{
-			setError("image must be lower 4 MB");
-		}
+		const storageRef = firebase.storage().ref();
+		const fileRef = storageRef.child(currentUser.uid);
+		await fileRef.put(img);
+		const user = JSON.parse(localStorage.getItem('User'));
+		user.photoURL = await fileRef.getDownloadURL();
+		localStorage.setItem('User', JSON.stringify(user));
+		await currentUser.updateProfile({
+			photoURL: await fileRef.getDownloadURL()
+		})
 	}
 	async function removeAvatar(){
-		setError("");
-		try{
-			const ref = firebase.storage().ref(currentUser.uid)
-			try {
-				await ref.getDownloadURL()
-				let desertRef = firebase.storage().refFromURL(currentUser.photoURL);
-				await desertRef.delete();
-			} catch(e){}
-			finally{
-				const user = JSON.parse(localStorage.getItem('User'));
-				user.photoURL = profileImg;
-				localStorage.setItem('User', JSON.stringify(user));
-				await currentUser.updateProfile({
-					photoURL: profileImg
-				})
-			}
-		} catch(e){
-			setError(e.message);
+		const ref = firebase.storage().ref(currentUser.uid)
+		try {
+			await ref.getDownloadURL()
+			let desertRef = firebase.storage().refFromURL(currentUser.photoURL);
+			await desertRef.delete();
+		} catch(e){}
+		finally{
+			const user = JSON.parse(localStorage.getItem('User'));
+			user.photoURL = profileImg;
+			localStorage.setItem('User', JSON.stringify(user));
+			await currentUser.updateProfile({
+				photoURL: profileImg
+			})
 		}
 	}
 	useEffect(() =>{ // check if stats no today, clear stats
-		async function fetchData() {
-			setError("");
+		async function checkDayTasks() {
 			const stats = JSON.parse(localStorage.getItem('stats'));
 			if(stats){
-				if(stats.days_items.date !== today()){
+				if(stats.days_items.date !== converToShortDate(today())){
 					stats.days_items.total_completed = 0;
 					localStorage.setItem('stats', JSON.stringify(stats));
 					const statsRef = firebase.database().ref(`users/${currentUser.uid}/stats/days_items`);
@@ -226,27 +202,29 @@ export function AuthProvider ({children}){
 				}
 			}
 		}
-		fetchData();
+		checkDayTasks();
 	// eslint-disable-next-line
 	},[])
 	useEffect(() => {
 		const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
 			if(user){
-				setCurrentUser(user)
+				setCurrentUser(user);
 				localStorage.setItem('User', JSON.stringify(user)); // set local user
+				localStorage.setItem('themes', JSON.stringify(themes));
 				const sidebar_on = JSON.parse(localStorage.getItem('sidebar_on'));// set local sidebar_on
 				localStorage.setItem('sidebar_on', JSON.stringify(sidebar_on ?? true));
-				localStorage.setItem('themes', JSON.stringify(themes));
-				fetchSettings(user); // set settings local
-				await fetchStats(user) // set stats local
+				fetchData(user);
 				setLoading(false); // hide loading
 			} else{
 				setCurrentUser(null);
 				localStorage.removeItem('User');
 				localStorage.removeItem('settings');
-				localStorage.removeItem('sidebar_on');
 				localStorage.removeItem('stats');
 				localStorage.removeItem('themes');
+				localStorage.removeItem('sort');
+				localStorage.removeItem('comments');
+				localStorage.removeItem('sidebar_on');
+				localStorage.removeItem('tasks');
 				setLoading(false);
 			}
 		})
@@ -264,16 +242,18 @@ export function AuthProvider ({children}){
 		changeName,
 		uploadAvatar,
 		removeAvatar,
-		updateLanguage,
 		changePassword,
 		changeEmail,
-		updateTheme,
-		error,
+		updateSettings,
 		LinkInGoogle,
 		isProviderPasswordUser,
 		isProviderGoogle,
 		unlinkGoogle,
-		googleAccount
+		googleAccount,
+		setIsNewUserDialog,
+		isNewUserDialog,
+		updateSort,
+		loader
 	}
 	return (
 		<AuthContext.Provider value={value}>

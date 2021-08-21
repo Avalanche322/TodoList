@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Context from "../contexts/context";
+
 const useGetPriority = () => {
+	const {settings} = useContext(Context);
 	const [isSelectPriorityOpen, setIsSelectPriorityOpen] = useState(false);
 	const [isPriorityClass, setIsPriorityClass] = useState('');
 	const [priority, setPriority] = useState(4);
@@ -12,10 +15,11 @@ const useGetPriority = () => {
 	function handlerPriorityOpen(val){
 		setIsSelectPriorityOpen(val)
 	}
-	function handlerSelectValuePriority(classValue, priority){
+	function handlerSelectValuePriority(classValue, priority, setPriorityEdit = setPriority){
 		setIsPriorityClass(classValue);
-		setPriority(priority);
+		setPriorityEdit(priority);
 		handlerPriorityOpen(false);
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
 	return {
 		handlerSelectValuePriority,
@@ -24,7 +28,7 @@ const useGetPriority = () => {
 		isPriorityClass,
 		handlerPriorityOpen,
 		isSelectPriorityOpen,
-		setIsPriorityClass,
+		setIsPriorityClass
 	}
 }
  

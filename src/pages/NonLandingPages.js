@@ -1,57 +1,54 @@
-import React, {useState} from "react";
-import {Switch} from 'react-router-dom';
+import { useState} from "react";
+import { useSwipeable } from "react-swipeable";
+import {Route, Switch} from 'react-router-dom';
 import {ThemeProvider} from "styled-components";
 import { useLocation } from "react-router";
-import ReactTooltip from "react-tooltip";
 import Sidebar from "../components/app/Sidebar";
 import Header from "../components/app/Header";
-import PrivateRoute from "../components/PrivateRoute";
 import useWindowSize from '../customHooks/useWindowSize';
-import useFetchTasks from "../customHooks/API/useFetchTasks";
 import Context from "../contexts/context"
-import Loader from "../components/app/Loader";
 import Home from "../pages/Home";
 import Inbox from "../pages/Inbox";
 import { GlobalStyles } from "../theme/GlobalStles";
 import useTheme from "../customHooks/useTheme";
 import Settings from "../pages/Settings";
 import NotFound from "../pages/NotFound";
+import TaskDetails from "./TaskDetails";
+import ModalBox from "../components/app/ModalBox";
+import { useAuth } from "../contexts/AuthContext";
 
 const NonLandingPages  = () => {
+	const {setIsNewUserDialog,isNewUserDialog} = useAuth();
+	const settings = JSON.parse(localStorage.getItem('settings'));
+	const comments = JSON.parse(localStorage.getItem('comments'));
+	const [tasks,setTasks] = useState(JSON.parse(localStorage.getItem('tasks')) );
 	const [addForm, setAddForm] = useState(false); // add task toggle open
 	const [taskEdit, setTaskEdit] = useState({id:null}); // task edit toggle open
-	const size = useWindowSize();
-	const {loader, error, taskListAll} = useFetchTasks();
+	const {windowSize} = useWindowSize();
 	const {theme,setTheme} = useTheme();
-	let location = useLocation();
+	const [isActiveHeader, setIsActiveHeader] = useState(false); // sidebar header
+	let location = useLocation(); // location for settings and task details
 	let background = location.state && location.state.background;
+	const [, setRerenderComponnent] = useState({}); // rerender component
+	const handlers = useSwipeable({ // swipe open and close sidebar (mobile)
+		onSwipedRight: () => setIsActiveHeader(true),
+		onSwipedLeft: () => setIsActiveHeader(false),
+	});
 	return (
 		<ThemeProvider theme={theme}>
 			<GlobalStyles/>
-			<Context.Provider value={{addForm, setAddForm,taskEdit, setTaskEdit,theme,setTheme}}>
-				<div className="wrapper">
-					{loader &&  <Loader/>}
-					{ error && <div className="denger">{ error }</div> }
-					{size.width <= 768 ? <Header/> : <Sidebar/>}
-					{taskListAll && <Switch location={background || location}>
-						<PrivateRoute 
-						exact path="/" 
-						component={Home}/>
-						<PrivateRoute 
-						exact path="/inbox" 
-						component={Inbox}/>
-						<PrivateRoute 
-						path="*" 
-						component={NotFound}/>
-					</Switch>}
-					{!loader && background && <PrivateRoute 
-						path= "/settings"
-						component={Settings}/>}
-					<ReactTooltip 
-						effect="solid"		
-						className="tooltip"
-					arrowColor="transparent" />
-				</div>
+			<Context.Provider value={{addForm,setAddForm,taskEdit,setTaskEdit,theme,setTheme,settings,comments,tasks,setTasks,setRerenderComponnent}}>		
+				<div className='wrapper' {...handlers}>
+					{isNewUserDialog && <ModalBox setIsNewUserDialog={setIsNewUserDialog} isNewUserDialog={isNewUserDialog} />}
+					{windowSize.width <= 768 ? <Header isActive={isActiveHeader} setIsActive={setIsActiveHeader}/> : <Sidebar/>}
+					<Switch location={background || location}>
+						<Route exact path="/" component={Home} />
+						<Route exact path="/inbox" component={Inbox} />
+						<Route path="*" component={NotFound}/>
+					</Switch>
+					{background && <Route path= "/settings/account" component={Settings}/>}
+					{background && <Route path={`/task/:id`} component={TaskDetails}/>}
+				</div> 	
 			</Context.Provider>
 		</ThemeProvider>
 	);

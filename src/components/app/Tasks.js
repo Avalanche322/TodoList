@@ -1,4 +1,5 @@
-import { useState, useContext } from "react";
+import { useState, useContext, memo } from "react";
+import { CSSTransition,TransitionGroup} from "react-transition-group";
 import CustomContexMenu from "../CustomContexMenu";
 import Edit from "./Edit";
 import Task from "./Task";
@@ -6,19 +7,33 @@ import Context from "../../contexts/context";
 
 const Tasks = ({tasks,page}) => {
 	const [selectTask, setSelectTask] = useState();
-	const { taskEdit } = useContext(Context);
+	const { taskEdit,setTaskEdit } = useContext(Context);
+	const cancelEditTask = () => setTaskEdit({id:null});
 	return (
-		<ul className="main__tasks">
-			{tasks.map(task =>{
-				return (
+		<>
+			<ul className="main__tasks">
+				<TransitionGroup component={null}>
+				{tasks.map((task) => ( 
+					task.id ?
 					taskEdit.id !== task.id 
-					? <Task task={task} key={task.id} page={page} setSelectTask={setSelectTask} /> 
-					: <Edit key={task.id} />
+						?  <CSSTransition in={true} key={task.id} timeout={400} classNames="move">					
+								<li>
+									<Task task={task} page={page} setSelectTask={setSelectTask} selectTask={selectTask}/>
+								</li>
+							</CSSTransition>
+						: <CSSTransition in={true} key={`edit${task.id}`} timeout={400} classNames="move-back" unmountOnExit>
+								<li>
+									<Edit cancel={cancelEditTask} task={taskEdit}/>
+								</li>
+							</CSSTransition>
+					: null
 				)
-			})}		
-			<CustomContexMenu selectTask={selectTask} />
+				)}			
+			</TransitionGroup>
 		</ul>
+		<CustomContexMenu selectTask={selectTask} setSelectTask={setSelectTask} />
+		</>
 	);
 }
  
-export default Tasks;
+export default memo(Tasks);

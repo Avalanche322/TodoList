@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useContext } from "react";
 import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
+import Context from "../contexts/context";
 
-const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,setIsSelectPriorityOpen,isSelectPriorityOpen}) => {
+const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,setIsSelectPriorityOpen,isSelectPriorityOpen,handlerSetPriority}) => {
+	const {settings} = useContext(Context);
 	let selectPriorityRef = useRef();
 	const { t } = useTranslation();
 	useEffect(() =>{		
@@ -16,27 +18,32 @@ const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,se
 			document.removeEventListener("mousedown", hendler)
 		};	
 	});
+	function handlerIsActive(){
+		setIsSelectPriorityOpen(!isSelectPriorityOpen);
+		if(settings.vibration) navigator.vibrate(10); // togle vibration
+	}
 	return (
-		<div ref={selectPriorityRef}  className="main-editor-task-form-priority">
+		<div ref={selectPriorityRef} className="priority">
 			<button 
 				type="button"
 				data-tip={t("setPriority")}
-				className={`main-editor-task-form-priority__btn fas fa-flag ${isPriorityClass}`}
-				onClick={() => setIsSelectPriorityOpen(!isSelectPriorityOpen)}>
+				className={`priority__btn  drop-down__btn fas fa-flag ${isPriorityClass}`}
+				onClick={handlerIsActive.bind(null)}>
 			</button>
-			<ul className={`main-editor-task-form-priority__list ${isSelectPriorityOpen ? "open" : "hidden"}`}>
+			<ul className={`priority__list drop-down__list ${isSelectPriorityOpen ? "open" : "hidden"}`}>
 				{isSelecPriority.map(selecPriority =>{
 					return (
 					<li
-						onClick={handlerSelectValuePriority.bind(null,selecPriority.classValue, selecPriority.priority)}			
+						onClick={handlerSelectValuePriority.bind(null,selecPriority.classValue, selecPriority.priority,handlerSetPriority)}
+						// pass handlerSetPriority for update local state edit			
 						key={selecPriority.id}
-						className={`main-editor-task-form-priority__item 
+						className={`priority__item 
 							${selecPriority.classValue === isPriorityClass ? 'focus' : ''}`}>
 						<span 
-							className={`main-editor-task-form-priority__priority fas fa-flag ${selecPriority.classValue}`}>
+							className={`priority__priority fas fa-flag ${selecPriority.classValue}`}>
 						{t("priority")} {selecPriority.priority}</span>
 						{selecPriority.classValue === isPriorityClass ? 
-							<span className="main-editor-task-form-priority__check check fas fa-check"></span> 
+							<span className="check fas fa-check"></span> 
 							: null
 						}
 					</li>)
@@ -51,4 +58,4 @@ const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,se
 	);
 }
  
-export default Priority;
+export default memo(Priority);

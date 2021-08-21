@@ -1,108 +1,127 @@
-import { useState, useContext } from "react";
+import { memo, useContext, useMemo, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import Comment from "../Comment";
-import Context from "../../contexts/context";
 import Priority from "../Priority";
 import Day from "../Day";
 import useGetPriority from "../../customHooks/useGetPriority";
 import useGetDay from "../../customHooks/useGetDay";
-import useGetDate from "../../customHooks/useGetDate";
-import useEditTask from "../../customHooks/API/useEditTask";
 import { useTranslation } from "react-i18next";
+import useGetDate from "../../customHooks/useGetDate";
+import Context from "../../contexts/context";
+import useEditData from "../../customHooks/API/useEditData";
 
-const Edit = () => {
-	const { taskEdit: task,setTaskEdit } = useContext(Context);
+const Edit = ({cancel,task}) => {
 	const [body,setBody] = useState(task.body);
-	const [comment,setComment] = useState(task.comment);
+	const {today} = useGetDate();
+	const {comments} = useContext(Context);
+	const [comment, setComment] = useState({text: "",posted_uid: task.id, date_posted: today()});
 	const [date, setDate] = useState(task.date);
 	const [priority, setPriority] = useState(task.priority);
 	const [error, setError] = useState('');
-	const {today,tommorow,nextWeek,nextWeekend} = useGetDate();
 	const { t } = useTranslation();
 
 	/*hook edit task*/
-	const{editTask} = useEditTask();
+	const{editTask} = useEditData();
 
 	function handlerSubmit(e){
 		e.preventDefault();
 		try{
 			editTask(body,date,priority,comment,task);
-			setTaskEdit({id:null});
+			cancel();
 		} catch(e){
 			setError(e.message);
 			alert(error);
 		}
 	}
-	/* Select day*/
-	const {handlerDayOpen,isSelectDayOpen,isSelectDay,setIsDay,setIsDayClass,setIsSelectDayOpen} = useGetDay();
-	const isDayClass = date === today() ? "fas fa-calendar-week" : date === tommorow() ? "fas fa-sun" : date === nextWeek() ? "fas fa-fast-forward" : date === nextWeekend() ? "fas fa-couch" : date === "" ? "far fa-calendar-times" : "fas fa-calendar-week";
-	const isDay = date === today() ? "Today" : date === tommorow() ? "Tommorow" : date === nextWeek() ? "Next Week" : date === nextWeekend() ? "Next Weekend" : date === "" ? "No date"  : date;
+	function handlerTextArea(e){
+		if(e.nativeEvent.inputType === "insertLineBreak"){
+			if(body.trim()){
+				handlerSubmit(e);
+			}
+			return
+		};
+		setBody(e.target.value);
+	}
 
-	function handlerSelectValueDay(day,date,classValue){
-		setIsDay(day);
-		setIsDayClass(classValue);
-		setDate(date);
-		setIsSelectDayOpen(false);
-	}
-	const {isSelecPriority,handlerPriorityOpen,isSelectPriorityOpen,setIsPriorityClass} = useGetPriority();
-	function handlerSelectValuePriority(classValue, priority){
-		setIsPriorityClass(classValue);
-		setPriority(priority);
-		handlerPriorityOpen(false);
-	}
+	// eslint-disable-next-line
+	const lessCodeThanCheckingPrevRow = useMemo(() =>{ // not sure about this function
+		for (const com of comments) {
+			if(com.posted_uid === task.id){
+				setComment(com);
+			}
+		}
+	// eslint-disable-next-line
+	}, [task])
+
+	/* Select day*/
+	const {setIsSelectDayOpen,isSelectDayOpen,isSelectDay,isDayClass,isDay,handlerSelectValueDay,setIsDay,setIsDayClass,handlerInputDateSubmit} = useGetDay();
+	/* Select priority*/
+	const {isSelecPriority,handlerPriorityOpen,isSelectPriorityOpen,handlerSelectValuePriority} = useGetPriority();
 	/* Select comment*/
 	function handlerSetComment(text) {
-		setComment(text);
+		setComment(prevState => ({
+			...prevState,
+			text
+		}));
 	}
-	return (
-		<li>
-			<form className="main-editor-task__form" onSubmit={handlerSubmit}>
-				<div className="main-editor-task-form__edit">
-					<TextareaAutosize 
-						className="main-editor-task-form__text" 
-						maxRows="6" 
-						minRows="1" 
-						autoFocus 
-						placeholder="Task name"
-						value={body}
-						onChange={(e) => setBody(e.target.value)}>
-					</TextareaAutosize>
-					<div className="main-editor-task-form__bottom">
+	return (	
+		<form className="main-editor-task__form" onSubmit={handlerSubmit}>
+			<div className="textarea__body">
+				<TextareaAutosize 
+					className="textarea__text" 
+					maxRows="6" 
+					minRows="2" 
+					autoFocus 
+					placeholder="Task name"
+					value={body}
+					onChange={(e) => handlerTextArea(e)}>
+				</TextareaAutosize>
+				<div className="main-editor-task-form__bottom">
+					{comment && (body.length > 500 ? 
+					<div className="denger limit">{t("taskNameCharacterLimit")} {body.length} / 500</div> : 
+					comment.text.length > 500 ?
+						<div className="denger limit">{t("commentNameCharacterLimit")} {comment.length} / 500</div> 
+						: null)}
+					<div className="textarea__block">
 						<Day
-							handlerDayOpen={handlerDayOpen} 
-							isDayClass={isDayClass}
-							isSelectDayOpen={isSelectDayOpen}
-							isDay={isDay}
-							date={date}
-							handlerSetDate={setDate}
-							isSelectDay={isSelectDay}
-							handlerSelectValueDay={handlerSelectValueDay}/>
-						<div className="main-editor-task-form__group">
-							<Priority 
-								isSelecPriority={isSelecPriority} 
-								isPriorityClass={priority === 4 ? '' : `priority-${priority}`}
-								handlerSelectValuePriority={handlerSelectValuePriority}
-								setIsSelectPriorityOpen={handlerPriorityOpen}
-								isSelectPriorityOpen={isSelectPriorityOpen}/>
-							<Comment comment={comment} setComment={handlerSetComment}/>
-						</div>
+						setIsSelectDayOpen={setIsSelectDayOpen}
+						handlerInputDateSubmit={handlerInputDateSubmit}
+						isDayClass={isDayClass}
+						isSelectDayOpen={isSelectDayOpen}
+						isDay={isDay}
+						date={date}
+						handlerSetDate={setDate}
+						isSelectDay={isSelectDay}
+						handlerSelectValueDay={handlerSelectValueDay}
+						setIsDay={setIsDay}
+						setIsDayClass={setIsDayClass}/>
+					<div className="textarea__group">
+						<Priority 
+							isSelecPriority={isSelecPriority} 
+							isPriorityClass={priority === 4 ? '' : `priority-${priority}`}
+							handlerSelectValuePriority={handlerSelectValuePriority}
+							setIsSelectPriorityOpen={handlerPriorityOpen}
+							isSelectPriorityOpen={isSelectPriorityOpen}
+							handlerSetPriority={setPriority}/>
+						<Comment comment={comment?.text ?? ''} setComment={handlerSetComment}/>
+					</div>
 					</div>
 				</div>
-				<div className="main-editor-task-form__action">
-				<button 
-					className="main-editor-task-form__btn-submit btn-submit" 
-					type="submit"
-					disabled={!body.trim()}>
-				{t("save")}</button>
-				<button 
-					className="main-editor-task-form__btn-cancel btn-cancel"
-					type="button"
-					onClick={() => setTaskEdit({id:null})}>
-				{t("cancel")}</button>
 			</div>
-			</form>
-		</li>
+			<div className="main-editor-task-form__action">
+			<button 
+				className="main-editor-task-form__btn-submit btn-submit" 
+				type="submit"
+				disabled={body.length > 500 || comment.length > 500 || !body.trim()}>
+			{t("save")}</button>
+			<button 
+				className="main-editor-task-form__btn-cancel btn-cancel"
+				type="button"
+				onClick={() => cancel()}>
+			{t("cancel")}</button>
+			</div>
+		</form>	
 	);
 }
  
-export default Edit;
+export default memo(Edit);

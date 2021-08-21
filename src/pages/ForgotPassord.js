@@ -4,8 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useState } from 'react/cjs/react.development';
 
 const ForgotPassword = () => {
-	const {resetPassword,error:err} = useAuth();
-	const [error, setError] = useState(err);
+	const {resetPassword} = useAuth();
+	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [email, setEmail] = useState('');
 	const [message, setMessage] = useState('');

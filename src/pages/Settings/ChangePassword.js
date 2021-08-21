@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useContext } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import Context from "../../contexts/context";
 
 const ChangePassword = ({close,back}) => {
-	const {changePassword,error: err} = useAuth();
+	const {settings} = useContext(Context);
+	const {changePassword} = useAuth();
 	const [isShowPasswordOld, setIsShowPasswordOld] = useState(false);
 	const [isShowPasswordNew, setIsShowPasswordNew] = useState(false);
 	const [isShowPasswordConft, setIsShowPasswordConft] = useState(false);
 	const { t } = useTranslation();
-	const [error, setError] = useState(err);
+	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState("");
 	const [oldPassword, setOldPassword] = useState("");
@@ -23,6 +25,7 @@ const ChangePassword = ({close,back}) => {
 	}, []);
 	async function handleSubmit(e){
 		e.preventDefault();
+		if(settings.vibration) navigator.vibrate(15); // togle vibration	
 		if(newPassword !== newPasswordConfirm){
 			setError("You confirmation password doesn't match your new password. Please try again.");
 		} else if(!(/^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(newPassword))){
@@ -35,7 +38,7 @@ const ChangePassword = ({close,back}) => {
 				setOldPassword("");
 				setNewPassword("");
 				setNewPasswordConfirm("");
-				setMessage("Your password change success");				
+				setMessage("Your password change success");
 			} catch(e){			
 				setMessage("");
 				setLoading(false);
@@ -44,6 +47,33 @@ const ChangePassword = ({close,back}) => {
 				setLoading(false);
 			}
 		}	
+	}
+	function handlerShowPassOld(){
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setIsShowPasswordOld(!isShowPasswordOld);
+	}
+	function handlerShowPassNew(){
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setIsShowPasswordNew(!isShowPasswordNew);
+	}
+	function handlerShowPassConft(){
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setIsShowPasswordConft(!isShowPasswordConft);
+	}
+	function handlerPassOld(e){
+		setOldPassword(e.target.value);
+		setError("");
+		setMessage("");
+	}
+	function handlerPassNew(e){
+		setNewPassword(e.target.value);
+		setError("");
+		setMessage("");
+	}
+	function handlerPassConft(e){
+		setNewPasswordConfirm(e.target.value);
+		setError("");
+		setMessage("");
 	}
 	return (
 		<form onSubmit={handleSubmit} className="settings__form">
@@ -65,15 +95,11 @@ const ChangePassword = ({close,back}) => {
 								name="old-password" 
 								id="old-password"
 								value={oldPassword}
-								onChange={(e) => {
-									setOldPassword(e.target.value);
-									setError("");
-									setMessage("");
-								}}/>
+								onChange={handlerPassOld}/>
 								<button 
 									type="button" 
 									className={`${isShowPasswordOld ? "far fa-eye" : "far fa-eye-slash"} btn-password`}
-									onClick={setIsShowPasswordOld.bind(null,!isShowPasswordOld)}></button>
+									onClick={handlerShowPassOld.bind(null)}></button>
 						</div>
 					</div>
 				</div>
@@ -86,15 +112,11 @@ const ChangePassword = ({close,back}) => {
 								name="new-password" 
 								id="new-password"
 								value={newPassword}
-								onChange={(e) => {
-									setNewPassword(e.target.value);
-									setError("");
-									setMessage("");
-								}}/>
+								onChange={handlerPassNew}/>
 								<button 
 									type="button" 
 									className={`${isShowPasswordNew ? "far fa-eye" : "far fa-eye-slash"} btn-password`}
-									onClick={setIsShowPasswordNew.bind(null,!isShowPasswordNew)}></button>
+									onClick={handlerShowPassNew.bind(null)}></button>
 						</div>
 					</div>
 				</div>
@@ -107,15 +129,11 @@ const ChangePassword = ({close,back}) => {
 								name="new-confirm-password" 
 								id="new-confirm-password"
 								value={newPasswordConfirm}
-								onChange={(e) => {
-									setNewPasswordConfirm(e.target.value);
-									setError("");
-									setMessage("");
-								}}/>
+								onChange={handlerPassConft}/>
 								<button 
 									type="button" 
 									className={`${isShowPasswordConft ? "far fa-eye" : "far fa-eye-slash"} btn-password`}
-									onClick={setIsShowPasswordConft.bind(null,!isShowPasswordConft)}></button>
+									onClick={handlerShowPassConft.bind(null)}></button>
 						</div>
 					</div>
 				</div>
@@ -139,4 +157,4 @@ const ChangePassword = ({close,back}) => {
 	);
 }
  
-export default ChangePassword;
+export default memo(ChangePassword);

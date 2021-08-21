@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState,useEffect, memo, useContext } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import Context from "../../contexts/context"
 
 const ChangeEmail = ({close,back}) => {
-	const {currentUser,changeEmail,error:err} = useAuth();
+	const {settings} = useContext(Context);
+	const {currentUser,changeEmail} = useAuth();
 	const [isShowPassword, setIsShowPassword] = useState(false);
 	const [message, setMessage] = useState("");
-	const [error, setError] = useState(err);
+	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [newEmail, setNewEmail] = useState("");
 	const [currentPassword, setCurrentPassword] = useState("");
@@ -19,6 +21,7 @@ const ChangeEmail = ({close,back}) => {
 	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();
+		if(settings.vibration) navigator.vibrate(15); // togle vibration
 		setMessage("");
 		setError("");
 		try{
@@ -29,11 +32,26 @@ const ChangeEmail = ({close,back}) => {
 			setMessage("Your email change success");
 		} catch(e){
 			setLoading(true);
-			setError(e.message);
 			setMessage("");
+			setError(e.message);
 		} finally{
 			setLoading(false);
 		}
+	}
+	//function handler
+	function handlerShowPass(){
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+		setIsShowPassword(!isShowPassword);
+	}
+	function handlerNewPass(e){
+		setNewEmail(e.target.value);
+		setError("");
+		setMessage("");
+	}
+	function handelPass(e){
+		setCurrentPassword(e.target.value);
+		setError("");
+		setMessage("");
 	}
 	return (
 		<form onSubmit={handleSubmit} className="settings__form">
@@ -52,11 +70,7 @@ const ChangeEmail = ({close,back}) => {
 						<div className="input settings__input">
 							<input 
 								value={newEmail}
-								onChange={(e) => {
-									setNewEmail(e.target.value);
-									setError("");
-									setMessage("");
-								}}
+								onChange={handlerNewPass}
 								type="email"
 								name="email" 
 								id="email"/>
@@ -72,18 +86,14 @@ const ChangeEmail = ({close,back}) => {
 						<div className="input settings__input">
 							<input 
 								value={currentPassword}
-								onChange={(e) => {
-									setCurrentPassword(e.target.value);
-									setError("");
-									setMessage("");
-								}}
+								onChange={handelPass}
 								type={isShowPassword ? "text" : "password"}
 								name="password" 
 								id="password"/>
 								<button 
 									type="button" 
 									className={`${isShowPassword ? "far fa-eye" : "far fa-eye-slash"} btn-password`}
-									onClick={setIsShowPassword.bind(null,!isShowPassword)}></button>
+									onClick={handlerShowPass.bind(null)}></button>
 						</div>
 					</div>
 				</div>
@@ -104,4 +114,4 @@ const ChangeEmail = ({close,back}) => {
 	);
 }
  
-export default ChangeEmail;
+export default memo(ChangeEmail);

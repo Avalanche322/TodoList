@@ -3,15 +3,24 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import Loader from "./components/app/Loader";
 import NonLandingPages from "./pages/NonLandingPages";
 import PrivateRoute from "./components/PrivateRoute";
-import { AuthProvider } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/AuthContext";
 import ForgotPassword from "./pages/ForgotPassord";
+import { CSSTransition } from "react-transition-group";
 
 const SingUp = React.lazy(() => import("./pages/SingUp"));
 const SingIn = React.lazy(() => import("./pages/SingIn"));
 function App() {
+	const {loader, currentUser} = useAuth();
 	return ( 
-		<AuthProvider>
-			<div className="App">
+		<div className="App">
+				{/*{loader && <Loader/>}*/}
+				<CSSTransition 
+					in={loader && !!currentUser} 
+					timeout={400}
+					classNames="opacity"
+					unmountOnExit>
+					<Loader/>
+				</CSSTransition>
 				<Router>
 					<Switch>
 						<Route 
@@ -32,11 +41,14 @@ function App() {
 							<React.Suspense fallback={ <Loader/>}>
 								<ForgotPassword/> {/* Forgot Password */}
 							</React.Suspense> }/>
-						<PrivateRoute component={NonLandingPages}/>
+						<PrivateRoute component={() => {
+							return (
+								!loader && <NonLandingPages/>
+							)
+						}}/>
 					</Switch>
 				</Router>
-			</div>
-		</AuthProvider>
+		</div>
 	);
 }
 

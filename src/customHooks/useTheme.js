@@ -9,12 +9,15 @@ const useTheme = () => {
 	const {currentUser} = useAuth();
 	const [error, setError] = useState('');
 	/*
-		fetch settings from firebase and set in local is slow and if settings local is loaded we use them else we fetch thme
+		fetch settings from firebase and set in local is slow and if settings local is loadded we use them else we fetch thme
 	*/
 	useEffect(() =>{
 		if(currentSettings){
 			for (const key in themes) {
-				if(currentSettings.theme === key ) setTheme(() => themes[key]);
+				if(currentSettings.theme === key ) {
+					setTheme(() => themes[key]);
+					
+				}
 			}
 		} else{
 			try{
@@ -23,7 +26,10 @@ const useTheme = () => {
 					const settingsVal = snapshot.val();	
 					if(settingsVal){
 						for (const key in themes) {
-							if(settingsVal.theme === key ) setTheme(() => themes[key]);
+							if(settingsVal.theme === key ) {
+								setTheme(() => themes[key]);
+								//break
+							}
 						}
 					}
 				})

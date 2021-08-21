@@ -1,15 +1,20 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
+import Context from "../contexts/context";
 
 const NotFound = () => {
+	const {settings} = useContext(Context);
+	const { t } = useTranslation();
 	useEffect(() => {
 		// title for page
 		document.title = `${t("notFound")} | TodoList`;
 	// eslint-disable-next-line
 	}, [])
-	const { t } = useTranslation();
+	function handlerGoHome(){
+		if(settings.vibration) navigator.vibrate(8); // togle vibration
+	}
 	return (
 		<div className="not-found">
     		<div className="not-found__code">
@@ -21,7 +26,7 @@ const NotFound = () => {
 				{t("notFoundPart1")}
 				<p>
 					<Trans i18nKey="notFoundPart2">
-						Let's go <Link to="/" className="btn-cancel">home</Link> and try from there.
+						Let's go <Link to="/" className="btn-cancel" onClick={handlerGoHome}>home</Link> and try from there.
 					</Trans>
 				</p>
 			</div>
