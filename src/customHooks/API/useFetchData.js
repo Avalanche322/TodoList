@@ -48,10 +48,10 @@ const useFetchData = () => {
 				}
 			})
 			await taskCommentRef.once('value', (snapshot) =>{
-				const tasks = snapshot.val();
+				const comments = snapshot.val();
 				const taskCommentListAll = [];
-				for (const id in tasks) {
-					taskCommentListAll.push({id,...tasks[id]});
+				for (const id in comments) {
+					taskCommentListAll.push({id,...comments[id]});
 				}
 				localStorage.setItem('comments', JSON.stringify(taskCommentListAll));
 			})
