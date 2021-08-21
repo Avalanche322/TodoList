@@ -9,7 +9,6 @@ import Account from "./Settings/Account";
 import ChangeEmail from "./Settings/ChangeEmail";
 import ChangePassword from "./Settings/ChangePassword";
 import DeleteAccount from "./Settings/DeleteAccount";
-import { useAuth } from "../contexts/AuthContext";
 import Context from "../contexts/context";
 
 const Settings = () => {
@@ -18,17 +17,14 @@ const Settings = () => {
 	const history = useHistory();
 	const { t } = useTranslation();
 	let location = useLocation();
-	const {setError} = useAuth();
 	const close = e => {
 		e.stopPropagation();
 		history.push(location.state.prevPath);
-		setError('');
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	};
 	const back = e => {
 		e.stopPropagation();
 		history.go(-1);
-		setError('');
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	};
 	const handlerActiveSidebar = () => {

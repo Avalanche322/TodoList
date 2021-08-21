@@ -21,9 +21,11 @@ const Tasks = ({tasks,page}) => {
 									<Task task={task} page={page} setSelectTask={setSelectTask} selectTask={selectTask}/>
 								</li>
 							</CSSTransition>
-						: <li key={task.id}>
-								<Edit cancel={cancelEditTask} task={taskEdit}/>
-						</li>
+						: <CSSTransition in={true} key={`edit${task.id}`} timeout={400} classNames="move-back" unmountOnExit>
+								<li>
+									<Edit cancel={cancelEditTask} task={taskEdit}/>
+								</li>
+							</CSSTransition>
 					: null
 				)
 				)}			

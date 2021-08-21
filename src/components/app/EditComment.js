@@ -1,14 +1,14 @@
 import TextareaAutosize from "react-textarea-autosize";
 import { useTranslation } from "react-i18next";
-import useEditTaskComment from "../../customHooks/API/useEditTaskComment";
 import { useContext } from "react";
 import Context from "../../contexts/context";
+import useEditData from "../../customHooks/API/useEditData";
 
 const EditComment = ({editComment,setEditComment,setComments}) => {
 	const {settings} = useContext(Context);
 	const comments = JSON.parse(localStorage.getItem('comments'));
 	const { t } = useTranslation();
-	const {editTaskComment} = useEditTaskComment();
+	const {editTaskComment} = useEditData();
 
 	function handlerCancel(){
 		if(settings.vibration) navigator.vibrate(10); // togle vibration
@@ -27,6 +27,7 @@ const EditComment = ({editComment,setEditComment,setComments}) => {
 		for (let i = 0; i < comments.length; i++) {
 			if(comments[i].id === editComment.id){
 				comments.splice(i,1,editComment);
+				//break
 			}
 		}
 		setComments(comments);

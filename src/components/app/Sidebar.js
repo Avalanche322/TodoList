@@ -1,7 +1,7 @@
-import { useState } from "react";
-import NavigationList from "../NavigationList";
+import { useState,useContext } from "react";
+import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
-import { useContext } from "react";
+import NavigationList from "../NavigationList";
 import Context from "../../contexts/context";
 
 const Sidebar = () => {
@@ -27,6 +27,10 @@ const Sidebar = () => {
 			<nav className="sidebar__menu">
 				<NavigationList isActive={isActive }/>
 			</nav>
+			<ReactTooltip 
+					effect="solid"		
+					className="tooltip"
+					arrowColor="transparent" />
 		</aside>
 	);
 }

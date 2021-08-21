@@ -27,15 +27,19 @@ const Sort = ({selectItemSort,setSelectItemSort,project}) => {
 		};	
 	});
 
-	function handlerSetSelectedItem(item){
-		const obj = {
-			...selectItemSort,
-			[project]: {sort_order: 'desc', sorted_by: item.sorted_by}
+	async function handlerSetSelectedItem(item){
+		try{
+			const obj = {
+				...selectItemSort,
+				[project]: {sort_order: 'desc', sorted_by: item.sorted_by}
+			}
+			setSelectItemSort(obj);
+			setIsSortOpen(false);
+			await updateSort(obj);
+			if(settings.vibration) navigator.vibrate(8); // togle vibration
+		} catch(e){
+			alert(e.message);
 		}
-		setSelectItemSort(obj);
-		updateSort(obj);
-		setIsSortOpen(false);
-		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
 	function handlerIsActive(){
 		setIsSortOpen(!isSortOpen);

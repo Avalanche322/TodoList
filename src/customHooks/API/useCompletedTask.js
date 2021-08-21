@@ -1,19 +1,16 @@
-import { useState,useContext } from "react";
+import {useContext } from "react";
 import firebase from "../../firebase";
 import { useAuth } from '../../contexts/AuthContext';
-import useDeleteTask from './useDeleteTask';
 import useGetDate from "../useGetDate";
-import useDeleteTaskComment from "./useDeleteTaskComment";
 import Context from "../../contexts/context";
 import useAudio from "../useAudio";
+import useDeleteData from "./useDeleteData"
 
 const useCompletedTask = () => {
 	const {currentUser} = useAuth();
-	const {deleteTask} = useDeleteTask();
-	const [error, setError] = useState('');
+	const {deleteTask,deleteTaskComment} = useDeleteData();
 	const {converToShortDate} = useGetDate();
 	const {settings,comments} = useContext(Context);
-	const {deleteTaskComment} = useDeleteTaskComment();
 	const {playAudio} = useAudio();
 	
 	async function handlerCountCompletedTask(){
@@ -43,15 +40,11 @@ const useCompletedTask = () => {
 			}
 						
 		} catch(e){
-			setError(e.message);
 			alert(e.message);
 		}
 	}
 	
-	return {
-		completedTask,
-		error
-	}
+	return {completedTask}
 }
  
 export default useCompletedTask;

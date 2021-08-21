@@ -12,8 +12,8 @@ const General = ({close,handlerActiveSidebar}) => {
 	const themes = JSON.parse(localStorage.getItem('themes'));
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [iSSupportedVibration, SetIsSupportedVibration] = useState(true);
-	const {updateSettings, error:err} = useAuth();
-	const [error, setError] = useState(err);
+	const {updateSettings} = useAuth();
+	const [error, setError] = useState('');
 	const [selectedThemeName, setSelectedThemeName] = useState(theme.name);
 	useEffect(() => {
 		// title for page
@@ -38,8 +38,13 @@ const General = ({close,handlerActiveSidebar}) => {
 		try{
 			updateSettings(settings);
 			localStorage.setItem('settings', JSON.stringify(settings));
+			for (const key in themes) {
+			if(themes[key].name === settings.theme){
+					setTheme(themes[key]);
+					//break
+				}
+			}
 			setIsUpdate(false);
-			
 		}catch(e){
 			setError(e.message);
 		}
@@ -47,7 +52,7 @@ const General = ({close,handlerActiveSidebar}) => {
 	const handlerCancel = () =>{
 		if(settings.vibration) navigator.vibrate(10); // togle vibration
 		setIsUpdate(false);
-		setSelectedThemeName(theme.name);
+		setSelectedThemeName(currentSettings.theme);
 		setSettings({
 			theme: currentSettings.theme,
 			language: currentSettings.language
@@ -55,6 +60,7 @@ const General = ({close,handlerActiveSidebar}) => {
 		for (const key in themes) {
 			if(themes[key].name === currentSettings.theme){
 				setTheme(themes[key]);
+				//break
 			}
 		}
 	}
@@ -65,11 +71,6 @@ const General = ({close,handlerActiveSidebar}) => {
 			...prevState,
 			theme: themeKey
 		}));
-		for (const key in themes) {
-			if(themes[key].name === themeKey){
-				setTheme(themes[key]);
-			}
-		}
 		if(currentSettings.theme !== themeKey){
 			setIsUpdate(true);
 		} else{
@@ -112,6 +113,10 @@ const General = ({close,handlerActiveSidebar}) => {
 			setIsUpdate(false);
 		}
 	}
+	const handelClose =(e) =>{
+		close(e);
+		handlerCancel();
+	}
 	useEffect(() => {
 		if ("vibrate" in navigator) {
 			SetIsSupportedVibration(true);
@@ -124,7 +129,7 @@ const General = ({close,handlerActiveSidebar}) => {
 			<header className="settings__header">
 				<span className="fas fa-arrow-left main-back" onClick={handlerActiveSidebar.bind(null, true)}></span>
 				<h2 className="settings__title">{t("general")}</h2>
-				<span className="fas fa-times close" onClick={close}></span>
+				<span className="fas fa-times close" onClick={handelClose}></span>
 			</header>
 			<div className="settings__general settings__container">
 				<div className="settings__block">

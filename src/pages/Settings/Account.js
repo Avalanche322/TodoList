@@ -8,14 +8,14 @@ import { useContext } from "react";
 import Context from "../../contexts/context";
 
 const Account = ({close,handlerActiveSidebar}) => {
-	const {currentUser,changeName,uploadAvatar,removeAvatar,error:err,LinkInGoogle,isProviderPasswordUser,isProviderGoogle,unlinkGoogle,googleAccount} 
+	const {currentUser,changeName,uploadAvatar,removeAvatar,LinkInGoogle,isProviderPasswordUser,isProviderGoogle,unlinkGoogle,googleAccount} 
 	= useAuth();
 	const {settings} = useContext(Context);
 	const [userAvatar, setUserAvatar] = useState(currentUser.photoURL);
 	const [userName, setUserName] = useState(currentUser.displayName);
 	const [isUploadPhoto, setIsUploadPhoto] = useState(false);
 	const [loading,setLoading] = useState(false);
-	const [error, setError] = useState(err);
+	const [error, setError] = useState('');
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [isGoogleProvider, setIsGoogleProvider] = useState();
 	const [isPasswordProvider, setIsPasswordProvider] = useState();
@@ -40,13 +40,22 @@ const Account = ({close,handlerActiveSidebar}) => {
 	const handleUpdateAvatar = async event => {
 		if(settings.vibration) navigator.vibrate(10); // togle vibration
 		setError("");
-		setLoading(true);
-		const fileUploadded = event.target.files[0];
-		await uploadAvatar(fileUploadded);
-		setUserAvatar(currentUser.photoURL);
-		setIsUploadPhoto(true);
-		setLoading(false);
-		if(settings.vibration) navigator.vibrate(15); // togle vibration
+		if(event.target.files[0].size <= 4194304){
+			try{
+				setLoading(true);
+				const fileUploadded = event.target.files[0];
+				await uploadAvatar(fileUploadded);
+				setUserAvatar(currentUser.photoURL);
+				setIsUploadPhoto(true);
+				setLoading(false);
+				if(settings.vibration) navigator.vibrate(15); // togle vibration
+			} catch(e){
+				setError(e.message);
+				setLoading(false);
+			}
+		} else { 
+			setError("image must be lower 4 MB"); 
+		}
   	};
 	useEffect(() =>{
 		if(profileImg !== userAvatar){
@@ -55,14 +64,18 @@ const Account = ({close,handlerActiveSidebar}) => {
 	}, [userAvatar])
 	// Remove photo
 	const handleRemoveAvatar = async () =>{
-		setError("");
-		if(settings.vibration) navigator.vibrate(10); // togle vibration
-		setLoading(true);
-		setIsUploadPhoto(false);
-		await removeAvatar();
-		setUserAvatar(currentUser.photoURL);
-		setLoading(false);
-		if(settings.vibration) navigator.vibrate(15); // togle vibration
+		try{
+			setError("");
+			if(settings.vibration) navigator.vibrate(10); // togle vibration
+			setLoading(true);
+			setIsUploadPhoto(false);
+			await removeAvatar();
+			setLoading(false);
+			if(settings.vibration) navigator.vibrate(15); // togle vibration
+		} catch(e){
+			setError(e.message);
+			setLoading(false);
+		}
 	}
 	const handlerChangeName = useCallback((e) => {
 		setError("");
@@ -169,7 +182,7 @@ const Account = ({close,handlerActiveSidebar}) => {
 								type="text" 
 								name="name" 
 								id="name"
-								value={userName}
+								value={userName ?? ''}
 								onChange={handlerChangeName} />
 						</div>
 					</div>

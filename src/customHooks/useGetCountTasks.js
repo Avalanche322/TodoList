@@ -1,19 +1,20 @@
-import useFetchTasks from "./API/useFetchTasks";
+import {useEffect, useState } from "react";
+import useGetDate from "./useGetDate";
 
 const useGetCountTasks = () => {
-	const {taskListAll,taskListToday,taskNoCompleted} = useFetchTasks();
-	let countTaskToday = 0;
-	let countTaskAll = 0;
-	let countTaskNoCompleted = 0;
-	if(taskListToday){// wait when task loading
-		countTaskToday = taskListToday.length;
-	}
-	if(taskListAll){// wait when task loading
-		countTaskAll = taskListAll.length;
-	}
-	if(taskNoCompleted){
-		countTaskNoCompleted = taskNoCompleted.length;
-	}
+	const tasks = JSON.parse(localStorage.getItem('tasks'));
+	const {today,converToShortDate} = useGetDate();
+	const [countTaskToday, setCountTaskToday] = useState(0);
+	const [countTaskAll, setCountTaskAll] = useState(0);
+	const [countTaskNoCompleted,setCountTaskNoCompleted] = useState(0);
+	useEffect(() => {
+		if(tasks){
+			setCountTaskToday(tasks.filter(t => converToShortDate(t.date) <= converToShortDate(today())).length);
+			setCountTaskAll(tasks.length);
+			setCountTaskNoCompleted(tasks.filter(t => converToShortDate(t.date) < converToShortDate(today())).length);
+		}
+		// eslint-disable-next-line
+	}, [tasks])
 	return {
 		countTaskToday,
 		countTaskAll,

@@ -6,10 +6,10 @@ import Context from "../../contexts/context"
 
 const ChangeEmail = ({close,back}) => {
 	const {settings} = useContext(Context);
-	const {currentUser,changeEmail,error:err} = useAuth();
+	const {currentUser,changeEmail} = useAuth();
 	const [isShowPassword, setIsShowPassword] = useState(false);
 	const [message, setMessage] = useState("");
-	const [error, setError] = useState(err);
+	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [newEmail, setNewEmail] = useState("");
 	const [currentPassword, setCurrentPassword] = useState("");
@@ -32,8 +32,8 @@ const ChangeEmail = ({close,back}) => {
 			setMessage("Your email change success");
 		} catch(e){
 			setLoading(true);
-			setError(e.message);
 			setMessage("");
+			setError(e.message);
 		} finally{
 			setLoading(false);
 		}

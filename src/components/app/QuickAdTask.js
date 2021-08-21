@@ -8,13 +8,13 @@ import Day from "../Day";
 import useGetPriority from "../../customHooks/useGetPriority";
 import useGetDay from "../../customHooks/useGetDay";
 import useGetDate from "../../customHooks/useGetDate";
-import useAddTask from "../../customHooks/API/useAddTask";
+import useAddData from "../../customHooks/API/useAddData";
 
 const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 	/*hook add task*/
-	const {addTask, error:err} = useAddTask();
+	const {addTask} = useAddData();
 	/* Select day*/
-	const {setIsSelectDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,handlerSetDate,isDay,isSelectDay,setIsDay,setIsDayClass} = useGetDay();	
+	const {setIsSelectDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,isDay,isSelectDay,setIsDay,setIsDayClass} = useGetDay();	
 	/* Select priority*/
 	const {handlerSelectValuePriority,priority,isSelecPriority,isPriorityClass,handlerPriorityOpen,isSelectPriorityOpen,} = useGetPriority();
 	/* Select comment*/
@@ -26,7 +26,6 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 	const {today} = useGetDate();
 	const [body, setBody] = useState('');
 	const quickAddTasRef = useRef(null);
-	const [error, setError] = useState(err);
 	const { t } = useTranslation();
 	
 	function handlerDefault() {
@@ -51,8 +50,7 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 			handlerIsOpen(false);
 			handlerDefault();
 		} catch(e){
-			setError(e.message);
-			alert(error);
+			alert(e.message);
 		}
 	}
 	function handlerCancel(){
@@ -107,7 +105,6 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 										isSelectDayOpen={isSelectDayOpen}
 										isDay={isDay}
 										date={date}
-										handlerSetDate={handlerSetDate}
 										isSelectDay={isSelectDay}
 										handlerSelectValueDay={handlerSelectValueDay}
 										setIsDay={setIsDay}

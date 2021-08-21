@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import QuickAddTask from "./app/QuickAdTask";
 import { NavLink } from "react-router-dom";
 import useGetCountTasks from '../customHooks/useGetCountTasks';
@@ -12,7 +12,6 @@ import { useContext } from "react";
 const NavigationList = ({isActive,setIsActive}) => {
 	const {logout,currentUser} = useAuth();
 	const {settings} = useContext(Context);
-	const [error, setError] = useState("");
 	const history = useHistory();
 	const {countTaskToday,countTaskAll,countTaskNoCompleted} = useGetCountTasks();
 	const location = useLocation();
@@ -22,13 +21,13 @@ const NavigationList = ({isActive,setIsActive}) => {
 	const countCompletedToday = (stats && stats.days_items.total_completed + "");
 	const countCompletedAll = (stats && stats.completed_count + "");
 	async function handleLogout() {
-		setError("")
 		try {
 			await logout();
 			if(settings.vibration) navigator.vibrate(200); // togle vibration
 			history.push("/singin");
-		} catch {
-			setError("Failed to log out");
+			window.location.reload();
+		} catch(e) {
+			alert(e.message);
 		}
 	}
 	/*Quick Add Task Modal Box*/
@@ -78,8 +77,9 @@ const NavigationList = ({isActive,setIsActive}) => {
 					</li>
 					<li>
 						<div 
+							tabIndex="0"
 							className="sidebar__link" 
-							onClick={handlerQuickAddTaskOpen.bind(null, !isQuickAddTaskOpen)}
+							onClick={handlerQuickAddTaskOpen.bind(null,!isQuickAddTaskOpen)}
 							date-place="right"
 							data-tip={!isActive ? t("quickAddTask") : ""}>
 							<i className="fas fa-plus sidebar-link__logo"></i>
@@ -128,7 +128,6 @@ const NavigationList = ({isActive,setIsActive}) => {
 								<img src={currentUser.photoURL} alt="" />
 							</div>
 							<div className="profile__detailts">
-								{error && <strong className="fas fa-exclamation-circle denger">{error}</strong>}
 								<strong className="profile__name">{currentUser.displayName}</strong>
 								<p className="profile__email">{currentUser.email}</p>
 							</div>
@@ -144,4 +143,4 @@ const NavigationList = ({isActive,setIsActive}) => {
 	);
 }
  
-export default NavigationList;
+export default memo(NavigationList);

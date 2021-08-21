@@ -41,27 +41,28 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 	}
 
 	/* Select day*/
-	const {isSelectDayOpen,isSelectDay,isDay,handlerSelectValueDay,setIsDay,setIsDayClass,setIsSelectDayOpen} = useGetDay();
+	const {isSelectDayOpen,isSelectDay,isDay,handlerSelectValueDay,setIsDay,setIsDayClass,setIsSelectDayOpen,handlerInputDateSubmit} = useGetDay();
 
 	return (		
-		<>
-			<ContextMenuTrigger id="contextmenu" holdToDisplay={isTouchDevice ? 700 : -1} collect={() => setSelectTask(task)}>
-				<div className={`main__task ${selectTask?.id === task.id ? 'main__task-focus' : ''}`}>
-						<input className="task__inp-cbx" id={`cbx${task.id}`} type="checkbox" style={{display: "none"}} />
-						<label className="task__cbx" htmlFor={`cbx${task.id}`} onClick={completedTask.bind(null,task)}>
-							<span className={`priority-cbx-${task.priority}`}>
-								<svg width="8px" height="8px" viewBox="0 0 12 9">
-								<polyline points="1 5 4 8 11 1"></polyline>
-								</svg>
-							</span>
-						</label>
-					<div className="main__group-task">
-						<div type="button" onClick={handlerLinkToDetails.bind(null)} className="main__link">
-							<p className={`task__text main__text ${task.completed ? "completed" : ""}`}>{task.body}</p>
-						</div>
-						<div className="main__group">
-							{(page === "home" && converToShortDate(task.date) === converToShortDate(today())) ? null : 
-								<Day
+		<ContextMenuTrigger id="contextmenu" holdToDisplay={isTouchDevice ? 700 : -1} collect={() => setSelectTask(task)}>
+			<div className={`main__task ${selectTask?.id === task.id ? 'main__task-focus' : ''}`}>
+					<input className="task__inp-cbx" id={`cbx${task.id}`} type="checkbox" style={{display: "none"}} />
+					<label className="task__cbx" htmlFor={`cbx${task.id}`} onClick={completedTask.bind(null,task)}>
+						<span className={`priority-cbx-${task.priority}`}>
+							<svg width="8px" height="8px" viewBox="0 0 12 9">
+							<polyline points="1 5 4 8 11 1"></polyline>
+							</svg>
+						</span>
+					</label>
+				<div className="main__group-task">
+					<div type="button" onClick={handlerLinkToDetails.bind(null)} className="main__link">
+						<p className={`task__text main__text ${task.completed ? "completed" : ""}`}>{task.body}</p>
+					</div>
+					<div className="main__group">
+						{(page === "home" && converToShortDate(task.date) === converToShortDate(today())) ? null : 
+							<Day
+									task={task}
+									handlerInputDateSubmit={handlerInputDateSubmit}
 									isDayClass={"fas fa-calendar-week"}
 									isSelectDayOpen={isSelectDayOpen}
 									isDay={isDay}
@@ -72,30 +73,29 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 									handlerSelectValueDay={handlerSelectValueDay}
 									setIsDay={setIsDay}
 									setIsDayClass={setIsDayClass}/>
-							}
-							{commentsCount ? <Link to={{	
-								pathname: `task/${task.id}/comments`, 
-								state: { background: location, prevPath: location.pathname }}} 
-								type="button" 
-								className="far fa-comment-alt btn"
-							>{commentsCount}</Link> : null}
-						</div>
-					</div>
-					<div className="main__task-action">
-						<button 
-							data-tip={t("editTask")} 
-							onClick={handlerTaskEdit.bind(null)} 
-							className="far fa-edit btn-action"
-						></button>
+						}
+						{commentsCount ? <Link to={{	
+							pathname: `task/${task.id}/comments`, 
+							state: { background: location, prevPath: location.pathname }}} 
+							type="button" 
+							className="far fa-comment-alt btn"
+						>{commentsCount}</Link> : null}
 					</div>
 				</div>
-			</ContextMenuTrigger>
-			<ReactTooltip 
-				effect="solid" 
-				place="bottom" 
-				className="tooltip"
-				arrowColor="transparent" />
-		</>
+				<div className="main__task-action">
+					<button 
+						data-tip={t("editTask")} 
+						onClick={handlerTaskEdit.bind(null)} 
+						className="far fa-edit btn-action"
+					></button>
+					<ReactTooltip 
+						effect="solid" 
+						place="bottom" 
+						className="tooltip"
+						arrowColor="transparent" />
+				</div>
+			</div>
+		</ContextMenuTrigger>
 	);
 }
  

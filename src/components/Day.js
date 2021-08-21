@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, useState, memo,useContext } from "react";
 import { useTranslation,Trans } from "react-i18next";
-import moment from 'moment';
 import useGetDate from "../customHooks/useGetDate";
 import Context from "../contexts/context";
 
-const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate,isSelectDay,handlerSelectValueDay,date,setIsDay,setIsDayClass}) => {
+const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate,isSelectDay,handlerSelectValueDay,date,setIsDay,setIsDayClass,task,handlerInputDateSubmit}) => {
 	const {settings} = useContext(Context);
 	let selectDayRef = useRef();
 	const {converToFullDate,converToShortDate,today,tomorrow,nextWeek,nextWeekend} = useGetDate();
@@ -31,14 +30,6 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 	function handlerDayOpen(){
 		setIsSelectDayOpen(!isSelectDayOpen);
 		if(settings.vibration) navigator.vibrate(15); // togle vibration
-	}
-	function handlerInputDateSubmit(){
-		handlerSetDate(moment(inputDate, ["DD-MM-YYYY", "DD-MMM-YYYY"]).format()); // set input date format year-month-day for post to server
-		setIsDay(converToFullDate(inputDate));
-		setInputDate(converToFullDate(inputDate))
-		setIsDayClass("fas fa-calendar-week")
-		setIsSelectDayOpen(false);
-		setIsInputDate(false)
 	}
 	useEffect(() =>{		
 		let hendler = (event) =>{
@@ -70,7 +61,7 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 				className={`day__btn drop-down__btn ${isDayClass} ${converToShortDate(date) < converToShortDate(today()) ? "denger-btn" : ''}`} 
 				type="button"
 				onClick={handlerDayOpen.bind(null)}>
-			{date ? converToFullDate(date) : t(isDay) } {/*toogle between date and today,tomorrow and etc.*/}
+			{date ? converToFullDate(date) : t("noDate") }
 			</button>
 			<ul className={`day__list drop-down__list ${isSelectDayOpen ? "open" : "hidden"}`}>
 				<li>
@@ -83,7 +74,7 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 				</li>
 				{isInputDate && (converToFullDate(inputDate) !== "Invalid date") && <li className="day__moment">
 					<p className="day__input-text">{t("didYouMean")}
-					<span onClick={handlerInputDateSubmit.bind(null)}>{converToFullDate(inputDate)}</span> ?</p>
+					<span onClick={handlerInputDateSubmit.bind(null,setInputDate,setIsSelectDayOpen,setIsInputDate,inputDate,task)}>{converToFullDate(inputDate)}</span> ?</p>
 					<p className="day__input-subtext">
 						<Trans i18nKey="inputDateInfo">
 							You can also type in recurring due dates like <span>today</span>, <span>tomorrow</span>,<span>next week</span>, and <span>weekends</span>.
@@ -94,7 +85,7 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 						<li
 							key={selectDay.id}
 							onClick={() =>{
-								handlerSelectValueDay(selectDay.day,selectDay.date,selectDay.classValue,handlerSetDate); // pass handlerSetDate for update local state edit
+								handlerSelectValueDay(selectDay.day,selectDay.date,selectDay.classValue,handlerSetDate,task); // pass handlerSetDate for update local state edit
 								setInputDate(converToFullDate(selectDay.date));
 							}}>
 							<span className={`day__day ${selectDay.classValue}`}>{t(selectDay.day)}</span> 

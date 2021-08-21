@@ -4,23 +4,21 @@ import DataSort from "react-data-sort";
 import Context from "../contexts/context";
 import Tasks from "../components/app/Tasks";
 import AddTask from "../components/app/AddTask";
-import useFetchTasks from "../customHooks/API/useFetchTasks";
 import useGetCountTasks from "../customHooks/useGetCountTasks";
 import Sort from "../components/Sort";
 import SubSort from "../components/SubSort";
 
 const Inbox = () => {
-	const {taskListAll} = useFetchTasks();
+	const { addForm,tasks } = useContext(Context);
 	const {countTaskAll} = useGetCountTasks();
-	const { addForm } = useContext(Context);
+	const { t } = useTranslation();
 	const page = "inbox";
 	// for sort
-	const [selectItemSort,setSelectItemSort] = useState(JSON.parse(localStorage.getItem('sort')));
+	const [selectItemSort,setSelectItemSort] = useState(JSON.parse(localStorage.getItem('sort')) ?? {home: {}, inbox: {}});
 	useEffect(() => {
 		// title for page
 		document.title = `${t("inbox")} | TodoList`;
 	})
-	const { t } = useTranslation();
 	return (
 		<main className="main">
 			<div className="main__content container">
@@ -28,10 +26,11 @@ const Inbox = () => {
 					<h1 className="main__title"><span>{t("inbox")}</span></h1>
 					<Sort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
 				</div>
-				{selectItemSort.inbox && <SubSort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />}
-				{taskListAll && 
+				{JSON.stringify(selectItemSort?.inbox) !== '{}' && 
+				<SubSort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />}
+				{tasks && 
 				<DataSort
-					data={taskListAll.length > 0 ? taskListAll : [{0:null}]}
+					data={tasks.length > 0 ? tasks : [{0:null}]}
 					defaultSortBy={selectItemSort.inbox?.sorted_by}
 					sortBy = {selectItemSort.inbox?.sorted_by === 'alphabetically' ? 'body' : selectItemSort.inbox?.sorted_by}
 					direction= {selectItemSort.inbox?.sort_order}
@@ -41,7 +40,7 @@ const Inbox = () => {
 				/>}
 				<AddTask/>
 			</div>
-			{taskListAll && !countTaskAll && !addForm ? 
+			{tasks && !countTaskAll && !addForm ? 
 				<div className="main__day-of">
 					<i className="fas fa-poo main-day-of__logo"></i>
 					<p className="main-day-of__text">{t("inboxEndTaskPart1")}</p>

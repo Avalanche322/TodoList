@@ -8,8 +8,8 @@ import Context from "../../contexts/context";
 const DeleteAccount = ({close,back}) => {
 	const {settings} = useContext(Context);
 	const history = useHistory();
-	const {deleteAccount,error: err} = useAuth();
-	const [error, setError] = useState(err);
+	const {deleteAccount} = useAuth();
+	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [isShowPassword, setIsShowPassword] = useState(false);
 	const [currentPassword, setCurrentPassword] = useState("");
@@ -24,20 +24,24 @@ const DeleteAccount = ({close,back}) => {
 		setError("");
 		try{
 			setLoading(true);
-			const isDeletedAccount = await deleteAccount(currentPassword);
+			await deleteAccount(currentPassword);
 			setCurrentPassword("");
-			if(isDeletedAccount){
-				if(settings.vibration) navigator.vibrate(500); // togle vibration
-				history.push('/singin');
-			}
-		} catch(e){
+			if(settings.vibration) navigator.vibrate(500); // togle vibration
+			history.push('/singin');
+			window.location.reload()
+		} catch(error){
 			setLoading(false);
-			setError(e.message);
+			setError(error.message);
+			setCurrentPassword("");
 		}
 	}
 	function handlerShowPass(){
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 		setIsShowPassword(!isShowPassword);
+	}
+	function handlerInputPass(val){
+		setError("");
+		setCurrentPassword(val);
 	}
 	return (
 		<form onSubmit={handleSubmit} className="settings__form">
@@ -63,7 +67,7 @@ const DeleteAccount = ({close,back}) => {
 						<div className="input settings__input">
 							<input 
 								value={currentPassword}
-								onChange={(e) => setCurrentPassword(e.target.value)}
+								onChange={(e) => handlerInputPass(e.target.value)}
 								type={isShowPassword ? "text" : "password"}
 								name="password" 
 								id="password"/>

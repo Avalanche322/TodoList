@@ -4,17 +4,17 @@ import ReactTooltip from "react-tooltip";
 import Context from "../contexts/context";
 import useGetPriority from "../customHooks/useGetPriority";
 import useGetDay from "../customHooks/useGetDay";
-import useDeleteTask from "../customHooks/API/useDeleteTask";
 import firebase from "../firebase";
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from "react-i18next";
+import useDeleteData from "../customHooks/API/useDeleteData";
 
 const CustomContexMenu = ({selectTask,setSelectTask}) => {
 	const [overlay, setOverlay] = useState(false);
 	const {isSelecPriority} = useGetPriority();
-	const {setTaskEdit,setAddForm,settings } = useContext(Context);
+	const {setTaskEdit,setAddForm,settings,tasks,setRerenderComponnent} = useContext(Context);
 	const {isSelectDay} = useGetDay();
-	const {deleteTask} = useDeleteTask();
+	const {deleteTask} = useDeleteData();
 	const {currentUser} = useAuth();
 	const { t } = useTranslation();
 	function changeDay(date){
@@ -22,6 +22,9 @@ const CustomContexMenu = ({selectTask,setSelectTask}) => {
 		taskRef.update({
 			date
 		});
+		selectTask.date = date;
+		localStorage.setItem('tasks', JSON.stringify(tasks));
+		setRerenderComponnent({});
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
 	function changePriority(priority){
@@ -29,6 +32,8 @@ const CustomContexMenu = ({selectTask,setSelectTask}) => {
 		taskRef.update({
 			priority
 		});
+		selectTask.priority = priority;
+		localStorage.setItem('tasks', JSON.stringify(tasks));
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
 	function handlerTaskEdit(){
@@ -39,7 +44,7 @@ const CustomContexMenu = ({selectTask,setSelectTask}) => {
 	function handlerOnHide(){
 		setOverlay(false);
 		setSelectTask({id:null});
-		//if(settings.vibration) navigator.vibrate(15); // togle vibration
+		if(settings.vibration) navigator.vibrate(15); // togle vibration
 	}
 	function handlerOnShow(){
 		setOverlay(true);

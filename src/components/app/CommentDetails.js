@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import ReactTooltip from "react-tooltip";
 import useGetDate from "../../customHooks/useGetDate"
 import { useAuth } from "../../contexts/AuthContext";
-import useAddTaskComment from "../../customHooks/API/useAddTaskComment";
-import useDeleteTaskComment from "../../customHooks/API/useDeleteTaskComment";
 import EditComment from "./EditComment";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Context from "../../contexts/context";
+import useAddData from "../../customHooks/API/useAddData";
+import useDeleteData from "../../customHooks/API/useDeleteData";
 
 const CommentDetails = ({taskId}) => {
 	const {settings} = useContext(Context);
@@ -18,10 +18,9 @@ const CommentDetails = ({taskId}) => {
 	const { t } = useTranslation();
 	const {converToTimeformat} = useGetDate();
 	const {currentUser} = useAuth();
-	const {addTaskComment} = useAddTaskComment();
-	const {deleteTaskComment} = useDeleteTaskComment();
+	const {addTaskComment} = useAddData();
+	const {deleteTaskComment} = useDeleteData();
 	const listRef = useRef(null);
-	
 	function handlerSubmit(e){
 		e.preventDefault();
 		if(settings.vibration) navigator.vibrate(15); // togle vibration
@@ -32,7 +31,6 @@ const CommentDetails = ({taskId}) => {
 	const handlerDelete = (comment) => {
 		deleteTaskComment(comment);
 		setComments(prevState => prevState.filter(com => com.id !== comment.id));
-		localStorage.setItem('comments', JSON.stringify(comments.filter(com => com.id !== comment.id)));
 	}
 	useEffect(() =>{ // scroll to bottom comments
 		if(listRef.current){
@@ -50,7 +48,7 @@ const CommentDetails = ({taskId}) => {
 								.map(comment =>(
 									editComment.id !== comment.id 
 										? <CSSTransition in={true} key={comment.id} timeout={400} classNames="move">
-											<li key={comment.id}>
+											<li>
 												<div className="task-detail-comments__img avatar">
 													<img src={currentUser.photoURL} alt="avatar" />
 												</div>
@@ -80,13 +78,13 @@ const CommentDetails = ({taskId}) => {
 												</div>
 											</li>
 										</CSSTransition>
-											: <li key={comment.id}>
-												<EditComment 
-													editComment={editComment} 
-													setEditComment={setEditComment} 
-													setComments={setComments}
-												/>
-											</li>
+										: <li key={comment.id}>
+											<EditComment 
+												editComment={editComment} 
+												setEditComment={setEditComment} 
+												setComments={setComments}
+											/>
+										</li>
 								) )}
 						</TransitionGroup>
 					</ul>

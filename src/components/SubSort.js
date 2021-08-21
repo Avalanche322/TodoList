@@ -8,15 +8,20 @@ const SubSort = ({selectItemSort,setSelectItemSort,project}) => {
 	const {settings} = useContext(Context);
 	const {t} = useTranslation();
 	const {updateSort} = useAuth();
-	function handlerClose(){
-		const sort = JSON.parse(localStorage.getItem('sort'));
-		sort[project] = null;
-		localStorage.setItem('sort', JSON.stringify(sort))
-		setSelectItemSort(prevState =>({
-			...prevState,
-			[project] : null
-		}));
-		if(settings.vibration) navigator.vibrate(10); // togle vibration
+	async function handlerClose(){
+		try{
+			const sort = JSON.parse(localStorage.getItem('sort'));
+			sort[project] = {};
+			localStorage.setItem('sort', JSON.stringify(sort))
+			setSelectItemSort(prevState =>({
+				...prevState,
+				[project] : {}
+			}));
+			updateSort(sort);
+			if(settings.vibration) navigator.vibrate(10); // togle vibration
+		} catch(e){
+			alert(e.message);
+		}
 	}
 	function handlerReverse (val){
 		setSelectItemSort(prevState =>({

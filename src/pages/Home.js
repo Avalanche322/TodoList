@@ -5,26 +5,23 @@ import Context from "../contexts/context";
 import Tasks from "../components/app/Tasks";
 import AddTask from "../components/app/AddTask";
 import useGetDate from "../customHooks/useGetDate";
-import useFetchTasks from "../customHooks/API/useFetchTasks";
 import useGetCountTasks from "../customHooks/useGetCountTasks";
 import Sort from "../components/Sort";
 import SubSort from "../components/SubSort";
 
 const Home = () => {
-	const {today,converToFullDate} = useGetDate();
-	const {taskListToday} = useFetchTasks();
+	const { addForm,tasks } = useContext(Context);
+	const {today,converToFullDate,converToShortDate} = useGetDate();
+	const taskListToday = tasks.filter(t => converToShortDate(t.date) <= converToShortDate(today()));
 	const {countTaskToday} = useGetCountTasks();
-	const { addForm } = useContext(Context);
 	const stats = JSON.parse(localStorage.getItem('stats'));
 	const countCompletedToday = (stats && stats.days_items.total_completed + "");
 	const { t } = useTranslation();
 	const page = "home";
-	// for sort
-	const [selectItemSort,setSelectItemSort] = useState(JSON.parse(localStorage.getItem('sort')));
-	
+	const [selectItemSort,setSelectItemSort] = useState(JSON.parse(localStorage.getItem('sort')) ?? {home: {}, inbox: {}});
 	useEffect(() => {
 		// title for page
-		document.title = `${t("home")} | TodoList`
+		document.title = `${t("home")} | TodoList`;
 	})
 	return (
 		<main className="main">
@@ -36,7 +33,7 @@ const Home = () => {
 					</h1>
 					<Sort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
 				</div>
-					{selectItemSort.home && 
+					{JSON.stringify(selectItemSort?.home) !== '{}' && 
 						<SubSort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
 					}			
 				{taskListToday && 

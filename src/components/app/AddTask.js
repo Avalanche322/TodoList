@@ -9,13 +9,13 @@ import Day from "../Day";
 import useGetPriority from "../../customHooks/useGetPriority";
 import useGetDay from "../../customHooks/useGetDay";
 import useGetDate from "../../customHooks/useGetDate";
-import useAddTask from "../../customHooks/API/useAddTask";
+import useAddData from "../../customHooks/API/useAddData";
 
 const AddTask = () => {
 	/*hook add task*/
-	const {addTask, error: err} = useAddTask();
+	const {addTask} = useAddData();
 	/* Select day*/
-	const {setIsSelectDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,handlerSetDate,isDay,isSelectDay,setIsDay,setIsDayClass} = useGetDay();	
+	const {setIsSelectDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,isDay,isSelectDay,setIsDay,setIsDayClass,handlerInputDateSubmit} = useGetDay();	
 	/* Select priority*/
 	const {handlerSelectValuePriority,priority,isSelecPriority,isPriorityClass,handlerPriorityOpen,isSelectPriorityOpen,} = useGetPriority();
 	/* Select comment*/
@@ -27,7 +27,6 @@ const AddTask = () => {
 	const { addForm, setAddForm,setTaskEdit, settings } = useContext(Context);
 	const {today} = useGetDate();
 	const [body, setBody] = useState('');
-	const [error, setError] = useState(err);
 	const { t } = useTranslation();
 	const nodeRef = useRef(null);
 	const timeout = 500;
@@ -52,8 +51,7 @@ const AddTask = () => {
 			addTask(body,date,priority,comment);
 			handlerDefault();
 		} catch(e){
-			setError(e.message);
-			alert(error);
+			alert(e.message);
 		}
 	}
 	function handlerCancel() {
@@ -97,12 +95,12 @@ const AddTask = () => {
 						 : null}
 							<div className="textarea__block">
 								<Day
+									handlerInputDateSubmit={handlerInputDateSubmit}
 									setIsSelectDayOpen={setIsSelectDayOpen}
 									isDayClass={isDayClass} 
 									isSelectDayOpen={isSelectDayOpen}
 									isDay={isDay}
 									date={date}
-									handlerSetDate={handlerSetDate}
 									isSelectDay={isSelectDay}
 									handlerSelectValueDay={handlerSelectValueDay}
 									setIsDay={setIsDay}

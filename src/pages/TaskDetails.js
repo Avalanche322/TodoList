@@ -11,16 +11,16 @@ import Day from "../components/Day";
 import Priority from "../components/Priority";
 import useGetDay from "../customHooks/useGetDay";
 import useGetPriority from "../customHooks/useGetPriority";
-import useDeleteTask from "../customHooks/API/useDeleteTask";
 import CommentDetails from "../components/app/CommentDetails";
 import ActivyDetails from "../components/app/ActivyDetails";
 import Context from "../contexts/context";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import useDeleteData from "../customHooks/API/useDeleteData";
 
 const TaskDetailt = () => {
-	const {settings} = useContext(Context);
+	const {settings,tasks} = useContext(Context);
 	const [toogleEdit, setToogleEdit] = useState(true);
 	const [taskEdit, setTaskEdit] = useState();
-	const [error, setError] = useState('');
 	const [date, setDate] = useState();
 	const [priority, setPriority] = useState();
 	const [isCommentsActive, setIsCommentsActive] = useState(true);
@@ -31,25 +31,19 @@ const TaskDetailt = () => {
 	const { id } = useParams();
 	const {completedTask} = useCompletedTask();
 	const {currentUser} = useAuth();
-	const {deleteTask} = useDeleteTask();
+	const {deleteTask} = useDeleteData();
 	/* Select day*/
-	const {setIsSelectDayOpen,isSelectDayOpen,isSelectDay,isDayClass,isDay,handlerSelectValueDay,setIsDay,setIsDayClass} = useGetDay();
+	const {setIsSelectDayOpen,isSelectDayOpen,isSelectDay,isDayClass,isDay,handlerSelectValueDay,setIsDay,setIsDayClass,handlerInputDateSubmit} = useGetDay();
 	/* Select priority*/
 	const {isSelecPriority,handlerPriorityOpen,isSelectPriorityOpen,handlerSelectValuePriority} = useGetPriority();
 	useEffect(() =>{
-		try{
-			const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`).child(id);
-			const listener = taskRef.on('value', (snapshot) =>{
-				const task = snapshot.val();
-				if(task){
-					setTaskEdit({id,...task});
-					setDate(task.date);
-					setPriority(task.priority);
-				}
-			})
-			return () => taskRef.off('value', listener);
-		} catch(e){
-			setError(e.message);
+		for (const task of tasks) {
+			if(task.id === id){
+				setTaskEdit(task);
+				setDate(task.date);
+				setPriority(task.priority);
+				//break
+			}
 		}
 	// eslint-disable-next-line
 	},[])
@@ -58,7 +52,7 @@ const TaskDetailt = () => {
 		taskEdit ? document.title = `${taskEdit.body} | TodoList` : document.title = 'TodoList'
 	// eslint-disable-next-line
 	}, [taskEdit])
-	function changeDay(date){
+	function changeDate(date){
 		const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`).child(taskEdit.id);
 		taskRef.update({
 			date
@@ -96,6 +90,7 @@ const TaskDetailt = () => {
 		setIActivyActive(val2);
 	}
 	return (
+		<TransitionGroup component={null}>
 		<Router>
 			<section className="task-detail" onClick={close}>
 				{taskEdit && <div className="task-detail__body" onClick={e => e.stopPropagation()}>
@@ -103,7 +98,6 @@ const TaskDetailt = () => {
 					<h2 className="task-detail__title">{t("taskDetails")}</h2>
 					<span className="fas fa-times close" onClick={close}></span>
 				</header>
-				{error && <div className="denger fas fa-exclamation-circle full-error">{ error }</div>}
 				{toogleEdit ? 
 					<div className="task-detail__overview">
 						<div className="task-detail__task">
@@ -128,16 +122,18 @@ const TaskDetailt = () => {
 									onClick={handlerTaskEdit.bind(null)}>
 								{taskEdit.body}</p>
 								<Day
-								setIsSelectDayOpen={setIsSelectDayOpen} 
-								isDayClass={isDayClass}
-								isSelectDayOpen={isSelectDayOpen}
-								isDay={isDay}
-								date={date}
-								handlerSetDate={changeDay}
-								isSelectDay={isSelectDay}
-								handlerSelectValueDay={handlerSelectValueDay}
-								setIsDay={setIsDay}
-								setIsDayClass={setIsDayClass}/>
+									task={taskEdit}
+									handlerInputDateSubmit={handlerInputDateSubmit}
+									setIsSelectDayOpen={setIsSelectDayOpen} 
+									isDayClass={isDayClass}
+									isSelectDayOpen={isSelectDayOpen}
+									isDay={isDay}
+									date={date}
+									handlerSetDate={changeDate}
+									isSelectDay={isSelectDay}
+									handlerSelectValueDay={handlerSelectValueDay}
+									setIsDay={setIsDay}
+									setIsDayClass={setIsDayClass}/>
 							</div>
 						</div>
 						<div className="task-detail__actions">	
@@ -176,10 +172,12 @@ const TaskDetailt = () => {
 							onClick={handlerTogglePage.bind(null,false,true)}
 						>{t("activity")}</button>
 					</div>
-					<div className="task-detail-tabs__body">
-						{isCommentsActive && <CommentDetails taskId={id}/>}
-						{isActivyActive && <ActivyDetails task={taskEdit}/>}
-					</div>
+					<CSSTransition key=".1" in={isCommentsActive} timeout={{enter:400,exit:0}} classNames="move-back" unmountOnExit>
+						<CommentDetails taskId={id}/>
+					</CSSTransition>
+					<CSSTransition key=".2" in={isActivyActive} timeout={{enter:400,exit:0}} classNames="move-back" unmountOnExit>
+						<ActivyDetails task={taskEdit}/>
+					</CSSTransition>
 				</div>
 			</div>}
 			</section>
@@ -189,6 +187,7 @@ const TaskDetailt = () => {
 				className="tooltip"
 				arrowColor="transparent" />
 		</Router>
+		</TransitionGroup>
 	);
 }
  

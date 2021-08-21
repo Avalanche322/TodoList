@@ -14,7 +14,10 @@ const useTheme = () => {
 	useEffect(() =>{
 		if(currentSettings){
 			for (const key in themes) {
-				if(currentSettings.theme === key ) setTheme(() => themes[key]);
+				if(currentSettings.theme === key ) {
+					setTheme(() => themes[key]);
+					
+				}
 			}
 		} else{
 			try{
@@ -23,7 +26,10 @@ const useTheme = () => {
 					const settingsVal = snapshot.val();	
 					if(settingsVal){
 						for (const key in themes) {
-							if(settingsVal.theme === key ) setTheme(() => themes[key]);
+							if(settingsVal.theme === key ) {
+								setTheme(() => themes[key]);
+								//break
+							}
 						}
 					}
 				})

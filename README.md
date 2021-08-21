@@ -4,17 +4,20 @@ An application use Firebase for hosting and datebase, built with React, JavaScri
 
 ## Project Status
 
-This project is currently in development. Users can sing up and sing in with Google or email and passwod, can mix them, change theme and language, turn on and of vibration and sound, name, password, avatar, add, delete or edit tasks with date, priority and comments, sort tasks. For mobile added swipe sidebar, vibration and sound.
+This project is currently done. Users can sing up and sing in with Google or email and passwod, can mix them, change theme and language, turn on and of vibration and sound, name, password, avatar, add, delete or edit tasks with date, priority and comments, sort tasks. For mobile added swipe sidebar, vibration and sound.
 
 ## Project Screen Shots
 
 ![home page](src/img/readmi/Screenshot_1.png)
-![quick add task](src/img/readmi/Screenshot_2.png)
-![account settings](src/img/readmi/Screenshot_3.png)
-![genneral settings](src/img/readmi/Screenshot_4.png)
-![context menu](src/img/readmi/Screenshot_5.png)
-![hide sidebar and tooltip](src/img/readmi/Screenshot_6.png)
-![task details](src/img/readmi/Screenshot_7.png)
+
+![quick add task](src/img/readmi/quick-add-task.gif)
+
+![settings](src/img/readmi/settings.gif)
+
+![context menu](src/img/readmi/context-menu.gif)
+
+![task details](src/img/readmi/task-details.gif)
+
 ![swipe sidebar](src/img/swipe-menu.gif)
 
 ## Installation and Setup Instructions
@@ -37,9 +40,17 @@ Install node modules:
 
 `npm install`
 
-To create .env.local (API Google Firebase)
+To create `.env.local` (API Google Firebase)
 
+You must open your IDE and create `.env.local` in root folder.
 
+`REACT_APP_API_KEY= API KEY
+REACT_APP_AUTH_DOMAIN= AUTH DOMAIN
+REACT_APP_PROJECT_ID= PROJECT ID
+REACT_APP_STORAGE_BUCKET= STORAGE BUCKET
+REACT_APP_MESSAGING_SENDER_ID= MESSAGING SENDER ID
+REACT_APP_APP_ID= APP ID
+REACT_APP_MEASUREMENT_ID= MEASUREMENT ID`
 
 To Start Server:
 

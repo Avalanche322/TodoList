@@ -6,12 +6,12 @@ import Context from "../../contexts/context";
 
 const ChangePassword = ({close,back}) => {
 	const {settings} = useContext(Context);
-	const {changePassword,error: err} = useAuth();
+	const {changePassword} = useAuth();
 	const [isShowPasswordOld, setIsShowPasswordOld] = useState(false);
 	const [isShowPasswordNew, setIsShowPasswordNew] = useState(false);
 	const [isShowPasswordConft, setIsShowPasswordConft] = useState(false);
 	const { t } = useTranslation();
-	const [error, setError] = useState(err);
+	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState("");
 	const [oldPassword, setOldPassword] = useState("");
