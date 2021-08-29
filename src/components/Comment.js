@@ -17,6 +17,13 @@ const Comment = ({comment, setComment}) => {
 			document.removeEventListener("mousedown", hendler)
 		};	
 	});
+	useEffect(() => {
+		document.addEventListener('keydown', (event) => {
+			if(event.code === 'Escape'){
+				setIsSelectCommentOpen(false);
+			}
+		});
+	},[])
 	return (
 		<div ref={selectCommentRef} className="comment">
 			<button 

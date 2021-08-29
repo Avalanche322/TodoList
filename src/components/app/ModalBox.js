@@ -1,5 +1,7 @@
-import swipeGif from "../../img/swipe-menu.gif";
-import soundVibration from "../../img/sound-vibration.png"
+import swipeGifMain from "../../img/swipe-menu.gif";
+import swipeGifSettings from "../../img/swipe-menu-settings.gif";
+import contextMenuMobile from "../../img/context-menu-mobile.gif"
+import soundVibration from "../../img/sound-vibration.png";
 import { useRef, useEffect } from "react";
 
 const ModalBox = ({setIsNewUserDialog,isNewUserDialog}) => {
@@ -31,9 +33,21 @@ const ModalBox = ({setIsNewUserDialog,isNewUserDialog}) => {
 						<div className="dialog__block">
 						<h3 className="dialog__sub-title">Swipe menu for mobile</h3>
 						<div>
-							<p className="dialog__text">You can also close and open menu click on button or swipe left and right.</p>
+							<p className="dialog__text">You can also close and open the menu by pressing the button or swipe left and right.</p>
 							<div className="dialog__gif">
-								<img src={swipeGif} alt="swipe gif" />
+								<img src={swipeGifMain} alt="swipe gif" />
+							</div>
+							<div className="dialog__gif">
+								<img src={swipeGifSettings} alt="swipe gif" />
+							</div>
+						</div>
+					</div>
+					<div className="dialog__block">
+						<h3 className="dialog__sub-title">Contex menu for mobile</h3>
+						<div>
+							<p className="dialog__text">You can edit, prioritize, date and delete tasks by right-clicking or holding on the touch device</p>
+							<div className="dialog__gif">
+								<img src={contextMenuMobile} alt="context menu for mobile" />
 							</div>
 						</div>
 					</div>

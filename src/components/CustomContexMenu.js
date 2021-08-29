@@ -24,7 +24,7 @@ const CustomContexMenu = ({selectTask,setSelectTask}) => {
 		});
 		selectTask.date = date;
 		localStorage.setItem('tasks', JSON.stringify(tasks));
-		setRerenderComponnent({});
+		setRerenderComponnent({}); // rerender component
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
 	function changePriority(priority){

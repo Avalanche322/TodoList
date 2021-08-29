@@ -24,7 +24,7 @@ const Home = () => {
 		document.title = `${t("home")} | TodoList`;
 	})
 	return (
-		<main className="main">
+		<>
 			<div className="main__content container">
 				<div className="main__header">
 					<h1 className="main__title">
@@ -58,7 +58,7 @@ const Home = () => {
 				</div> 
 				: null
 			}
-		</main>
+		</>
 	);
 }
  

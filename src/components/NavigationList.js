@@ -56,6 +56,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 							exact to="/"
 							date-place="right"
 							onClick={handlerMobileMenu}
+							data-for="tooltip-aside"
 							data-tip={!isActive ? t("home") : ""}>
 							<i className="fas fa-home sidebar-link__logo"></i>
 							<span className="sidebar-link__title">{t("home")}</span>
@@ -69,6 +70,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 							to="/inbox"
 							date-place="right"
 							onClick={handlerMobileMenu}
+							data-for="tooltip-aside"
 							data-tip={!isActive ? t("inbox"): ""}>
 							<i className="fas fa-inbox sidebar-link__logo"></i>
 							<span className="sidebar-link__title">{t("inbox")}</span>	
@@ -80,7 +82,9 @@ const NavigationList = ({isActive,setIsActive}) => {
 							tabIndex="0"
 							className="sidebar__link" 
 							onClick={handlerQuickAddTaskOpen.bind(null,!isQuickAddTaskOpen)}
+							onKeyDown={(e) => e.key === "Enter" ?  handlerQuickAddTaskOpen(!isQuickAddTaskOpen) : null}
 							date-place="right"
+							data-for="tooltip-aside"
 							data-tip={!isActive ? t("quickAddTask") : ""}>
 							<i className="fas fa-plus sidebar-link__logo"></i>
 							<span className="sidebar-link__title">{t("quickAddTask")}</span>
@@ -97,6 +101,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 							}}
 							date-place="right"
 							onClick={handlerMobileMenu}
+							data-for="tooltip-aside"
 							data-tip={!isActive ? t("settings") : ""}>
 							<i className="fas fa-cog sidebar-link__logo"></i>
 							<span className="sidebar-link__title">{t("settings")}</span>
@@ -106,11 +111,13 @@ const NavigationList = ({isActive,setIsActive}) => {
 				<div className="stats">
 					<h2 className="stats__title">Stats</h2>
 					<div className="stats__count-task" 
+						data-for="tooltip-aside"
 						data-tip={!isActive ? `${t("completedTasksToday")} ${(countCompletedToday ?? "0")}`: ""}> 
 						<i className="fas fa-calendar-week stats__logo"></i>
 						<span>{t("completedTasksToday")} {countCompletedToday ?? "0"}</span>
 					</div>
 					<div className="stats__count-task"
+						data-for="tooltip-aside"
 						data-tip={!isActive ? `${t("completedAllTasks")} ${(countCompletedAll ?? "0")}`: ""}> 
 						<i className="fas fa-tasks stats__logo"></i>
 						<span>{t("completedAllTasks")} {countCompletedAll ?? "0"}</span>
@@ -118,16 +125,19 @@ const NavigationList = ({isActive,setIsActive}) => {
 				</div>
 			</div>
 			<div className="profile">
-					<NavLink to={{
-						pathname: "/settings/account",
-						state: { background: location, prevPath: location.pathname },
-					}}
-					onClick={handlerMobileMenu}>
+					<NavLink
+						className="profile__link"
+						tabIndex={!isActive ? '-1' : '0'}
+						to={{
+							pathname: "/settings/account",
+							state: { background: location, prevPath: location.pathname },
+						}}
+						onClick={handlerMobileMenu}>
 						<div className="profile__body">
 							<div className="profile__img avatar">
 								<img src={currentUser.photoURL} alt="" />
 							</div>
-							<div className="profile__detailts">
+							<div className="profile__details">
 								<strong className="profile__name">{currentUser.displayName}</strong>
 								<p className="profile__email">{currentUser.email}</p>
 							</div>
@@ -137,6 +147,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 						className="fas fa-sign-out-alt profile__logo" 
 						onClick={handleLogout.bind(null)}
 						date-place="right"
+						data-for="tooltip-aside"
 						data-tip={t("logout")}></i>
 				</div>
 		</>

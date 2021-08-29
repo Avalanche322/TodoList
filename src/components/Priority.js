@@ -33,7 +33,7 @@ const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,se
 			<ul className={`priority__list drop-down__list ${isSelectPriorityOpen ? "open" : "hidden"}`}>
 				{isSelecPriority.map(selecPriority =>{
 					return (
-					<li
+					<li tabIndex="1"
 						onClick={handlerSelectValuePriority.bind(null,selecPriority.classValue, selecPriority.priority,handlerSetPriority)}
 						// pass handlerSetPriority for update local state edit			
 						key={selecPriority.id}

@@ -1,4 +1,4 @@
-import React ,{ memo, useContext, useState } from "react";
+import React ,{ memo, useContext, useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router";
 import {BrowserRouter as Router, Switch, NavLink, Route} from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -32,10 +32,23 @@ const Settings = () => {
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	};
 	const handlers = useSwipeable({
-		onSwipedRight: () => setIsActiveSidebar(true),
-		onSwipedLeft: () => setIsActiveSidebar(false),
+		onSwipedRight: () => {
+			setIsActiveSidebar(true);
+			if(settings.vibration) navigator.vibrate(8);
+		},
+		onSwipedLeft: () => {
+			setIsActiveSidebar(false);
+			if(settings.vibration) navigator.vibrate(8);
+		},
 	});
-
+	useEffect(() => {
+		document.addEventListener('keydown', (event) => {
+			if(event.code === 'Escape'){
+				history.push(location.state.prevPath);
+			}
+		});
+	//eslint-disable-next-line
+	},[])
 	return (
 		<Router>
 			<TransitionGroup component={null}>

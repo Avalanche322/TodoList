@@ -10,7 +10,7 @@ const useCompletedTask = () => {
 	const {currentUser} = useAuth();
 	const {deleteTask,deleteTaskComment} = useDeleteData();
 	const {converToShortDate} = useGetDate();
-	const {settings,comments} = useContext(Context);
+	const {settings} = useContext(Context);
 	const {playAudio} = useAudio();
 	
 	async function handlerCountCompletedTask(){
@@ -22,8 +22,8 @@ const useCompletedTask = () => {
 		const statsRef = firebase.database().ref(`users/${currentUser.uid}/stats`);
 		await statsRef.update(stats)
 	}
-
 	function completedTask(task){
+		const comments = JSON.parse(localStorage.getItem('comments'));
 		try{
 			const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`).child(task.id);
 			taskRef.update({
@@ -35,11 +35,9 @@ const useCompletedTask = () => {
 			playAudio();
 			for (const comment of comments) {
 				if(comment.posted_uid === task.id){
-					//deleteTaskComment(comment);
-					console.log(comment);
+					deleteTaskComment(comment);
 				}
-			}
-						
+			}				
 		} catch(e){
 			alert(e.message);
 		}
