@@ -14,7 +14,7 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 	/*hook add task*/
 	const {addTask} = useAddData();
 	/* Select day*/
-	const {setIsSelectDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,isDay,isSelectDay,setIsDay,setIsDayClass} = useGetDay();	
+	const {setIsSelectDayOpen,handlerSelectValueDay,date,isDayClass,isSelectDayOpen,isDay,isSelectDay,setIsDay,setIsDayClass,handlerInputDateSubmit} = useGetDay();	
 	/* Select priority*/
 	const {handlerSelectValuePriority,priority,isSelecPriority,isPriorityClass,handlerPriorityOpen,isSelectPriorityOpen,} = useGetPriority();
 	/* Select comment*/
@@ -70,6 +70,27 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 			}
 		}
 	})
+	//useEffect(() => {
+	//	document.addEventListener('keydown', (event) => {
+	//		if(event.code === 'Escape'){
+	//			handlerCancel();
+	//		}
+	//	});
+	////eslint-disable-next-line
+	//},[])	
+	useEffect(() =>{	// add outline Tab
+		if(isOpen){
+			let hendler = (event) =>{
+				if(event.code === 'Escape'){
+					handlerCancel();
+				}
+			}
+			document.addEventListener("keydown", hendler)
+			return () =>{
+				document.removeEventListener("keydown", hendler)
+			};	
+		}
+	});
 	return (
 		<CSSTransition 
 			in={isOpen}
@@ -100,6 +121,7 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 							: null}
 								<div className="textarea__block">
 									<Day
+										handlerInputDateSubmit = {handlerInputDateSubmit}
 										setIsSelectDayOpen={setIsSelectDayOpen} 
 										isDayClass={isDayClass} 
 										isSelectDayOpen={isSelectDayOpen}

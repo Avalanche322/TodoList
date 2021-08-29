@@ -17,9 +17,11 @@ const Sidebar = () => {
 		<aside className={`sidebar ${isActive  ? "sidebar__active" : ""}`}>
 			<div className="sidebar__header">
 				<h2 className="sidebar__logo">The best TodoList</h2>
-				<div className="sidebar__humburger"
+				<div tabIndex="1" className="sidebar__humburger"
 					onClick={handlerSidebar.bind(null)}
+					onKeyDown={(e) => e.key === "Enter" ?  handlerSidebar() : null}
 					data-place="right"
+					data-for="tooltip-aside"
 					data-tip={!isActive  ? t("openMenu") : t("closeMenu")}>
 					<span></span>
 				</div>
@@ -28,6 +30,7 @@ const Sidebar = () => {
 				<NavigationList isActive={isActive }/>
 			</nav>
 			<ReactTooltip 
+					id="tooltip-aside"
 					effect="solid"		
 					className="tooltip"
 					arrowColor="transparent" />

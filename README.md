@@ -4,7 +4,7 @@ An application use Firebase for hosting and datebase, built with React, JavaScri
 
 ## Project Status
 
-This project is currently done. Users can sing up and sing in with Google or email and passwod, can mix them, change theme and language, turn on and of vibration and sound, name, password, avatar, add, delete or edit tasks with date, priority and comments, sort tasks. For mobile added swipe sidebar, vibration and sound.
+This project is currently developing. Users can sing up and sing in with Google or email and passwod, can mix them, change theme and language, turn on and of vibration and sound, name, password, avatar, add, delete or edit tasks with date, priority and comments, sort tasks. For mobile added swipe sidebar, vibration and sound.
 
 ## Project Screen Shots
 

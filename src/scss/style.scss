@@ -95,12 +95,14 @@ body{
 	background: rgb(var(--bg));
 	color: rgb(var(--text));
 }
-:focus, :active {
+:active {
   outline: none;
 }
-
-a:focus, a:active {
-  outline: none;
+:focus{
+	outline: 1px solid $orange;
+}
+.mousedown *:focus {
+ 	outline: 0;
 }
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
@@ -412,10 +414,9 @@ a:focus, a:active {
 /*Profile*/
 .profile{
 	display: flex;
-	//position: absolute;
 	width: 100%;
-	//bottom: 0;
 	align-items: center;
+	overflow: hidden;
 	background: rgba(var(--bg), 0.4);
 	&__body{
 		display: flex;
@@ -456,7 +457,10 @@ a:focus, a:active {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
-	}	
+	}
+	&__link{
+		width: 100%;
+	}
 }
 /*Stats*/
 .stats{
@@ -530,9 +534,6 @@ a:focus, a:active {
 		width: 100%;
 	}
 	&__cbx{
-		-webkit-user-select: none;
-		user-select: none;
-		-webkit-tap-highlight-color: transparent;
 		cursor: pointer;
 		position: relative;
 		z-index: 1;
@@ -903,7 +904,7 @@ a:focus, a:active {
 				cursor: auto;
 			}
 		}
-		.sidebar__link span,.sidebar__logo,.profile__name,.profile__email,.profile__img,.stats__count-task span{
+		.sidebar__link span,.sidebar__logo,.profile__body,.stats__count-task span{
 			opacity: 1;
 			pointer-events: painted;
 		}
@@ -912,6 +913,9 @@ a:focus, a:active {
 		}
 		.sidebar__humburger{
 			right: 0px;
+		}
+		.profile__link{
+			width: auto;
 		}
 	}
 	&__humburger{
@@ -1036,7 +1040,6 @@ a:focus, a:active {
 			width: 100%;
 			transition: all 0.3s ease 0s;
 			background-color: rgb(var(--text));
-			
 		}
 		&::before,&::after{
 			content: '';		
@@ -2107,6 +2110,7 @@ a:focus, a:active {
 }
 /*======================Not Found 404======================*/
 .not-found{
+	height: 100%;
 	text-align: center;
 	display: flex;
 	justify-content: center;
@@ -2158,10 +2162,9 @@ a:focus, a:active {
 }
 @media (min-width:768px) {
 	.profile{
-		&__name, &__img,&__email{
+		&__body{
 			opacity: 0;
-			pointer-events: none;
-			transition: opacity 0.3s ease 0s;
+			flex-wrap: nowrap;
 		}
 	}
 	.settings{

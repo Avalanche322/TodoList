@@ -20,7 +20,7 @@ const Inbox = () => {
 		document.title = `${t("inbox")} | TodoList`;
 	})
 	return (
-		<main className="main">
+		<>
 			<div className="main__content container">
 				<div className="main__header">
 					<h1 className="main__title"><span>{t("inbox")}</span></h1>
@@ -48,7 +48,7 @@ const Inbox = () => {
 				</div> 
 				: null
 			}
-		</main>
+		</>
 	);
 }
  

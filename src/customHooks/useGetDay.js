@@ -21,7 +21,7 @@ const useGetDay = () => {
 		setIsDay(day);
 		setIsDayClass(classValue);
 		setDateEdit(date);
-		setRerenderComponnent({});
+		setRerenderComponnent({}); // rerender component
 		if(task){
 			task.date = date;
 			for (let i = 0; i < tasks.length; i++) {

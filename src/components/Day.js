@@ -55,6 +55,19 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 		setIsDay(converToFullDate(date));
 	// eslint-disable-next-line
 	},[])
+	useEffect(() =>{			
+		let hendler = (event) =>{
+			if(event.code === 'Escape'){
+				setIsSelectDayOpen(false);
+				setInputDate(converToFullDate(date));
+				setIsInputDate(false);
+			}
+		}
+		document.addEventListener("keydown", hendler)
+		return () =>{
+			document.removeEventListener("keydown", hendler)
+		};	
+	});
 	return (
 		<div ref={selectDayRef} className="day">
 			<button 
@@ -83,6 +96,7 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 				{isSelectDay.filter(day => day.day !== isDay).map(selectDay =>{
 					return (
 						<li
+							tabIndex="1"
 							key={selectDay.id}
 							onClick={() =>{
 								handlerSelectValueDay(selectDay.day,selectDay.date,selectDay.classValue,handlerSetDate,task); // pass handlerSetDate for update local state edit

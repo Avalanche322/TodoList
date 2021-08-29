@@ -14,7 +14,6 @@ const useEditData = () => {
 
 	function editTask(body,date,priority,comment,task){
 		const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`).child(task.id);
-		console.log(comment);
 		const UpdateTask = {
 			body,
 			completed: false,

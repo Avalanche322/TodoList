@@ -92,12 +92,16 @@ body {
   color: rgb(var(--text));
 }
 
-:focus, :active {
+:active {
   outline: none;
 }
 
-a:focus, a:active {
-  outline: none;
+:focus {
+  outline: 1px solid #ff8928;
+}
+
+.mousedown *:focus {
+  outline: 0;
 }
 
 *::-webkit-scrollbar,
@@ -432,6 +436,7 @@ a:focus, a:active {
   display: flex;
   width: 100%;
   align-items: center;
+  overflow: hidden;
   background: rgba(var(--bg), 0.4);
 }
 .profile__body {
@@ -473,6 +478,9 @@ a:focus, a:active {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+.profile__link {
+  width: 100%;
 }
 
 /*Stats*/
@@ -550,9 +558,6 @@ a:focus, a:active {
   width: 100%;
 }
 .task__cbx {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -934,7 +939,7 @@ a:focus, a:active {
 .sidebar__active .stats__logo {
   cursor: auto;
 }
-.sidebar__active .sidebar__link span, .sidebar__active .sidebar__logo, .sidebar__active .profile__name, .sidebar__active .profile__email, .sidebar__active .profile__img, .sidebar__active .stats__count-task span {
+.sidebar__active .sidebar__link span, .sidebar__active .sidebar__logo, .sidebar__active .profile__body, .sidebar__active .stats__count-task span {
   opacity: 1;
   pointer-events: painted;
 }
@@ -943,6 +948,9 @@ a:focus, a:active {
 }
 .sidebar__active .sidebar__humburger {
   right: 0px;
+}
+.sidebar__active .profile__link {
+  width: auto;
 }
 .sidebar__humburger {
   position: absolute;
@@ -2093,6 +2101,7 @@ a:focus, a:active {
 
 /*======================Not Found 404======================*/
 .not-found {
+  height: 100%;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -2147,10 +2156,9 @@ a:focus, a:active {
   }
 }
 @media (min-width: 768px) {
-  .profile__name, .profile__img, .profile__email {
+  .profile__body {
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease 0s;
+    flex-wrap: nowrap;
   }
 
   .settings .main-back {

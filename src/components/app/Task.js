@@ -47,7 +47,12 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 		<ContextMenuTrigger id="contextmenu" holdToDisplay={isTouchDevice ? 700 : -1} collect={() => setSelectTask(task)}>
 			<div className={`main__task ${selectTask?.id === task.id ? 'main__task-focus' : ''}`}>
 					<input className="task__inp-cbx" id={`cbx${task.id}`} type="checkbox" style={{display: "none"}} />
-					<label className="task__cbx" htmlFor={`cbx${task.id}`} onClick={completedTask.bind(null,task)}>
+					<label 
+						tabIndex="1" 
+						className="task__cbx" 
+						htmlFor={`cbx${task.id}`} 
+						onClick={completedTask.bind(null,task)}
+						onKeyDown={(e) => e.key === "Enter" ?  completedTask(task) : null}>
 						<span className={`priority-cbx-${task.priority}`}>
 							<svg width="8px" height="8px" viewBox="0 0 12 9">
 							<polyline points="1 5 4 8 11 1"></polyline>
@@ -55,7 +60,11 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 						</span>
 					</label>
 				<div className="main__group-task">
-					<div type="button" onClick={handlerLinkToDetails.bind(null)} className="main__link">
+					<div 
+						tabIndex="1" 
+						onClick={handlerLinkToDetails.bind(null)} 
+						onKeyDown={(e) => e.key === "Enter" ?  handlerLinkToDetails() : null}
+						className="main__link">
 						<p className={`task__text main__text ${task.completed ? "completed" : ""}`}>{task.body}</p>
 					</div>
 					<div className="main__group">

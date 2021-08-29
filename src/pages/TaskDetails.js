@@ -89,6 +89,25 @@ const TaskDetailt = () => {
 		setIsCommentsActive(val1);
 		setIActivyActive(val2);
 	}
+	//useEffect(() => {
+	//	document.addEventListener('keydown', (event) => {
+	//		if(event.code === 'Escape'){
+	//			history.push(location.state.prevPath);
+	//		}
+	//	});
+	//// eslint-disable-next-line
+	//},[])
+	useEffect(() =>{
+		let hendler = (event) =>{
+			if(event.code === 'Escape'){
+				history.push(location.state.prevPath);
+			}
+		}
+		document.addEventListener("keydown", hendler)
+		return () =>{
+			document.removeEventListener("keydown", hendler)
+		};	
+	});
 	return (
 		<TransitionGroup component={null}>
 		<Router>

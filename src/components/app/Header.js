@@ -33,6 +33,7 @@ const Header = ({isActive, setIsActive}) => {
 						<div 
 							className={`header__humburger ${isActive ? "_active" : ''}`} 
 							onClick={handlerSidebar.bind(null)}
+							onKeyDown={(e) => e.key === "Enter" ?  handlerSidebar() : null}
 							data-place="right"
 							data-tip={!isActive ? t("openMenu") : t("closeMenu")}>
 							<span></span>
