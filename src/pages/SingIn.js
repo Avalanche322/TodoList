@@ -15,7 +15,7 @@ const SingIn = () => {
 	const [isShowPassword, setIsShowPassword] = useState(false);
 	useEffect(() => {
 		// title for page
-		document.title = "SignIn | TodoList"
+		document.title = "Sig In | TodoList"
 	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();

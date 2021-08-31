@@ -98,11 +98,8 @@ body{
 :active {
   outline: none;
 }
-:focus{
+:focus-visible{
 	outline: 1px solid $orange;
-}
-.mousedown *:focus {
- 	outline: 0;
 }
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
@@ -167,6 +164,8 @@ body{
 	transition: all 0.3s ease;
 	cursor: pointer;
 	font-size: 16px;
+	background: transparent;
+	color: rgb(var(--text));
 	&:hover{
 		color: rgb(var(--text-light));
 		transform: rotate(90deg);
@@ -176,6 +175,8 @@ body{
 	transition: all 0.3s ease;
 	cursor: pointer;
 	font-size: 16px;
+	background: transparent;
+	color: rgb(var(--text));
 	&:hover{
 		color: rgb(var(--text-light));
 		//transform: rotate(360deg);
@@ -350,6 +351,9 @@ body{
 		line-height: 20px;
 		background: rgb(var(--bg-light));
 		color: rgb(var(--text));
+		&:focus{
+			outline: none !important;
+		}
 	}
 	&__bottom{
 		margin-top: 10px;
@@ -427,13 +431,15 @@ body{
 			background: rgba(var(--bg),0.4);
 		}
 	}
-	&__logo{
+	&__logout{
 		position: absolute;
-		right: 15px;
+		right: 10px;
 		cursor: pointer;
 		transition: all 0.4s ease;
 		border-radius: 12px;
 		font-size: 22px;
+		background: transparent;
+		color: rgb(var(--text));
 		font-weight: 500;
 		white-space: nowrap;
 		padding: 10px;
@@ -1250,6 +1256,9 @@ body{
 		padding: 2px 8px;
 		opacity: 0;
 		transition: opacity 0.3s ease;
+		&:focus{
+			opacity: 1;
+		}
 	}
 	&__link{
 		&::before{
@@ -1419,6 +1428,9 @@ body{
 		height: 100%;
 		padding-left: 10px;
 		color: rgb(var(--text));
+		&:focus{
+			outline: none !important;
+		}
 	}
 	&__input-text{
 		margin-left: 10px;
@@ -1513,6 +1525,7 @@ body{
 		padding: 10px 10px 50px 10px;
 		&:focus{
 			border-color: rgb(var(--text-support));
+			outline: none	!important;
 		}
 	}
 }

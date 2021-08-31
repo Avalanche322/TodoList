@@ -127,15 +127,15 @@ const General = ({close,handlerActiveSidebar}) => {
 	return (
 		<form className="settings__form" onSubmit={submit}>
 			<header className="settings__header">
-				<span className="fas fa-arrow-left main-back" onClick={handlerActiveSidebar.bind(null, true)}></span>
+				<button type="button" className="fas fa-arrow-left main-back" onClick={handlerActiveSidebar.bind(null, true)}></button>
 				<h2 className="settings__title">{t("general")}</h2>
-				<span className="fas fa-times close" onClick={handelClose}></span>
+				<button type="button" className="fas fa-times close" onClick={handelClose}></button>
 			</header>
 			<div className="settings__general settings__container">
 				<div className="settings__block">
 					<h3 className="settings__subtitle">{t("language")}</h3>
 					<div className="settings__group">
-						<div className="select">
+						<div className="select" tabIndex="1">
 							<select name="language" id="language" onChange={handlerChangeLanguege} value={settings.language}>
 								<option value="en">English</option>
 								<option value="uk">Ukraine</option>

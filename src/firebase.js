@@ -1,7 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import 'firebase/analytics';
 import "firebase/storage"
 
 const firebaseConfig = {
@@ -14,5 +13,5 @@ const firebaseConfig = {
 	measurementId: process.env.REACT_APP_MEASUREMENT_ID
 }
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+
 export default firebase

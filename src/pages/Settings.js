@@ -42,11 +42,15 @@ const Settings = () => {
 		},
 	});
 	useEffect(() => {
-		document.addEventListener('keydown', (event) => {
+		let hendler = (event) => {
 			if(event.code === 'Escape'){
 				history.push(location.state.prevPath);
 			}
-		});
+		}
+		document.addEventListener('keydown', hendler);
+		return () =>{
+			document.removeEventListener("keydown", hendler)
+		}
 	//eslint-disable-next-line
 	},[])
 	return (
@@ -61,7 +65,7 @@ const Settings = () => {
 						<div className={`settings__sidebar ${isActiveSidebar ? "active" : ""}`}>
 							<header className="settings-sidebar__header">
 								<h1 className="settings__title">{t("settings")}</h1>
-								<span className="fas fa-times close" onClick={handlerActiveSidebar.bind(null)}></span>
+								<button type="button" className="fas fa-times close" onClick={handlerActiveSidebar.bind(null)}></button>
 							</header>
 							<ul className="settings-sidebar__menu">
 								<li>

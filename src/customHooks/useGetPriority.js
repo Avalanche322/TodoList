@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import Context from "../contexts/context";
 
 const useGetPriority = () => {
-	const {settings} = useContext(Context);
+	const {settings,tasks,setRerenderComponnent} = useContext(Context);
 	const [isSelectPriorityOpen, setIsSelectPriorityOpen] = useState(false);
 	const [isPriorityClass, setIsPriorityClass] = useState('');
 	const [priority, setPriority] = useState(4);
@@ -15,10 +15,21 @@ const useGetPriority = () => {
 	function handlerPriorityOpen(val){
 		setIsSelectPriorityOpen(val)
 	}
-	function handlerSelectValuePriority(classValue, priority, setPriorityEdit = setPriority){
+	function handlerSelectValuePriority(classValue, priority, setPriorityEdit = setPriority,task){
 		setIsPriorityClass(classValue);
 		setPriorityEdit(priority);
 		handlerPriorityOpen(false);
+		if(task){ // change task priority and add to local tasks array
+			setRerenderComponnent({}); // rerender component
+			task.priority = priority;
+			for (let i = 0; i < tasks.length; i++) {
+				if(tasks[i].id === task.id){
+					tasks.splice(i,1,task);
+					//break
+				}
+			}
+			localStorage.setItem('tasks', JSON.stringify(tasks));
+		}
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	}
 	return {

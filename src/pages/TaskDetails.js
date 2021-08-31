@@ -1,4 +1,4 @@
-import {BrowserRouter as Router,useParams } from "react-router-dom";
+import {BrowserRouter as Router } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import { useLocation,useHistory } from "react-router";
 import { memo, useContext, useEffect, useState } from "react";
@@ -18,17 +18,14 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import useDeleteData from "../customHooks/API/useDeleteData";
 
 const TaskDetailt = () => {
-	const {settings,tasks} = useContext(Context);
+	const {settings} = useContext(Context);
+	let location = useLocation();
 	const [toogleEdit, setToogleEdit] = useState(true);
-	const [taskEdit, setTaskEdit] = useState();
-	const [date, setDate] = useState();
-	const [priority, setPriority] = useState();
+	const [taskEdit, setTaskEdit] = useState(location.state.task);
 	const [isCommentsActive, setIsCommentsActive] = useState(true);
 	const [isActivyActive, setIActivyActive] = useState(false);
 	const history = useHistory();
 	const {t} = useTranslation();
-	let location = useLocation();
-	const { id } = useParams();
 	const {completedTask} = useCompletedTask();
 	const {currentUser} = useAuth();
 	const {deleteTask} = useDeleteData();
@@ -36,17 +33,6 @@ const TaskDetailt = () => {
 	const {setIsSelectDayOpen,isSelectDayOpen,isSelectDay,isDayClass,isDay,handlerSelectValueDay,setIsDay,setIsDayClass,handlerInputDateSubmit} = useGetDay();
 	/* Select priority*/
 	const {isSelecPriority,handlerPriorityOpen,isSelectPriorityOpen,handlerSelectValuePriority} = useGetPriority();
-	useEffect(() =>{
-		for (const task of tasks) {
-			if(task.id === id){
-				setTaskEdit(task);
-				setDate(task.date);
-				setPriority(task.priority);
-				//break
-			}
-		}
-	// eslint-disable-next-line
-	},[])
 	useEffect(() => {
 		// title for page
 		taskEdit ? document.title = `${taskEdit.body} | TodoList` : document.title = 'TodoList'
@@ -89,25 +75,18 @@ const TaskDetailt = () => {
 		setIsCommentsActive(val1);
 		setIActivyActive(val2);
 	}
-	//useEffect(() => {
-	//	document.addEventListener('keydown', (event) => {
-	//		if(event.code === 'Escape'){
-	//			history.push(location.state.prevPath);
-	//		}
-	//	});
-	//// eslint-disable-next-line
-	//},[])
-	useEffect(() =>{
-		let hendler = (event) =>{
+	useEffect(() => {
+		let hendler = (event) => {
 			if(event.code === 'Escape'){
 				history.push(location.state.prevPath);
 			}
 		}
-		document.addEventListener("keydown", hendler)
+		document.addEventListener('keydown', hendler);
 		return () =>{
 			document.removeEventListener("keydown", hendler)
-		};	
-	});
+		}
+	//eslint-disable-next-line
+	},[])
 	return (
 		<TransitionGroup component={null}>
 		<Router>
@@ -115,7 +94,7 @@ const TaskDetailt = () => {
 				{taskEdit && <div className="task-detail__body" onClick={e => e.stopPropagation()}>
 				<header className="task-detail__header">
 					<h2 className="task-detail__title">{t("taskDetails")}</h2>
-					<span className="fas fa-times close" onClick={close}></span>
+					<button className="fas fa-times close" onClick={close}></button>
 				</header>
 				{toogleEdit ? 
 					<div className="task-detail__overview">
@@ -147,7 +126,7 @@ const TaskDetailt = () => {
 									isDayClass={isDayClass}
 									isSelectDayOpen={isSelectDayOpen}
 									isDay={isDay}
-									date={date}
+									date={location.state.task.date}
 									handlerSetDate={changeDate}
 									isSelectDay={isSelectDay}
 									handlerSelectValueDay={handlerSelectValueDay}
@@ -157,8 +136,9 @@ const TaskDetailt = () => {
 						</div>
 						<div className="task-detail__actions">	
 							<Priority 
+								task={taskEdit}
 								isSelecPriority={isSelecPriority} 
-								isPriorityClass={priority === 4 ? '' : `priority-${priority}`}
+								isPriorityClass={location.state.task.priority === 4 ? '' : `priority-${location.state.task.priority}`}
 								handlerSelectValuePriority={handlerSelectValuePriority}
 								setIsSelectPriorityOpen={handlerPriorityOpen}
 								isSelectPriorityOpen={isSelectPriorityOpen}
@@ -192,7 +172,7 @@ const TaskDetailt = () => {
 						>{t("activity")}</button>
 					</div>
 					<CSSTransition key=".1" in={isCommentsActive} timeout={{enter:400,exit:0}} classNames="move-back" unmountOnExit>
-						<CommentDetails taskId={id}/>
+						<CommentDetails taskId={taskEdit.id}/>
 					</CSSTransition>
 					<CSSTransition key=".2" in={isActivyActive} timeout={{enter:400,exit:0}} classNames="move-back" unmountOnExit>
 						<ActivyDetails task={taskEdit}/>

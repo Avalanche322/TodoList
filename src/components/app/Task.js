@@ -30,7 +30,7 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 	const handlerLinkToDetails = () => {
 		history.push({
 			pathname: `task/${task.id}`,
-			state: { background: location, prevPath: location.pathname }
+			state: { background: location, prevPath: location.pathname, task: task }
 		})
 	}
 	function changeDay(date){
@@ -91,11 +91,11 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 						>{commentsCount}</Link> : null}
 					</div>
 				</div>
-				<div className="main__task-action">
+				<div>
 					<button 
 						data-tip={t("editTask")} 
 						onClick={handlerTaskEdit.bind(null)} 
-						className="far fa-edit btn-action"
+						className="far fa-edit btn-action main__task-action"
 					></button>
 					<ReactTooltip 
 						effect="solid" 

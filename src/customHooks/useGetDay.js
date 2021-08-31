@@ -22,12 +22,11 @@ const useGetDay = () => {
 		setIsDayClass(classValue);
 		setDateEdit(date);
 		setRerenderComponnent({}); // rerender component
-		if(task){
+		if(task){ // change task date and add to local tasks array
 			task.date = date;
 			for (let i = 0; i < tasks.length; i++) {
 				if(tasks[i].id === task.id){
 					tasks.splice(i,1,task);
-					//break
 				}
 			}
 			localStorage.setItem('tasks', JSON.stringify(tasks));

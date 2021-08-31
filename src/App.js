@@ -1,5 +1,4 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import Loader from "./components/app/Loader";
 import NonLandingPages from "./pages/NonLandingPages";
@@ -12,27 +11,9 @@ const SingUp = React.lazy(() => import("./pages/SingUp"));
 const SingIn = React.lazy(() => import("./pages/SingIn"));
 function App() {
 	const {loader, currentUser} = useAuth();
-	const [mouseDown, setMouseDown] = useState(true);
-	useEffect(() =>{	// remove outline Tab	
-		let hendler = () => setMouseDown(true)
-		document.addEventListener("mousedown", hendler)
-		return () =>{
-			document.removeEventListener("mousedown", hendler)
-		};	
-	});
-	useEffect(() =>{	// add outline Tab			
-		let hendler = (event) =>{
-			if(event.code === 'Tab'){
-				setMouseDown(false);
-			}
-		}
-		document.addEventListener("keydown", hendler)
-		return () =>{
-			document.removeEventListener("keydown", hendler)
-		};	
-	});
+
 	return ( 
-		<div className={`App ${mouseDown ? 'mousedown' : ''}`}>
+		<div className="App">
 				<CSSTransition 
 					in={loader && !!currentUser} 
 					timeout={400}

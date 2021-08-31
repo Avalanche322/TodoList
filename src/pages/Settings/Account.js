@@ -138,9 +138,9 @@ const Account = ({close,handlerActiveSidebar}) => {
 	return (
 		<form className="settings__form" onSubmit={Update}>
 			<header className="settings__header">
-				<span className="fas fa-arrow-left main-back" onClick={handlerActiveSidebar.bind(null, true)}></span>
+				<button type="button" className="fas fa-arrow-left main-back" onClick={handlerActiveSidebar.bind(null, true)}></button>
 				<h2 className="settings__title">{t("account")}</h2>
-				<span className="fas fa-times close" onClick={close}></span>
+				<button type="button" className="fas fa-times close" onClick={close}></button>
 			</header>
 			<div className="settings__account settings__container">
 				{/**Photo*/}

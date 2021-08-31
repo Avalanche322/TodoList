@@ -46,9 +46,9 @@ const DeleteAccount = ({close,back}) => {
 	return (
 		<form onSubmit={handleSubmit} className="settings__form">
 			<header className="settings__header">
-				<span className="fas fa-arrow-left back" onClick={back}></span>
+				<button type="button" className="fas fa-arrow-left back" onClick={back}></button>
 				<h2 className="settings__title">{t("deleteAccount")}</h2>
-				<span className="fas fa-times close" onClick={close}></span>
+				<button type="button" className="fas fa-times close" onClick={close}></button>
 			</header>
 			<div className="settings__delete settings__container">
 				<div className="settings__block">

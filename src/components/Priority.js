@@ -3,10 +3,13 @@ import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
 import Context from "../contexts/context";
 
-const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,setIsSelectPriorityOpen,isSelectPriorityOpen,handlerSetPriority}) => {
+const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,setIsSelectPriorityOpen,isSelectPriorityOpen,handlerSetPriority,task}) => {
 	const {settings} = useContext(Context);
 	let selectPriorityRef = useRef();
 	const { t } = useTranslation();
+	function handlerItemPriority(selecPriority){
+		handlerSelectValuePriority(selecPriority.classValue, selecPriority.priority,handlerSetPriority, task)
+	}
 	useEffect(() =>{		
 		let hendler = (event) =>{
 			if(!selectPriorityRef.current.contains(event.target)){
@@ -18,6 +21,18 @@ const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,se
 			document.removeEventListener("mousedown", hendler)
 		};	
 	});
+	useEffect(() => {
+		let hendler = (event) => {
+			if(event.code === 'Escape'){
+				setIsSelectPriorityOpen(false);
+			}
+		}
+		document.addEventListener('keydown', hendler);
+		return () =>{
+			document.removeEventListener("keydown", hendler)
+		}
+	//eslint-disable-next-line
+	},[])
 	function handlerIsActive(){
 		setIsSelectPriorityOpen(!isSelectPriorityOpen);
 		if(settings.vibration) navigator.vibrate(10); // togle vibration
@@ -33,12 +48,12 @@ const Priority = ({isSelecPriority,isPriorityClass,handlerSelectValuePriority,se
 			<ul className={`priority__list drop-down__list ${isSelectPriorityOpen ? "open" : "hidden"}`}>
 				{isSelecPriority.map(selecPriority =>{
 					return (
-					<li tabIndex="1"
-						onClick={handlerSelectValuePriority.bind(null,selecPriority.classValue, selecPriority.priority,handlerSetPriority)}
-						// pass handlerSetPriority for update local state edit			
+					<li 
+						tabIndex="1"
+						onClick={handlerItemPriority.bind(null,selecPriority)}
+						onKeyDown={(e) => e.key === "Enter" ?  handlerItemPriority(selecPriority) : null}
 						key={selecPriority.id}
-						className={`priority__item 
-							${selecPriority.classValue === isPriorityClass ? 'focus' : ''}`}>
+						className={`priority__item ${selecPriority.classValue === isPriorityClass ? 'focus' : ''}`}>
 						<span 
 							className={`priority__priority fas fa-flag ${selecPriority.classValue}`}>
 						{t("priority")} {selecPriority.priority}</span>

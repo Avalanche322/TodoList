@@ -31,6 +31,10 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 		setIsSelectDayOpen(!isSelectDayOpen);
 		if(settings.vibration) navigator.vibrate(15); // togle vibration
 	}
+	function handlerItemDay(selectDay){
+		handlerSelectValueDay(selectDay.day,selectDay.date,selectDay.classValue,handlerSetDate,task); // pass handlerSetDate for update local state edit
+		setInputDate(converToFullDate(selectDay.date));
+	}
 	useEffect(() =>{		
 		let hendler = (event) =>{
 			if(!selectDayRef.current.contains(event.target)){
@@ -55,19 +59,20 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 		setIsDay(converToFullDate(date));
 	// eslint-disable-next-line
 	},[])
-	useEffect(() =>{			
-		let hendler = (event) =>{
+	useEffect(() => {
+		let hendler = (event) => {
 			if(event.code === 'Escape'){
 				setIsSelectDayOpen(false);
 				setInputDate(converToFullDate(date));
 				setIsInputDate(false);
 			}
 		}
-		document.addEventListener("keydown", hendler)
+		document.addEventListener('keydown', hendler);
 		return () =>{
 			document.removeEventListener("keydown", hendler)
-		};	
-	});
+		}
+	//eslint-disable-next-line
+	},[])
 	return (
 		<div ref={selectDayRef} className="day">
 			<button 
@@ -98,10 +103,8 @@ const Day = ({setIsSelectDayOpen,isDayClass,isSelectDayOpen,isDay,handlerSetDate
 						<li
 							tabIndex="1"
 							key={selectDay.id}
-							onClick={() =>{
-								handlerSelectValueDay(selectDay.day,selectDay.date,selectDay.classValue,handlerSetDate,task); // pass handlerSetDate for update local state edit
-								setInputDate(converToFullDate(selectDay.date));
-							}}>
+							onClick={handlerItemDay.bind(null,selectDay)}
+							onKeyDown={(e) => e.key === "Enter" ?  handlerItemDay(selectDay) : null}>
 							<span className={`day__day ${selectDay.classValue}`}>{t(selectDay.day)}</span> 
 							<span className="day__date">{converToFullDate(selectDay.date)}</span>
 						</li>)

@@ -143,12 +143,13 @@ const NavigationList = ({isActive,setIsActive}) => {
 							</div>
 					</div>
 					</NavLink>
-					<i 
-						className="fas fa-sign-out-alt profile__logo" 
+					<button
+						type="button" 
+						className="fas fa-sign-out-alt profile__logout" 
 						onClick={handleLogout.bind(null)}
 						date-place="right"
 						data-for="tooltip-aside"
-						data-tip={t("logout")}></i>
+						data-tip={t("logout")}></button>
 				</div>
 		</>
 	);

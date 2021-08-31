@@ -49,7 +49,6 @@ const Header = ({isActive, setIsActive}) => {
 					className="tooltip"
 					arrowColor="transparent" />
 			</header>
-			{isActive && <div className="overlay-bg"></div>}
 		</>
 	);
 }

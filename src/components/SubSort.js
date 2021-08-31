@@ -43,7 +43,7 @@ const SubSort = ({selectItemSort,setSelectItemSort,project}) => {
 				className={`fas fa-long-arrow-alt-${selectItemSort[project]?.sort_order === "desc" ? "up" : "down"} main-sort__btn-reverse`}
 				onClick={handlerReverse.bind(null,selectItemSort[project]?.sort_order)}></button>
 			<span className="main-sort__sub-name">{t(`sortedBy${selectItemSort[project]?.sorted_by}`)}</span>
-			<span className="fas fa-times close" onClick={handlerClose.bind(null)}></span>
+			<button className="fas fa-times close" onClick={handlerClose.bind(null)}></button>
 		</div>
 	);
 }

@@ -26,7 +26,18 @@ const Sort = ({selectItemSort,setSelectItemSort,project}) => {
 			document.removeEventListener("mousedown", hendler)
 		};	
 	});
-
+	useEffect(() => {
+		let hendler = (event) => {
+			if(event.code === 'Escape'){
+				setIsSortOpen(false);
+			}
+		}
+		document.addEventListener('keydown', hendler);
+		return () =>{
+			document.removeEventListener("keydown", hendler)
+		}
+	//eslint-disable-next-line
+	},[])
 	async function handlerSetSelectedItem(item){
 		try{
 			const obj = {
@@ -51,7 +62,12 @@ const Sort = ({selectItemSort,setSelectItemSort,project}) => {
 			<ul className={`main-sort__list ${isSortOpen ? "open" : "hidden"}`}>
 				{sortItem.map(item =>{
 					return(
-						<li className={`main-sort__item ${item.sorted_by === selectItemSort[project]?.sorted_by ? 'focus' : ''}`} key={item.id} onClick={handlerSetSelectedItem.bind(null,item)}>
+						<li 
+							className={`main-sort__item ${item.sorted_by === selectItemSort[project]?.sorted_by ? 'focus' : ''}`} 
+							key={item.id}
+							tabIndex="1"
+							onClick={handlerSetSelectedItem.bind(null,item)}
+							onKeyDown={(e) => e.key === "Enter" ?  handlerSetSelectedItem(item) : null}>
 							<span className={`main-sort__name ${item.classValue}`}>{t(item.name)}</span>
 							{ item.sorted_by === selectItemSort[project]?.sorted_by ? <span className="check fas fa-check"></span> : null}
 						</li>

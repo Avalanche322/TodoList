@@ -27,6 +27,7 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 	const [body, setBody] = useState('');
 	const quickAddTasRef = useRef(null);
 	const { t } = useTranslation();
+	const [isQuickComment, setIsQuickComment] = useState(false);
 	
 	function handlerDefault() {
 		setBody('');
@@ -70,27 +71,20 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 			}
 		}
 	})
-	//useEffect(() => {
-	//	document.addEventListener('keydown', (event) => {
-	//		if(event.code === 'Escape'){
-	//			handlerCancel();
-	//		}
-	//	});
-	////eslint-disable-next-line
-	//},[])	
-	useEffect(() =>{	// add outline Tab
-		if(isOpen){
-			let hendler = (event) =>{
+	useEffect(() => {
+		if(isOpen && !isSelectPriorityOpen && !isSelectDayOpen && !isQuickComment){
+			let hendler = (event) => {
 				if(event.code === 'Escape'){
 					handlerCancel();
 				}
 			}
-			document.addEventListener("keydown", hendler)
+			document.addEventListener('keydown', hendler);
 			return () =>{
 				document.removeEventListener("keydown", hendler)
-			};	
+			}
 		}
-	});
+	//eslint-disable-next-line
+	})
 	return (
 		<CSSTransition 
 			in={isOpen}
@@ -121,7 +115,7 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 							: null}
 								<div className="textarea__block">
 									<Day
-										handlerInputDateSubmit = {handlerInputDateSubmit}
+										handlerInputDateSubmit={handlerInputDateSubmit}
 										setIsSelectDayOpen={setIsSelectDayOpen} 
 										isDayClass={isDayClass} 
 										isSelectDayOpen={isSelectDayOpen}
@@ -138,7 +132,11 @@ const QuickAddTask = ({isOpen, handlerIsOpen}) => {
 											handlerSelectValuePriority={handlerSelectValuePriority}
 											setIsSelectPriorityOpen={handlerPriorityOpen}
 											isSelectPriorityOpen={isSelectPriorityOpen}/>
-										<Comment comment={comment} setComment={handlerSetComment}/>
+										<Comment 
+											comment={comment}
+											setComment={handlerSetComment}
+											isQuickComment={isQuickComment}
+											setIsQuickComment={setIsQuickComment} />
 									</div>
 								</div>
 							</div>
