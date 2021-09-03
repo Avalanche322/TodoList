@@ -8,15 +8,15 @@ This project is currently done. Users can sing up and sing in with Google or ema
 
 ## Project Screen Shots
 
-![home page](src/img/readmi/Screenshot_1.png)
+![home page](src/img/markdown/Screenshot_1.png)
 
-![quick add task](src/img/readmi/quick-add-task.gif)
+![quick add task](src/img/markdown/quick-add-task.gif)
 
-![settings](src/img/readmi/settings.gif)
+![settings](src/img/markdown/settings.gif)
 
-![context menu](src/img/readmi/context-menu.gif)
+![context menu](src/img/markdown/context-menu.gif)
 
-![task details](src/img/readmi/task-details.gif)
+![task details](src/img/markdown/task-details.gif)
 
 ![swipe sidebar](src/img/swipe-menu.gif)
 
@@ -27,6 +27,8 @@ Open [https://todol-dev.firebaseapp.com/](https://todol-dev.firebaseapp.com/) to
 Clone down this repository. You will need firebase account and `node`, `npm` installed globally on your machine.
 
 Installation:
+
+![how download](src/img/markdown/how-download.gif)
 
 Clone repository
 
