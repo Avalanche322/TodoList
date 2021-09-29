@@ -907,7 +907,7 @@ body {
   line-height: 18px;
 }
 .dialog__block:not(:last-child) {
-  margin-bottom: 20px;
+  margin-bottom: 80px;
 }
 .dialog__container {
   overflow: auto;
