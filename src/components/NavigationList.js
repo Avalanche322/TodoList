@@ -53,7 +53,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 						<NavLink 
 							className="sidebar__link" 
 							activeClassName="sidebar__link_active" 
-							exact to="/"
+							exact to="/home"
 							date-place="right"
 							onClick={handlerMobileMenu}
 							data-for="tooltip-aside"
@@ -96,8 +96,8 @@ const NavigationList = ({isActive,setIsActive}) => {
 							className="sidebar__link" 
 							activeClassName="sidebar__link_active"
 							to={{
-								pathname: "/settings/account",
-								state: { background: location, prevPath: location.pathname },
+								pathname: `${location.pathname}/settings/account`,
+								state: { prevPath: location.pathname },
 							}}
 							date-place="right"
 							onClick={handlerMobileMenu}

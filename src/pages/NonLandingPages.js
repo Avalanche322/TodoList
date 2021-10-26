@@ -28,7 +28,6 @@ const NonLandingPages  = () => {
 	const {theme,setTheme} = useTheme();
 	const [isActiveHeader, setIsActiveHeader] = useState(false); // sidebar header
 	let location = useLocation(); // location for settings and task details
-	let background = location.state && location.state.background;
 	const [, setRerenderComponnent] = useState({}); // rerender component
 	const swipe = useSwipeable({
 		onSwipedRight: () => {
@@ -50,13 +49,15 @@ const NonLandingPages  = () => {
 					{isNewUserDialog && <ModalBox setIsNewUserDialog={setIsNewUserDialog} isNewUserDialog={isNewUserDialog} />}
 					{windowSize.width <= 768 ? <Header isActive={isActiveHeader} setIsActive={setIsActiveHeader}/> : <Sidebar/>}
 					<main className="main" {...swipe}>
-						<Switch location={background || location}>
-							<Route exact path="/" component={Home} />
-							<Route exact path="/inbox" component={Inbox} />
+						<Switch>
+							<Route path="/home" component={Home} />
+							<Route path="/inbox" component={Inbox} />
 							<Route path="*" component={NotFound}/>
 						</Switch>
-						{background && <Route path= "/settings/account" component={Settings}/>}
-						{background && <Route path={`/task/:id`} component={TaskDetails}/>}
+						<Route path={`${location.state?.prevPath}/settings`}>
+							<Settings prevPath={location.state?.prevPath}/>
+						</Route>
+						<Route path={`${location.state?.prevPath}/task/:id`} component={TaskDetails}/>
 						{isActiveHeader && <div className="overlay-bg"></div>}
 					</main>
 				</div> 	

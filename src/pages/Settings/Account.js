@@ -7,7 +7,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { useContext } from "react";
 import Context from "../../contexts/context";
 
-const Account = ({close,handlerActiveSidebar}) => {
+const Account = ({close,handlerActiveSidebar,prevPath}) => {
 	const {currentUser,changeName,uploadAvatar,removeAvatar,LinkInGoogle,isProviderPasswordUser,isProviderGoogle,unlinkGoogle,googleAccount} 
 	= useAuth();
 	const {settings} = useContext(Context);
@@ -193,7 +193,7 @@ const Account = ({close,handlerActiveSidebar}) => {
 					<div className="settings-account__group settings__group">
 						<span className="settings__text">{currentUser.email}</span>
 						<Link 
-							to="/settings/account/email" 
+							to={`${prevPath}/settings/email`} 
 							className="settings-account__btn"
 							onClick={handlerLinkVibration}
 						>{t("changeEmail")}</Link>
@@ -203,7 +203,7 @@ const Account = ({close,handlerActiveSidebar}) => {
 				<div className="settings-account__block settings__block">
 					<h3 className="settings__subtitle">{t("password")}</h3>
 						<Link 
-							to="/settings/account/password" 
+							to={`${prevPath}/settings/password`}
 							className="settings-account__btn"
 							onClick={handlerLinkVibration}
 						>{t("changePassword")}</Link>
@@ -222,7 +222,7 @@ const Account = ({close,handlerActiveSidebar}) => {
 						{!isPasswordProvider && <div className="settings-account__group settings__group">
 							<p className="settings__text">
 								<Trans i18nKey="connectedAccountsInfo2">
-									Your password is not set, so we cannot disconnect you from your Google account. If you want to disconnect, please <Link to="/settings/account/password" className="settings__link">set up your password</Link> first.
+									Your password is not set, so we cannot disconnect you from your Google account. If you want to disconnect, please <Link to={`${prevPath}/settings/password`} className="settings__link">set up your password</Link> first.
 								</Trans>
 							</p>
 						</div>}
@@ -246,7 +246,7 @@ const Account = ({close,handlerActiveSidebar}) => {
 					<div className="settings-account__group settings__group">
 						<span className="settings__text">{t("permanentlyDeleteAccountText")}</span>
 						<Link 
-							to="/settings/account/delete" 
+							to={`${prevPath}/settings/delete`} 
 							className="settings-account__btn btn-red"
 							onClick={handlerLinkVibration}
 						>{t("permanentlyDeleteAccount")}</Link>

@@ -26,7 +26,7 @@ const NotFound = () => {
 				{t("notFoundPart1")}
 				<p>
 					<Trans i18nKey="notFoundPart2">
-						Let's go <Link to="/" className="btn-cancel" onClick={handlerGoHome}>home</Link> and try from there.
+						Let's go <Link to="/home" className="btn-cancel" onClick={handlerGoHome}>home</Link> and try from there.
 					</Trans>
 				</p>
 			</div>

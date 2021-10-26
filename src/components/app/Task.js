@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { memo, useContext } from "react";
 import { useHistory, useLocation } from "react-router";
 import Context from "../../contexts/context";
@@ -29,7 +28,7 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 	}
 	const handlerLinkToDetails = () => {
 		history.push({
-			pathname: `task/${task.id}`,
+			pathname: `${location.pathname}/task/${task.id}`,
 			state: { background: location, prevPath: location.pathname, task: task }
 		})
 	}
@@ -39,7 +38,6 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 			date
 		});
 	}
-
 	/* Select day*/
 	const {isSelectDayOpen,isSelectDay,isDay,handlerSelectValueDay,setIsDay,setIsDayClass,setIsSelectDayOpen,handlerInputDateSubmit} = useGetDay();
 
@@ -83,12 +81,11 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 									setIsDay={setIsDay}
 									setIsDayClass={setIsDayClass}/>
 						}
-						{commentsCount ? <Link to={{	
-							pathname: `task/${task.id}/comments`, 
-							state: { background: location, prevPath: location.pathname }}} 
+						{commentsCount ? <button
+							onClick={handlerLinkToDetails.bind(null)}
 							type="button" 
 							className="far fa-comment-alt btn"
-						>{commentsCount}</Link> : null}
+						>{commentsCount}</button> : null}
 					</div>
 				</div>
 				<div>

@@ -1,5 +1,5 @@
 import React ,{ memo, useContext, useState, useEffect } from "react";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router";
 import {BrowserRouter as Router, Switch, NavLink, Route} from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useTranslation } from "react-i18next";
@@ -11,15 +11,14 @@ import ChangePassword from "./Settings/ChangePassword";
 import DeleteAccount from "./Settings/DeleteAccount";
 import Context from "../contexts/context";
 
-const Settings = () => {
+const Settings = ({prevPath}) => {
 	const {settings} = useContext(Context);
 	const [isActiveSidebar, setIsActiveSidebar] = useState(false);
 	const history = useHistory();
 	const { t } = useTranslation();
-	let location = useLocation();
 	const close = e => {
 		e.stopPropagation();
-		history.push(location.state.prevPath);
+		history.push(prevPath);
 		if(settings.vibration) navigator.vibrate(8); // togle vibration
 	};
 	const back = e => {
@@ -44,7 +43,7 @@ const Settings = () => {
 	useEffect(() => {
 		let hendler = (event) => {
 			if(event.code === 'Escape'){
-				history.push(location.state.prevPath);
+				history.push(prevPath);
 			}
 		}
 		document.addEventListener('keydown', hendler);
@@ -72,7 +71,7 @@ const Settings = () => {
 									<NavLink 
 										className="settings-sidebar__item" 
 										activeClassName="settings-sidebar__item_active" 
-										to="/settings/account"
+										to={`${prevPath}/settings/account`}
 										onClick={handlerActiveSidebar.bind(null, false)}>
 										<i className="far fa-user-circle settings-sidebar__logo"></i>
 										<span className="">{t("account")}</span>
@@ -82,7 +81,7 @@ const Settings = () => {
 									<NavLink 
 										className="settings-sidebar__item" 
 										activeClassName="settings-sidebar__item_active" 
-										to="/settings/genneral"
+										to={`${prevPath}/settings/genneral`}
 										onClick={handlerActiveSidebar.bind(null, false)}>
 										<i className="fas fa-cog settings-sidebar__logo"></i>
 										<span className="">{t("general")}</span>	
@@ -93,27 +92,27 @@ const Settings = () => {
 						<div className="settings__content">
 							<TransitionGroup component={null}>
 								<Switch>
-									<Route exact path="/settings/account" >
+									<Route path={`${prevPath}/settings/account`} >
 										<CSSTransition in={true} key=".1" timeout={600} classNames="move-back" unmountOnExit>
-											<Account close={close} handlerActiveSidebar={handlerActiveSidebar} />
+											<Account prevPath={prevPath} close={close} handlerActiveSidebar={handlerActiveSidebar} />
 										</CSSTransition>
 									</Route>
-									<Route exact path="/settings/genneral">
+									<Route path={`${prevPath}/settings/genneral`}>
 										<CSSTransition in={true} key=".2" timeout={600} classNames="move-back" unmountOnExit>
 											<General close={close} handlerActiveSidebar={handlerActiveSidebar} />
 										</CSSTransition>
 									</Route>
-									<Route exact path="/settings/account/email">
+									<Route path={`${prevPath}/settings/email`}>
 										<CSSTransition in={true} key=".3" timeout={600} classNames="move-back" unmountOnExit>
 											<ChangeEmail close={close} back={back} handlerActiveSidebar={handlerActiveSidebar} />
 										</CSSTransition>
 									</Route>
-									<Route exact path="/settings/account/password">
+									<Route path={`${prevPath}/settings/password`}>
 										<CSSTransition in={true} key=".4" timeout={600} classNames="move-back" unmountOnExit>
 											<ChangePassword close={close} back={back} handlerActiveSidebar={handlerActiveSidebar} />
 										</CSSTransition>
 									</Route>
-									<Route exact path="/settings/account/delete">
+									<Route path={`${prevPath}/settings/delete`}>
 										<CSSTransition in={true} key=".5" timeout={600} classNames="move-back" unmountOnExit>
 											<DeleteAccount close={close} back={back} handlerActiveSidebar={handlerActiveSidebar} />
 										</CSSTransition>
