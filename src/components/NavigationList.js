@@ -129,7 +129,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 						className="profile__link"
 						tabIndex={!isActive ? '-1' : '0'}
 						to={{
-							pathname: "/settings/account",
+							pathname: `${location.pathname}/settings/account`,
 							state: { background: location, prevPath: location.pathname },
 						}}
 						onClick={handlerMobileMenu}>

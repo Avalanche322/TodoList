@@ -1,6 +1,6 @@
 import { useState} from "react";
 import { useSwipeable } from "react-swipeable";
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import {ThemeProvider} from "styled-components";
 import { useLocation } from "react-router";
 import Sidebar from "../components/app/Sidebar";
@@ -18,7 +18,7 @@ import ModalBox from "../components/app/ModalBox";
 import { useAuth } from "../contexts/AuthContext";
 
 const NonLandingPages  = () => {
-	const {setIsNewUserDialog,isNewUserDialog} = useAuth();
+	const {setIsNewUserDialog,isNewUserDialog, currentUser} = useAuth();
 	const settings = JSON.parse(localStorage.getItem('settings'));
 	const comments = JSON.parse(localStorage.getItem('comments'));
 	const [tasks,setTasks] = useState(JSON.parse(localStorage.getItem('tasks')) );
@@ -50,6 +50,17 @@ const NonLandingPages  = () => {
 					{windowSize.width <= 768 ? <Header isActive={isActiveHeader} setIsActive={setIsActiveHeader}/> : <Sidebar/>}
 					<main className="main" {...swipe}>
 						<Switch>
+							<Route
+								exact
+								path="/"
+								render={() => {
+									return (
+										currentUser ?
+										<Redirect to="/home" /> :
+										<Redirect to="/" /> 
+									)
+								}}
+							/>
 							<Route path="/home" component={Home} />
 							<Route path="/inbox" component={Inbox} />
 							<Route path="*" component={NotFound}/>
