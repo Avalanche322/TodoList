@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
 import Context from "../contexts/context";
@@ -34,4 +34,4 @@ const NotFound = () => {
 	);
 }
  
-export default NotFound;
+export default memo(NotFound);

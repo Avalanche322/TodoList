@@ -25,12 +25,12 @@ const Home = () => {
 	})
 	return (
 		<>
-			<div className="main__content container">
+			<section className="main__content container">
 				<div className="main__header">
-					<h1 className="main__title">
+					<h2 className="main__title">
 						<span>{t("today")}</span>
 						<small>{converToFullDate(today())}</small>
-					</h1>
+					</h2>
 					<Sort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
 				</div>
 					{JSON.stringify(selectItemSort?.home) !== '{}' && 
@@ -49,7 +49,7 @@ const Home = () => {
 					}}/>
 				}
 				<AddTask/>
-			</div>
+			</section>
 			{taskListToday && !countTaskToday && !addForm ? 
 				<div className="main__day-of">
 					<i className="far fa-smile main-day-of__logo"></i>

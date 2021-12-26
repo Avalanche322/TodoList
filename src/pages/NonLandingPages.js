@@ -57,7 +57,7 @@ const NonLandingPages  = () => {
 									return (
 										currentUser ?
 										<Redirect to="/home" /> :
-										<Redirect to="/" /> 
+										<Redirect to="/prevue" /> 
 									)
 								}}
 							/>

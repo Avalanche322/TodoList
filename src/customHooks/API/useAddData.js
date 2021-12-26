@@ -14,7 +14,7 @@ const useAddData = () => {
 	const {countTaskAll} = useGetCountTasks();
 	function addTask(body,date,priority,comment){
 		try{
-			if(countTaskAll < 500){
+			if(countTaskAll < 200){
 				const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`);
 				//const tasks = JSON.parse(localStorage.getItem('tasks'));
 				const task = {
@@ -32,7 +32,7 @@ const useAddData = () => {
 				if(settings.vibration) navigator.vibrate(10); // togle vibration
 				addTaskComment(comment,insertData.key);
 			} else{
-				throw new Error('Limit task is 500');
+				throw new Error('Limit task is 200');
 			}
 		} catch(e){
 			alert(e.message)
@@ -40,7 +40,7 @@ const useAddData = () => {
 	}
 	function addTaskComment(text,taskId){
 		try{
-			if(comments.length < 500){
+			if(comments.length < 200){
 				if(text){
 					const taskCommentRef = firebase.database().ref(`users/${currentUser.uid}/comments`);
 					const comment = {
@@ -55,7 +55,7 @@ const useAddData = () => {
 					if(settings.vibration) navigator.vibrate(10); // togle vibration
 				}
 			} else{
-				throw new Error('Limit comments is 500');
+				throw new Error('Limit comments is 200');
 			}
 		} catch(e){
 			alert(e.message);

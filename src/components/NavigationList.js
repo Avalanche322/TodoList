@@ -24,7 +24,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 		try {
 			await logout();
 			if(settings.vibration) navigator.vibrate(200); // togle vibration
-			history.push("/singin");
+			history.push("/prevue");
 			window.location.reload();
 		} catch(e) {
 			alert(e.message);
@@ -108,49 +108,61 @@ const NavigationList = ({isActive,setIsActive}) => {
 						</NavLink>
 					</li>
 				</ul>
-				<div className="stats">
-					<h2 className="stats__title">Stats</h2>
-					<div className="stats__count-task" 
+				<div className="sidebar__stats stats-sidebar">
+					<h2 className="stats-sidebar__title sidebar__subtitle">Stats</h2>
+					<div className="stats-sidebar__count-task" 
 						data-for="tooltip-aside"
 						data-tip={!isActive ? `${t("completedTasksToday")} ${(countCompletedToday ?? "0")}`: ""}> 
-						<i className="fas fa-calendar-week stats__logo"></i>
+						<i className="fas fa-calendar-week stats-sidebar__logo"></i>
 						<span>{t("completedTasksToday")} {countCompletedToday ?? "0"}</span>
 					</div>
-					<div className="stats__count-task"
+					<div className="stats-sidebar__count-task"
 						data-for="tooltip-aside"
 						data-tip={!isActive ? `${t("completedAllTasks")} ${(countCompletedAll ?? "0")}`: ""}> 
-						<i className="fas fa-tasks stats__logo"></i>
+						<i className="fas fa-tasks stats-sidebar__logo"></i>
 						<span>{t("completedAllTasks")} {countCompletedAll ?? "0"}</span>
 					</div>
 				</div>
-			</div>
-			<div className="profile">
-					<NavLink
-						className="profile__link"
-						tabIndex={!isActive ? '-1' : '0'}
-						to={{
-							pathname: `${location.pathname}/settings/account`,
-							state: { background: location, prevPath: location.pathname },
-						}}
-						onClick={handlerMobileMenu}>
-						<div className="profile__body">
-							<div className="profile__img avatar">
-								<img src={currentUser.photoURL} alt="" />
-							</div>
-							<div className="profile__details">
-								<strong className="profile__name">{currentUser.displayName}</strong>
-								<p className="profile__email">{currentUser.email}</p>
-							</div>
-					</div>
-					</NavLink>
-					<button
-						type="button" 
-						className="fas fa-sign-out-alt profile__logout" 
-						onClick={handleLogout.bind(null)}
-						date-place="right"
+				<div className='sidebar__help help-sidebar'>
+					<h2 className="stats-sidebar__title sidebar__subtitle">Help</h2>
+					<NavLink 
+						exact to="/help" 
+						className='help-sidebar__btn' 
+						target='_blank'
 						data-for="tooltip-aside"
-						data-tip={t("logout")}></button>
+						data-tip={!isActive ? t("openHelpInformation") : ""}>
+						<i className="far fa-question-circle help-sidebar__logo"></i> 
+						<span className='help-sidebar__text'>{t("openHelpInformation")}</span>
+					</NavLink>
 				</div>
+			</div>
+			<div className="sidebar__profile profile-sidebar">
+				<NavLink
+					className="profile-sidebar__link"
+					tabIndex={!isActive ? '-1' : '0'}
+					to={{
+						pathname: `${location.pathname}/settings/account`,
+						state: { background: location, prevPath: location.pathname },
+					}}
+					onClick={handlerMobileMenu}>
+					<div className="profile-sidebar__body">
+						<div className="profile-sidebar__img avatar">
+							<img src={currentUser.photoURL} alt="" />
+						</div>
+						<div className="profile-sidebar__details">
+							<strong className="profile-sidebar__name">{currentUser.displayName}</strong>
+							<p className="profile-sidebar__email">{currentUser.email}</p>
+						</div>
+				</div>
+				</NavLink>
+				<button
+					type="button" 
+					className="fas fa-sign-out-alt profile-sidebar__logout" 
+					onClick={handleLogout.bind(null)}
+					date-place="right"
+					data-for="tooltip-aside"
+					data-tip={t("logout")}></button>
+			</div>
 		</>
 	);
 }

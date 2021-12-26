@@ -1,5 +1,5 @@
 import { useAuth } from '../contexts/AuthContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import logo from '../img/logo.png'
@@ -97,4 +97,4 @@ const SingIn = () => {
 	);
 }
  
-export default SingIn;
+export default memo(SingIn);

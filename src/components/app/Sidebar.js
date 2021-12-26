@@ -16,7 +16,7 @@ const Sidebar = () => {
 	return (
 		<aside className={`sidebar ${isActive  ? "sidebar__active" : ""}`}>
 			<div className="sidebar__header">
-				<h2 className="sidebar__logo">The best TodoList</h2>
+				<h1 className="sidebar__logo">The best TodoList</h1>
 				<div tabIndex="1" className="sidebar__humburger"
 					onClick={handlerSidebar.bind(null)}
 					onKeyDown={(e) => e.key === "Enter" ?  handlerSidebar() : null}

@@ -91,5 +91,14 @@
 	"DesktopTaskCompleteTone": "Desktop Task complete tone",
 	"MobileTaskCompleteTone":"Mobile Task complete tone",
 	"PlaySoundWhenTaskCompleted":"Play a sound when tasks are completed.",
-	"YouCanAddCommentsForYourTask": "You can add comments for your task"
+	"YouCanAddCommentsForYourTask": "You can add comments for your task",
+	"help": "Help",
+	"informationForNewUser": "Information for new user",
+	"openHelpInformation": "Open help & information",
+	"swipeMenu": "Swipe menu for mobile",
+	"swipeMenuInform": "You can also close and open the menu by pressing the button or swipe left and right.",
+	"contexMenu": "Contex menu for mobile",
+	"contexMenuInform": "You can edit, prioritize, date and delete tasks by right-clicking or holding on the touch device.",
+	"soundVibration": "Sound & vibration",
+	"soundVibrationInform": "In default vibration and sound for mobile turn on, you can also turn off them."
 }

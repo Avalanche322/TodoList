@@ -6,6 +6,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import { useAuth } from "./contexts/AuthContext";
 import ForgotPassword from "./pages/ForgotPassord";
 import { CSSTransition } from "react-transition-group";
+import Help from "./pages/Help";
+import Prevue from "./pages/Prevue";
 
 const SingUp = React.lazy(() => import("./pages/SingUp"));
 const SingIn = React.lazy(() => import("./pages/SingIn"));
@@ -41,6 +43,18 @@ function App() {
 							<React.Suspense fallback={ <Loader/>}>
 								<ForgotPassword/> {/* Forgot Password */}
 							</React.Suspense> }/>
+							<Route 
+								path="/help" 
+								component={() => 
+								<React.Suspense fallback={ <Loader/>}>
+									<Help/> {/* Help */}
+								</React.Suspense> }/>
+							<Route 
+								path="/prevue" 
+								component={() => 
+								<React.Suspense fallback={ <Loader/>}>
+									<Prevue/> {/* Help */}
+								</React.Suspense> }/>
 						<PrivateRoute component={() => {
 							return (
 								!loader && <NonLandingPages/>

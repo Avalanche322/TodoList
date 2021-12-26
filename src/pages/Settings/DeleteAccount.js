@@ -27,7 +27,7 @@ const DeleteAccount = ({close,back}) => {
 			await deleteAccount(currentPassword);
 			setCurrentPassword("");
 			if(settings.vibration) navigator.vibrate(500); // togle vibration
-			history.push('/singin');
+			history.push('/prevue');
 			window.location.reload()
 		} catch(error){
 			setLoading(false);

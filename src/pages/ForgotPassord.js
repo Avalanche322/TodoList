@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import logo from "../img/logo.png";
 import { useAuth } from '../contexts/AuthContext';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 const ForgotPassword = () => {
 	const {resetPassword} = useAuth();
@@ -56,4 +56,4 @@ const ForgotPassword = () => {
 	);
 }
  
-export default ForgotPassword;
+export default memo(ForgotPassword);

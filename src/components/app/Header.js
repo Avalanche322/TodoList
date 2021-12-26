@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, memo } from 'react';
 import NavigationList from '../NavigationList';
 import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
@@ -53,4 +53,4 @@ const Header = ({isActive, setIsActive}) => {
 	);
 }
  
-export default Header;
+export default memo(Header);

@@ -21,9 +21,9 @@ const Inbox = () => {
 	})
 	return (
 		<>
-			<div className="main__content container">
+			<section className="main__content container">
 				<div className="main__header">
-					<h1 className="main__title"><span>{t("inbox")}</span></h1>
+					<h2 className="main__title"><span>{t("inbox")}</span></h2>
 					<Sort selectItemSort={selectItemSort} setSelectItemSort={setSelectItemSort} project={page} />
 				</div>
 				{JSON.stringify(selectItemSort?.inbox) !== '{}' && 
@@ -39,7 +39,7 @@ const Inbox = () => {
 					)}
 				/>}
 				<AddTask/>
-			</div>
+			</section>
 			{tasks && !countTaskAll && !addForm ? 
 				<div className="main__day-of">
 					<i className="fas fa-poo main-day-of__logo"></i>

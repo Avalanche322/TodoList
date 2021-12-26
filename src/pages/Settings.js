@@ -63,7 +63,7 @@ const Settings = ({prevPath}) => {
 					<div className="settings__body" onClick={e => e.stopPropagation()}>
 						<div className={`settings__sidebar ${isActiveSidebar ? "active" : ""}`}>
 							<header className="settings-sidebar__header">
-								<h1 className="settings__title">{t("settings")}</h1>
+								<h2 className="settings__title">{t("settings")}</h2>
 								<button type="button" className="fas fa-times close" onClick={handlerActiveSidebar.bind(null)}></button>
 							</header>
 							<ul className="settings-sidebar__menu">

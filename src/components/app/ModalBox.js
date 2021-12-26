@@ -2,10 +2,12 @@ import swipeGifMain from "../../img/swipe-menu.gif";
 import swipeGifSettings from "../../img/swipe-menu-settings.gif";
 import contextMenuMobile from "../../img/context-menu-mobile.gif"
 import soundVibration from "../../img/sound-vibration.png";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, memo } from "react";
+import { useTranslation } from "react-i18next";
 
 const ModalBox = ({setIsNewUserDialog,isNewUserDialog}) => {
 	const modalBoxRef = useRef();
+	const { t } = useTranslation();
 	function close (){
 		setIsNewUserDialog(false);
 	}
@@ -26,37 +28,37 @@ const ModalBox = ({setIsNewUserDialog,isNewUserDialog}) => {
 		<div className="dialog">
 			<div className="dialog__body" ref={modalBoxRef}>
 				<header className="dialog__header">
-					<h2 className="dialog__title">Information for new user</h2>
+					<h2 className="dialog__title">{t("informationForNewUser")}</h2>
 					<span className="fas fa-times close" onClick={close}></span>
 				</header>
-					<div className="dialog__container">
-						<div className="dialog__block">
-						<h3 className="dialog__sub-title">Swipe menu for mobile</h3>
+				<div className="dialog__container">
+					<div className="dialog__block">
+						<h3 className="dialog__sub-title">{t("swipeMenu")}</h3>
 						<div>
-							<p className="dialog__text">You can also close and open the menu by pressing the button or swipe left and right.</p>
+							<p className="dialog__text">{t("swipeMenuInform")}</p>
 							<div className="dialog__gif">
-								<img src={swipeGifMain} alt="swipe gif" />
+								<img src={swipeGifMain} loading='lazy' alt="swipe gif" />
 							</div>
 							<div className="dialog__gif">
-								<img src={swipeGifSettings} alt="swipe gif" />
+								<img src={swipeGifSettings} loading='lazy' alt="swipe gif" />
 							</div>
 						</div>
 					</div>
 					<div className="dialog__block">
-						<h3 className="dialog__sub-title">Contex menu for mobile</h3>
+						<h3 className="dialog__sub-title">{t("contexMenu")}</h3>
 						<div>
-							<p className="dialog__text">You can edit, prioritize, date and delete tasks by right-clicking or holding on the touch device</p>
+							<p className="dialog__text">{t("contexMenuInform")}</p>
 							<div className="dialog__gif">
-								<img src={contextMenuMobile} alt="context menu for mobile" />
+								<img src={contextMenuMobile} loading='lazy' alt="context menu for mobile" />
 							</div>
 						</div>
 					</div>
 					<div className="dialog__block">
-						<h3 className="dialog__sub-title">Sound & vibration</h3>
+						<h3 className="dialog__sub-title">{t("soundVibration")}</h3>
 						<div>
-							<p className="dialog__text">In default vibration and sound for mobile turn on, you can also turn off them.</p>
+							<p className="dialog__text">{t("soundVibrationInform")}</p>
 							<div className="dialog__img">
-								<img src={soundVibration} alt="sound & vibration" />
+								<img src={soundVibration} loading='lazy' alt="sound & vibration" />
 							</div>
 						</div>
 					</div>
@@ -66,4 +68,4 @@ const ModalBox = ({setIsNewUserDialog,isNewUserDialog}) => {
 	);
 }
  
-export default ModalBox;
+export default memo(ModalBox);

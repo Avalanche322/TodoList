@@ -1,6 +1,6 @@
 import TextareaAutosize from "react-textarea-autosize";
 import { useTranslation } from "react-i18next";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import Context from "../../contexts/context";
 import useEditData from "../../customHooks/API/useEditData";
 
@@ -66,4 +66,4 @@ const EditComment = ({editComment,setEditComment,setComments}) => {
 	);
 }
  
-export default EditComment;
+export default memo(EditComment);
