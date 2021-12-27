@@ -1,4 +1,5 @@
 import { useState, useEffect, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import logo from '../img/logo.png'
@@ -6,6 +7,7 @@ import googleIcon from '../img/google-icon.png';
 import { useAuth } from '../contexts/AuthContext';
 
 const SingUp = () => {
+	const {t} = useTranslation();
 	const {singup,singInWithGoogle} = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -66,19 +68,19 @@ const SingUp = () => {
 					<div className="sing-up__logo">
 						<img src={logo} alt="logo" />
 					</div>
-					<h2 className="sing-up__title title">Sing Up</h2>
+					<h2 className="sing-up__title title">{t('singUp')}</h2>
 					{error && <strong className="fas fa-exclamation-circle denger">{error}</strong>}
 				</div>
 				<button className="btn-submit sing-in__btn-social" onClick={handleSubmitWithGoogle.bind()} disabled={loading}>
 						<img className="sing-in__img-social" src={googleIcon} alt="Google Icon" />
-						Continue with Google
+						{t('continueWithGoogle')}
 				</button>
 				<div className="sing-up__or">
-					<span>OR</span>
+					<span>{t('or')}</span>
 				</div>
 				<form onSubmit={handleSubmit} className="sing-up__form">
 					<div className="sing-up__group">
-						<label className="sing-up__label" htmlFor="email">Email</label>
+						<label className="sing-up__label" htmlFor="email">{t('email')}</label>
 						<div className="sing-up__input input">
 							<input 
 								onChange={handlerInputEmail}
@@ -88,7 +90,7 @@ const SingUp = () => {
 						</div>
 					</div>
 					<div className="sing-up__group">
-						<label className="sing-up__label" htmlFor="name">Your Name</label>
+						<label className="sing-up__label" htmlFor="name">{t('name')}</label>
 						<div className="sing-up__input input" >
 							<input 
 								onChange={handlerInputName}
@@ -98,7 +100,7 @@ const SingUp = () => {
 						</div>
 					</div>
 					<div className="sing-up__group">
-						<label className="sing-up__label" htmlFor="password">Password</label>
+						<label className="sing-up__label" htmlFor="password">{t('password')}</label>
 						<div className="input">
 							<input 
 								onChange={handlerInputPass}
@@ -111,10 +113,10 @@ const SingUp = () => {
 								onClick={setIsShowPassword.bind(null,!isShowPassword)}></button>
 						</div>
 					</div>
-					<button type="submit" className="btn-submit sing-up__btn-submit" disabled={loading}>Sing Up</button>
+					<button type="submit" className="btn-submit sing-up__btn-submit" disabled={loading}>{t('singUp')}</button>
 				</form>
-				<p className="sing-up__link">Already have account? <Link to="/singin" className="link-reset-password">Sing In</Link></p>
-				<p className="sing-up__link"><Link to="/forgotPassword" className="link-reset-password">Forgot your password?</Link></p>
+				<p className="sing-up__link">{t('alreadyHaveAccount')} <Link to="/singin" className="link-reset-password">{t('singIn')}</Link></p>
+				<p className="sing-up__link"><Link to="/forgotPassword" className="link-reset-password">{t('ForgotPassword')}</Link></p>
 			</div>
 		</div>
 	);

@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import logo from '../../img/logo.png'
 
 const Footer = () => {
-	const {i18n} = useTranslation();
+	const {i18n, t} = useTranslation();
 	const {updateSettings, currentUser} = useAuth();
 	let settings = JSON.parse(localStorage.getItem('settings')) ?? {};
 	const handlerChangeLanguege = (e) =>{
@@ -28,7 +28,7 @@ const Footer = () => {
 					<div className="footer__content top-footer__content">
 						<div className="top-footer__short">
 							<img src={logo} alt="logo" className='top-footer__logo' />
-							<p className='top-footer__text'>Stay up-to-date on all things TodoList by following us on social media.</p>
+							<p className='top-footer__text'>{t('topFooterTitle')}</p>
 							<div>
 								<Link className='top-footer__link fab fa-twitter' to='https://twitter.com/?lang=uk'></Link>
 								<Link className='top-footer__link fab fa-telegram-plane' to='https://web.telegram.org/z/'></Link>
@@ -38,28 +38,28 @@ const Footer = () => {
 						</div>
 						<div className="top-footer__blocks">
 							<div className="top-footer__block block-top-footer">
-								<h3 className='block-top-footer__title'>FEATURES</h3>
-								<Link className='block-top-footer__link' to='/help'>How It Works</Link>
-								<Link className='block-top-footer__link' to='/help'>For Teams</Link>
-								<Link className='block-top-footer__link' to='/help'>Pricing</Link>
-								<Link className='block-top-footer__link' to='/help'>Templates</Link>
+								<h3 className='block-top-footer__title'>{t('features')}</h3>
+								<Link className='block-top-footer__link' to='/help'>{t('howItWorks')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('forTeams')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('pricing')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('templates')}</Link>
 							</div>
 							<div className="top-footer__block block-top-footer">
-								<h3 className='block-top-footer__title'>RESOURCES</h3>
-								<Link className='block-top-footer__link' to='/help'>Download Apps</Link>
-								<Link className='block-top-footer__link' to='/help'>Help Center</Link>
-								<Link className='block-top-footer__link' to='/help'>Productivity Methods</Link>
-								<Link className='block-top-footer__link' to='/help'>Refer a friend</Link>
-								<Link className='block-top-footer__link' to='/help'>Integrations</Link>
-								<Link className='block-top-footer__link' to='/help'>Channel Partners</Link>
+								<h3 className='block-top-footer__title'>{t('resources')}</h3>
+								<Link className='block-top-footer__link' to='/help'>{t('downloadApps')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('helpCenter')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('productivityMethods')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('referFriend')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('integrations')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('channelPartners')}</Link>
 							</div>
 							<div className="top-footer__block block-top-footer">
-								<h3 className='block-top-footer__title'>COMPANY</h3>
-								<Link className='block-top-footer__link' to='/help'>About Us</Link>
-								<Link className='block-top-footer__link' to='/help'>We are hiring!</Link>
-								<Link className='block-top-footer__link' to='/help'>Blog</Link>
-								<Link className='block-top-footer__link' to='/help'>Press</Link>
-								<Link className='block-top-footer__link' to='/help'>Twist</Link>
+								<h3 className='block-top-footer__title'>{t('company')}</h3>
+								<Link className='block-top-footer__link' to='/help'>{t('aboutUs')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('weAreHiring')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('blog')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('press')}</Link>
+								<Link className='block-top-footer__link' to='/help'>{t('twist')}</Link>
 							</div>
 						</div>
 					</div>
@@ -67,9 +67,9 @@ const Footer = () => {
 				<div className="footer__bottom bottom-footer">
 					<div className="footer__content">
 						<div className="bottom-footer__list">
-							<Link to='/help' className='bottom-footer__item'>Security</Link> 
-							<Link to='/help' className='bottom-footer__item'>Privacy</Link> 
-							<Link to='/help' className='bottom-footer__item'>Terms</Link> 
+							<Link to='/help' className='bottom-footer__item'>{t('security')}</Link> 
+							<Link to='/help' className='bottom-footer__item'>{t('privacy')}</Link> 
+							<Link to='/help' className='bottom-footer__item'>{t('terms')}</Link> 
 							<Link 
 								to='https://github.com/Avalanche322' 
 								className='bottom-footer__item'

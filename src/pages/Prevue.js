@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import ScrollAnimation from 'react-animate-on-scroll';
 import { Link } from 'react-router-dom';
-//import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Footer from '../components/app/Footer';
 import mainPageImg from '../img/markdown/Screenshot_1.png'
 import inboxPageImg from '../img/markdown/Screenshot_5.png'
@@ -9,7 +10,7 @@ import settingsPageImg from '../img/markdown/settings.gif'
 import taskDetailsPageImg from '../img/markdown/task-details.gif'
 
 const Prevue = () => {
-	//const {t} = useTranslation();
+	const {t} = useTranslation();
 	const [active, setActive] = useState(false);
 	useEffect(() => {
 		// title for page
@@ -23,7 +24,7 @@ const Prevue = () => {
 						<Link to='/prevue'>The best TodoList</Link>
 					</h2>
 					<div className={`header-prevue__menu ${active ? '_active' : ''}`}>
-						<Link className='header-prevue__link' to='/singin'>Log In</Link>
+						<Link className='header-prevue__link' to='/singin'>{t('singIn')}</Link>
 					</div>
 					<div
 						onClick={() => setActive(!active)}
@@ -117,7 +118,7 @@ const Prevue = () => {
 									values="
 										M0 350
 										C 473,283
-										822,200
+										1680,400
 										1920,116 
 
 										V 700 
@@ -127,7 +128,7 @@ const Prevue = () => {
 
 										M0 350
 										C 473,200
-										1222,423
+										1200,723
 										1920,136 
 
 										V 700 
@@ -137,7 +138,7 @@ const Prevue = () => {
 
 										M0 350
 										C 973,460
-										1722,203
+										1850,203
 										1920,120 
 
 										V 700
@@ -147,7 +148,7 @@ const Prevue = () => {
 
 										M0 350
 										C 473,283
-										822,200
+										1680,400
 										1920,116 
 
 										V 700 
@@ -160,8 +161,8 @@ const Prevue = () => {
 						</g>
 						<foreignObject width='100%' height='100%'>
 							<div className='waves-main-prevue__block'>
-								<h2 className='waves-main-prevue__title'>Organize it all with TodoList</h2>
-								<Link to='/singup' className='btn-submit main-prevue__btn'>Get started</Link>
+								<h2 className='waves-main-prevue__title'>{t('organizeTodoList')}</h2>
+								<Link to='/singup' className='btn-submit main-prevue__btn'>{t('getStarted')}</Link>
 							</div>
 						</foreignObject>
 					</svg>
@@ -170,9 +171,9 @@ const Prevue = () => {
 					<div className='main-prevue__section'>
 						<div className="main-prevue__content">
 							<div className='main-prevue__block'>
-								<p className="main-prevue__uppertitle">Global TodoList</p>
-								<h3 className='main-prevue__title'>Manage your to-do's from anywhere.</h3>
-								<p className='main-prevue__text'>Create and access your to-do lists from anywhere: desktop, mobile phone, or browser tab. Now you'll never miss an idea or forget what you need to do next.</p>
+								<p className="main-prevue__uppertitle">{t('globalTodoList')}</p>
+								<h3 className='main-prevue__title'>{t('manageYourToDo')}</h3>
+								<p className='main-prevue__text'>{t('globalTodoListText')}</p>
 							</div>
 							<ScrollAnimation 
 								animateIn='zoom'
@@ -180,7 +181,7 @@ const Prevue = () => {
 								initiallyVisible={true}
 								style={{opacity: '1'}}>
 								<div className='main-prevue__img'>
-									<img src={mainPageImg} alt="main page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={mainPageImg} alt="main page" loading="lazy" />
 								</div>
 							</ScrollAnimation>
 						</div>
@@ -188,9 +189,9 @@ const Prevue = () => {
 					<div className='main-prevue__section'>
 						<div className="main-prevue__content">
 							<div className='main-prevue__block'>
-								<p className="main-prevue__uppertitle">Customization</p>
-								<h3 className='main-prevue__title'>Create the perfect list for every need.</h3>
-								<p className='main-prevue__text'>You can make TodoList show what you want, how you want. Add formatting, coloring, and link items with assignees or tasks to transform lists into actionable workflows.</p>
+								<p className="main-prevue__uppertitle">{t('customization')}</p>
+								<h3 className='main-prevue__title'>{t('createPerfectList')}</h3>
+								<p className='main-prevue__text'>{t('customizationText')}</p>
 							</div>
 							<ScrollAnimation 
 									animateIn='zoom' 
@@ -198,7 +199,7 @@ const Prevue = () => {
 									initiallyVisible={true}
 									style={{opacity: '1'}}>
 								<div className='main-prevue__img'>
-									<img src={settingsPageImg} alt="settings page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={settingsPageImg} alt="settings page" loading="lazy" />
 								</div>
 							</ScrollAnimation>
 						</div>
@@ -206,9 +207,9 @@ const Prevue = () => {
 					<div className='main-prevue__section'>
 						<div className="main-prevue__content">
 							<div className='main-prevue__block'>
-								<p className="main-prevue__uppertitle">Organization</p>
-								<h3 className='main-prevue__title'>Never miss a task or idea again.</h3>
-								<p className='main-prevue__text'>TodoList Home view makes it easy to view and customize everything you need to work on. Set reminders, reschedule tasks, and assign priorities so you never lose anything again.</p>
+								<p className="main-prevue__uppertitle">{t('organization')}</p>
+								<h3 className='main-prevue__title'>{t('neverMissTask')}</h3>
+								<p className='main-prevue__text'>{t('organizationText')}</p>
 							</div>
 							<ScrollAnimation 
 								animateIn='zoom'
@@ -216,7 +217,7 @@ const Prevue = () => {
 								initiallyVisible={true}
 								style={{opacity: '1'}}>
 								<div className='main-prevue__img'>
-									<img src={inboxPageImg} alt="inbox page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={inboxPageImg} alt="inbox page" loading="lazy" />
 								</div>
 							</ScrollAnimation>
 						</div>
@@ -224,9 +225,9 @@ const Prevue = () => {
 					<div className='main-prevue__section'>
 						<div className="main-prevue__content">
 							<div className='main-prevue__block'>
-								<p className="main-prevue__uppertitle">Details task</p>
-								<h3 className='main-prevue__title'>Create clear action items for tasks.</h3>
-								<p className='main-prevue__text'>Add checklists to any task in TodoList to create clear processes for yourself</p>
+								<p className="main-prevue__uppertitle">{t('detailsTask')}</p>
+								<h3 className='main-prevue__title'>{t('CreateClearActionItems')}</h3>
+								<p className='main-prevue__text'>{t('detailsTaskText')}</p>
 							</div>
 							<ScrollAnimation 
 								animateIn='zoom' 
@@ -235,14 +236,14 @@ const Prevue = () => {
 								style={{opacity: '1'}}
 								>
 								<div className='main-prevue__img'>
-									<img src={taskDetailsPageImg} alt="task details page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={taskDetailsPageImg} alt="task details page" loading="lazy" />
 								</div>
 							</ScrollAnimation>
 						</div>
 					</div>
 					<div className="main-prevue__bottom bottom-main-prevue">
-						<h3 className='bottom-main-prevue__title'>Create clear action items for tasks.</h3>
-						<Link to='/singup' className='btn-submit main-prevue__btn'>Get Started</Link>
+						<h3 className='bottom-main-prevue__title'>{t('CreateClearActionItems')}</h3>
+						<Link to='/singup' className='btn-submit main-prevue__btn'>{t('getStarted')}</Link>
 					</div>
 				</div>
 			</div>

@@ -147,7 +147,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 					onClick={handlerMobileMenu}>
 					<div className="profile-sidebar__body">
 						<div className="profile-sidebar__img avatar">
-							<img src={currentUser.photoURL} alt="" />
+							<img src={currentUser.photoURL} alt="avatar" />
 						</div>
 						<div className="profile-sidebar__details">
 							<strong className="profile-sidebar__name">{currentUser.displayName}</strong>

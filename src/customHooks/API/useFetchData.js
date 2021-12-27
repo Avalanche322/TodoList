@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 const useFetchData = () => {
 	const [loader, setLoader] = useState(true);
 	const {i18n} = useTranslation();
+	const settings = JSON.parse(localStorage.getItem('settings'));
 	async function fetchData(user){
 		try{
 			const taskRef = firebase.database().ref(`users/${user.uid}/tasks`);
@@ -39,14 +40,16 @@ const useFetchData = () => {
 						localStorage.setItem('sort', JSON.stringify({home: {}, inbox:{}}));
 					}
 			})
-			await settingsRef.once('value', (snapshot) => {
-				const settingsVal = snapshot.val();	
-				if(settingsVal){
-					i18n.changeLanguage(settingsVal.language);
-					document.documentElement.lang = settingsVal.language; 
-					localStorage.setItem('settings', JSON.stringify(settingsVal));
-				}
-			})
+			if(settings){
+				await settingsRef.once('value', (snapshot) => {
+					const settingsVal = snapshot.val();	
+					if(!settingsVal){
+						i18n.changeLanguage(settingsVal.language);
+						document.documentElement.lang = settingsVal.language; 
+						localStorage.setItem('settings', JSON.stringify(settingsVal));
+					}
+				})
+			}
 			await taskCommentRef.once('value', (snapshot) =>{
 				const comments = snapshot.val();
 				const taskCommentListAll = [];
