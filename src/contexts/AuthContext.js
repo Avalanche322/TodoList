@@ -217,13 +217,15 @@ export function AuthProvider ({children}){
 			} else{
 				setCurrentUser(null);
 				localStorage.removeItem('User');
-				localStorage.removeItem('settings');
 				localStorage.removeItem('stats');
 				localStorage.removeItem('themes');
 				localStorage.removeItem('sort');
 				localStorage.removeItem('comments');
 				localStorage.removeItem('sidebar_on');
 				localStorage.removeItem('tasks');
+				// update language for prevue and help pages
+				let settings = JSON.parse(localStorage.getItem('settings'));
+				i18n.changeLanguage(settings?.language ?? 'en');
 				setLoading(false);
 			}
 		})

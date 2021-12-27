@@ -5,19 +5,23 @@ import { useAuth } from "../contexts/AuthContext";
 import Footer from "../components/app/Footer";
 
 const Help = () => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 	const {updateSettings, currentUser} = useAuth();
-	let settings = JSON.parse(localStorage.getItem('settings'));
+	let settings = JSON.parse(localStorage.getItem('settings')) ?? {};
 	const [active, setActive] = useState(false);
 	useEffect(() => {
 		// title for page
 		document.title = `${t("help")} | TodoList`;
 	})
 	const handlerChangeLanguege = (e) =>{
-		if(settings.vibration) navigator.vibrate(8); // togle vibration
 		try{
+			if(settings?.vibration) navigator.vibrate(8); // togle vibration
 			settings.language = e.target.value;
-			updateSettings(settings);
+			if(currentUser){
+				updateSettings(settings)
+			} else{
+				i18n.changeLanguage(settings.language);
+			}
 			localStorage.setItem('settings', JSON.stringify(settings));
 		}catch(e){
 			alert(e.message);

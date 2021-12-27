@@ -6,10 +6,10 @@ import logo from '../../img/logo.png'
 const Footer = () => {
 	const {i18n} = useTranslation();
 	const {updateSettings, currentUser} = useAuth();
-	let settings = JSON.parse(localStorage.getItem('settings'));
+	let settings = JSON.parse(localStorage.getItem('settings')) ?? {};
 	const handlerChangeLanguege = (e) =>{
-		if(settings.vibration) navigator.vibrate(8); // togle vibration
 		try{
+			if(settings?.vibration) navigator.vibrate(8); // togle vibration
 			settings.language = e.target.value;
 			if(currentUser){
 				updateSettings(settings)
