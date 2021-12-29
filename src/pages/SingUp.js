@@ -19,7 +19,7 @@ const SingUp = () => {
 
 	useEffect(() => {
 		// title for page
-		document.title = "SingUp | TodoList"
+		document.title = `${t('singUp')} | TodoList`
 	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();

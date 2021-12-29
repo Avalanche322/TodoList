@@ -93,8 +93,9 @@
 	"PlaySoundWhenTaskCompleted":"Play a sound when tasks are completed.",
 	"YouCanAddCommentsForYourTask": "You can add comments for your task",
 	"help": "Help",
+	"stats": "Stats",
 	"informationForNewUser": "Information for new user",
-	"openHelpInformation": "Open help & information",
+	"featuresNavigation": "Features",
 	"swipeMenu": "Swipe menu for mobile",
 	"swipeMenuInform": "You can also close and open the menu by pressing the button or swipe left and right.",
 	"contexMenu": "Contex menu for mobile",
@@ -142,5 +143,6 @@
 	"or": "or",
 	"needAccount": "Need an account?",
 	"singUp": "Sing Up",
-	"alreadyHaveAccount": "Already have account?"
+	"alreadyHaveAccount": "Already have account?",
+	"prevueTitle": "The do list to organize work & life"
 }

@@ -1,5 +1,4 @@
-import { memo, useState } from "react";
-import QuickAddTask from "./app/QuickAdTask";
+import { memo } from "react";
 import { NavLink } from "react-router-dom";
 import useGetCountTasks from '../customHooks/useGetCountTasks';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,7 +10,7 @@ import { useContext } from "react";
 
 const NavigationList = ({isActive,setIsActive}) => {
 	const {logout,currentUser} = useAuth();
-	const {settings} = useContext(Context);
+	const {settings, isQuickAddTaskOpen, handlerQuickAddTaskOpen, isDialogFeature, setDialogFeature} = useContext(Context);
 	const history = useHistory();
 	const {countTaskToday,countTaskAll,countTaskNoCompleted} = useGetCountTasks();
 	const location = useLocation();
@@ -20,6 +19,18 @@ const NavigationList = ({isActive,setIsActive}) => {
 	const stats = JSON.parse(localStorage.getItem('stats'));
 	const countCompletedToday = (stats && stats.days_items.total_completed + "");
 	const countCompletedAll = (stats && stats.completed_count + "");
+	function handlerActiveLink (val){
+		handlerQuickAddTaskOpen(val);
+		if(windowSize.width <= 768){
+			setIsActive(false);
+		}
+	}
+	function handlerHelpOpen (val){
+		setDialogFeature(val);
+		if(windowSize.width <= 768){
+			setIsActive(false);
+		}
+	}
 	async function handleLogout() {
 		try {
 			await logout();
@@ -28,17 +39,6 @@ const NavigationList = ({isActive,setIsActive}) => {
 			window.location.reload();
 		} catch(e) {
 			alert(e.message);
-		}
-	}
-	/*Quick Add Task Modal Box*/
-  	const [isQuickAddTaskOpen,setQuickAddTaskOpen] = useState(false);
-	function handlerQuickAddTaskOpen(val){
-		setQuickAddTaskOpen(val);
-		if(windowSize.width <= 768){
-			setIsActive(false);
-		}
-		if(val && settings.vibration){
-			navigator.vibrate(8); // togle vibration
 		}
 	}
 	function handlerMobileMenu(){
@@ -81,15 +81,15 @@ const NavigationList = ({isActive,setIsActive}) => {
 						<div 
 							tabIndex="0"
 							className="sidebar__link" 
-							onClick={handlerQuickAddTaskOpen.bind(null,!isQuickAddTaskOpen)}
-							onKeyDown={(e) => e.key === "Enter" ?  handlerQuickAddTaskOpen(!isQuickAddTaskOpen) : null}
+							onClick={handlerActiveLink.bind(null,!isQuickAddTaskOpen)}
+							onKeyDown={(e) => e.key === "Enter" ?  handlerActiveLink(!isQuickAddTaskOpen) : null}
 							date-place="right"
 							data-for="tooltip-aside"
 							data-tip={!isActive ? t("quickAddTask") : ""}>
 							<i className="fas fa-plus sidebar-link__logo"></i>
 							<span className="sidebar-link__title">{t("quickAddTask")}</span>
 						</div>
-						<QuickAddTask isOpen={isQuickAddTaskOpen} handlerIsOpen={handlerQuickAddTaskOpen}/>
+						
 					</li>
 					<li>
 						<NavLink 
@@ -109,7 +109,7 @@ const NavigationList = ({isActive,setIsActive}) => {
 					</li>
 				</ul>
 				<div className="sidebar__stats stats-sidebar">
-					<h2 className="stats-sidebar__title sidebar__subtitle">Stats</h2>
+					<h2 className="stats-sidebar__title sidebar__subtitle">{t('stats')}</h2>
 					<div className="stats-sidebar__count-task" 
 						data-for="tooltip-aside"
 						data-tip={!isActive ? `${t("completedTasksToday")} ${(countCompletedToday ?? "0")}`: ""}> 
@@ -124,16 +124,15 @@ const NavigationList = ({isActive,setIsActive}) => {
 					</div>
 				</div>
 				<div className='sidebar__help help-sidebar'>
-					<h2 className="stats-sidebar__title sidebar__subtitle">Help</h2>
-					<NavLink 
-						exact to="/help" 
-						className='help-sidebar__btn' 
-						target='_blank'
+					<h2 className="stats-sidebar__title sidebar__subtitle">{t('help')}</h2>
+					<button 
+						className='help-sidebar__btn'
 						data-for="tooltip-aside"
-						data-tip={!isActive ? t("openHelpInformation") : ""}>
+						onClick={handlerHelpOpen.bind(null, !isDialogFeature)}
+						data-tip={!isActive ? t("featuresNavigation") : ""}>
 						<i className="far fa-question-circle help-sidebar__logo"></i> 
-						<span className='help-sidebar__text'>{t("openHelpInformation")}</span>
-					</NavLink>
+						<span className='help-sidebar__text'>{t("featuresNavigation")}</span>
+					</button>
 				</div>
 			</div>
 			<div className="sidebar__profile profile-sidebar">

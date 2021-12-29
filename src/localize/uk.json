@@ -21,7 +21,7 @@
 	"changePassword":"Змінити пароль",
 	"password":"Пароль",
 	"connectedAccounts":"Підключені акауннти",
-	"logTodoListGoogle":"Увійдіть в TodoList за допомогою Google.",
+	"logTodoListGoogle":"Аутентифікований в TodoList за допомогою Google.",
 	"logInWithGoogle":"Увійдіть за допомогою Google",
 	"logOutWithGoogle":"Відключити акаунт Google",
 	"permanentlyDeleteAccount":"Остаточно видалити обліковий запис",
@@ -93,8 +93,9 @@
 	"PlaySoundWhenTaskCompleted":"Відтворювати звук після виконання завдань.",
 	"YouCanAddCommentsForYourTask": "Ви також можеет додати коментарі до вашого завдання",
 	"help": "Допомога",
+	"stats": "Статистика",
 	"informationForNewUser": "Інформація для нового користувача",
-	"openHelpInformation": "Отримати допомогу та інформацію",
+	"featuresNavigation": "Особливості",
 	"swipeMenu": "Гортання меню для мобільного телефону",
 	"swipeMenuInform": "Ви також можете закрити та відкрити меню, натиснувши кнопку або проведіть пальцем ліворуч і праворуч.",
 	"contexMenu": "Контекстне меню для мобільного",
@@ -142,5 +143,6 @@
 	"or": "або",
 	"needAccount": "Потрібен акаунт?",
 	"singUp": "Зареєструватися",
-	"alreadyHaveAccount": "Вже маєте акаунт?"
+	"alreadyHaveAccount": "Вже маєте акаунт?",
+	"prevueTitle": "Список справ для організації роботи та життя"
 }

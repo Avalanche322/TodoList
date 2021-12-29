@@ -14,7 +14,7 @@ const Prevue = () => {
 	const [active, setActive] = useState(false);
 	useEffect(() => {
 		// title for page
-		document.title = `TodoList: The do list to organize work & life`;
+		document.title = `TodoList: ${t('prevueTitle')}`;
 	})
 	return (
 		<section className='prevue'>
@@ -181,7 +181,7 @@ const Prevue = () => {
 								initiallyVisible={true}
 								style={{opacity: '1'}}>
 								<div className='main-prevue__img'>
-									<LazyLoadImage effect="opacity" src={mainPageImg} alt="main page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={mainPageImg} alt="main page" />
 								</div>
 							</ScrollAnimation>
 						</div>
@@ -199,7 +199,7 @@ const Prevue = () => {
 									initiallyVisible={true}
 									style={{opacity: '1'}}>
 								<div className='main-prevue__img'>
-									<LazyLoadImage effect="opacity" src={settingsPageImg} alt="settings page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={settingsPageImg} alt="settings page" />
 								</div>
 							</ScrollAnimation>
 						</div>
@@ -217,7 +217,7 @@ const Prevue = () => {
 								initiallyVisible={true}
 								style={{opacity: '1'}}>
 								<div className='main-prevue__img'>
-									<LazyLoadImage effect="opacity" src={inboxPageImg} alt="inbox page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={inboxPageImg} alt="inbox page" />
 								</div>
 							</ScrollAnimation>
 						</div>
@@ -236,7 +236,7 @@ const Prevue = () => {
 								style={{opacity: '1'}}
 								>
 								<div className='main-prevue__img'>
-									<LazyLoadImage effect="opacity" src={taskDetailsPageImg} alt="task details page" loading="lazy" />
+									<LazyLoadImage effect="opacity" src={taskDetailsPageImg} alt="task details page" />
 								</div>
 							</ScrollAnimation>
 						</div>

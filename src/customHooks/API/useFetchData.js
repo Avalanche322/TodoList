@@ -40,16 +40,21 @@ const useFetchData = () => {
 						localStorage.setItem('sort', JSON.stringify({home: {}, inbox:{}}));
 					}
 			})
-			if(settings){
-				await settingsRef.once('value', (snapshot) => {
-					const settingsVal = snapshot.val();	
-					if(!settingsVal){
+			await settingsRef.once('value', async (snapshot) => {
+				const settingsVal = snapshot.val();	
+				if(settingsVal){
+					if(settings?.language){
+						i18n.changeLanguage(settings.language);
+						document.documentElement.lang = settings.language;
+						await settingsRef.update({...settingsVal, ...settings});
+						localStorage.setItem('settings', JSON.stringify({...settingsVal, ...settings}));
+					} else {
 						i18n.changeLanguage(settingsVal.language);
 						document.documentElement.lang = settingsVal.language; 
 						localStorage.setItem('settings', JSON.stringify(settingsVal));
 					}
-				})
-			}
+				}
+			})
 			await taskCommentRef.once('value', (snapshot) =>{
 				const comments = snapshot.val();
 				const taskCommentListAll = [];

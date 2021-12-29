@@ -15,6 +15,7 @@ const Footer = () => {
 				updateSettings(settings)
 			} else{
 				i18n.changeLanguage(settings.language);
+				window.location.reload();
 			}
 			localStorage.setItem('settings', JSON.stringify(settings));
 		}catch(e){

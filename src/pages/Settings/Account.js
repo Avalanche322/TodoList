@@ -70,6 +70,7 @@ const Account = ({close,handlerActiveSidebar,prevPath}) => {
 			setLoading(true);
 			setIsUploadPhoto(false);
 			await removeAvatar();
+			setUserAvatar(currentUser.photoURL);
 			setLoading(false);
 			if(settings.vibration) navigator.vibrate(15); // togle vibration
 		} catch(e){

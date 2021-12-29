@@ -15,10 +15,12 @@ import Settings from "../pages/Settings";
 import NotFound from "../pages/NotFound";
 import TaskDetails from "./TaskDetails";
 import ModalBox from "../components/app/ModalBox";
+import QuickAddTask from "../components/app/QuickAdTask";
 import { useAuth } from "../contexts/AuthContext";
 
 const NonLandingPages  = () => {
-	const {setIsNewUserDialog,isNewUserDialog, currentUser} = useAuth();
+	const {isNewUserDialog, currentUser} = useAuth();
+	const [isDialogFeature, setDialogFeature] = useState(isNewUserDialog);
 	const settings = JSON.parse(localStorage.getItem('settings'));
 	const comments = JSON.parse(localStorage.getItem('comments'));
 	const [tasks,setTasks] = useState(JSON.parse(localStorage.getItem('tasks')) );
@@ -41,12 +43,21 @@ const NonLandingPages  = () => {
 			if(settings.vibration) navigator.vibrate(8);
 		},
 	});
+	/*Quick Add Task Modal Box*/
+  	const [isQuickAddTaskOpen,setQuickAddTaskOpen] = useState(false);
+	function handlerQuickAddTaskOpen(val){
+		setQuickAddTaskOpen(val);
+		if(val && settings.vibration){
+			navigator.vibrate(8); // togle vibration
+		}
+	}
 	return (
 		<ThemeProvider theme={theme}>
 			<GlobalStyles/>
-			<Context.Provider value={{addForm,setAddForm,taskEdit,setTaskEdit,theme,setTheme,settings,comments,tasks,setTasks,setRerenderComponnent,location}}>		
+			<Context.Provider value={{addForm,setAddForm,taskEdit,setTaskEdit,theme,setTheme,settings,comments,tasks,setTasks,setRerenderComponnent,location, isQuickAddTaskOpen, handlerQuickAddTaskOpen, setDialogFeature, isDialogFeature}}>		
 				<div className='wrapper'>
-					{isNewUserDialog && <ModalBox setIsNewUserDialog={setIsNewUserDialog} isNewUserDialog={isNewUserDialog} />}
+					<ModalBox setDialogFeature={setDialogFeature} isDialogFeature={isDialogFeature} />
+					<QuickAddTask isOpen={isQuickAddTaskOpen} handlerIsOpen={handlerQuickAddTaskOpen}/>
 					{windowSize.width <= 768 ? <Header isActive={isActiveHeader} setIsActive={setIsActiveHeader}/> : <Sidebar/>}
 					<main className="main" {...swipe}>
 						<Switch>
