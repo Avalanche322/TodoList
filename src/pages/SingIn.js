@@ -18,6 +18,7 @@ const SingIn = () => {
 	useEffect(() => {
 		// title for page
 		document.title = `${t('singIn')} | TodoList`
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();

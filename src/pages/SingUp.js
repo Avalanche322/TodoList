@@ -20,6 +20,7 @@ const SingUp = () => {
 	useEffect(() => {
 		// title for page
 		document.title = `${t('singUp')} | TodoList`
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	async function handleSubmit(e){
 		e.preventDefault();
