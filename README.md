@@ -8,17 +8,17 @@ This project is currently done. Users can sing up and sing in with Google or ema
 
 ## Project Screen Shots
 
-![home page](src/img/markdown/Screenshot_1.png)
+![home page](./src/assets/img/markdown/Screenshot_1.png)
 
-![quick add task](src/img/markdown/quick-add-task.gif)
+![quick add task](./src/assets/img/markdown/quick-add-task.gif)
 
-![settings](src/img/markdown/settings.gif)
+![settings](./src/assets/img/markdown/settings.gif)
 
-![context menu](src/img/markdown/context-menu.gif)
+![context menu](./src/assets/img/markdown/context-menu.gif)
 
-![task details](src/img/markdown/task-details.gif)
+![task details](./src/assets/img/markdown/task-details.gif)
 
-![swipe sidebar](src/img/swipe-menu.gif)
+![swipe sidebar](./src/assets/img/swipe-menu.gif)
 
 ## Installation and Setup Instructions
 
@@ -28,11 +28,11 @@ Clone down this repository. You will need firebase account and `node`, `npm` ins
 
 Installation:
 
-![how download](src/img/markdown/how-download.gif)
+![how download](./src/assets/img/markdown/how-download.gif)
 
 Clone repository
 
-`git clone https://github.com/Avalanche322/TodoList.git`  
+`git clone https://github.com/Avalanche322/TodoList.git`
 
 Open folder
 
@@ -54,11 +54,10 @@ REACT_APP_MESSAGING_SENDER_ID= MESSAGING SENDER ID <br />
 REACT_APP_APP_ID= APP ID <br />
 REACT_APP_MEASUREMENT_ID= MEASUREMENT ID <br />
 
-
 To Start Server:
 
-`npm run start`  
+`npm run start`
 
 To Visit App:
 
-`http://localhost:3000` 
+`http://localhost:3000`
