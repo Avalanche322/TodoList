@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import firebase from '../firebase';
-import profileImg from '../img/user2.png';
+import profileImg from '../assets/img/user.png';
 import useGetDate from '../customHooks/useGetDate';
-import themes from "../theme/schema.json";
+import themes from "../assets/theme/schema.json";
 import useFetchData from '../customHooks/API/useFetchData';
 
 const AuthContext = React.createContext()

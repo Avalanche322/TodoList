@@ -1,6 +1,6 @@
 import {useContext } from "react";
 import Context from "../contexts/context";
-import completedSound from '../sounds/completed.mp3' 
+import completedSound from '../assets/sounds/completed.mp3' 
 import useWindowSize from "./useWindowSize";
 
 const useAudio = () => {

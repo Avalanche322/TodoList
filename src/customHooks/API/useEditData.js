@@ -1,7 +1,7 @@
 import firebase from "../../firebase";
 import { useAuth } from '../../contexts/AuthContext';
 import { useContext } from "react";
-import Context from "../../contexts/context";
+import Context from '../../contexts/context';
 import useAddData from "./useAddData";
 import useDeleteData from "./useDeleteData";
 
