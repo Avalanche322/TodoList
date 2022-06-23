@@ -1,7 +1,7 @@
 import './settings.scss'
 
 import React ,{ memo, useContext, useState, useEffect } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import {BrowserRouter as Router, Switch, NavLink, Route} from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,7 @@ const Settings = ({prevPath}) => {
 	const {settings} = useContext(Context);
 	const [isActiveSidebar, setIsActiveSidebar] = useState(false);
 	const history = useHistory();
+	let location = useLocation();
 	const { t } = useTranslation();
 	const close = e => {
 		e.stopPropagation();
@@ -73,7 +74,10 @@ const Settings = ({prevPath}) => {
 									<NavLink 
 										className="settings-sidebar__item" 
 										activeClassName="settings-sidebar__item_active" 
-										to={`${prevPath}/settings/account`}
+										to={{
+											pathname: `${prevPath}/settings/account`,
+											state: { prevPath: location.state?.prevPath },
+										}}
 										onClick={handlerActiveSidebar.bind(null, false)}>
 										<i className="far fa-user-circle settings-sidebar__logo"></i>
 										<span className="">{t("account")}</span>
@@ -83,7 +87,10 @@ const Settings = ({prevPath}) => {
 									<NavLink 
 										className="settings-sidebar__item" 
 										activeClassName="settings-sidebar__item_active" 
-										to={`${prevPath}/settings/genneral`}
+										to={{
+											pathname: `${prevPath}/settings/genneral`,
+											state: { prevPath: location.state?.prevPath },
+										}}
 										onClick={handlerActiveSidebar.bind(null, false)}>
 										<i className="fas fa-cog settings-sidebar__logo"></i>
 										<span className="">{t("general")}</span>	

@@ -47,6 +47,7 @@ const General = ({close,handlerActiveSidebar}) => {
 				}
 			}
 			setIsUpdate(false);
+			document.title = `${t("general")} - ${t("settings")} | TodoList`;
 		}catch(e){
 			setError(e.message);
 		}
