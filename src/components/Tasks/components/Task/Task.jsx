@@ -29,7 +29,7 @@ const Task = ({task,page,setSelectTask,selectTask}) => {
 	const handlerLinkToDetails = () => {
 		history.push({
 			pathname: `${location.pathname}/task/${task.id}`,
-			state: { background: location, prevPath: location.pathname, task: task }
+			state: { background: location, prevPath: location.pathname, id: task.id }
 		})
 	}
 	function changeDay(date){

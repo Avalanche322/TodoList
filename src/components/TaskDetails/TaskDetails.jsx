@@ -20,10 +20,10 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import useDeleteData from "../../customHooks/API/useDeleteData";
 
 const TaskDetailt = () => {
-	const {settings} = useContext(Context);
+	const {settings, tasks} = useContext(Context);
 	let location = useLocation();
 	const [toogleEdit, setToogleEdit] = useState(true);
-	const [taskEdit, setTaskEdit] = useState(location.state.task);
+	const [taskEdit, setTaskEdit] = useState(tasks.filter(x => x.id === location.state.id)[0] ?? {});
 	const [isCommentsActive, setIsCommentsActive] = useState(true);
 	const [isActivyActive, setIActivyActive] = useState(false);
 	const history = useHistory();
@@ -40,6 +40,9 @@ const TaskDetailt = () => {
 		taskEdit ? document.title = `${taskEdit.body} | TodoList` : document.title = 'TodoList'
 	// eslint-disable-next-line
 	}, [taskEdit])
+	useEffect(() => {
+		setTaskEdit(tasks.filter(x => x.id === location.state.id)[0])
+	}, [tasks, toogleEdit, location.state.id])
 	function changeDate(date){
 		const taskRef = firebase.database().ref(`users/${currentUser.uid}/tasks`).child(taskEdit.id);
 		taskRef.update({
@@ -128,7 +131,7 @@ const TaskDetailt = () => {
 									isDayClass={isDayClass}
 									isSelectDayOpen={isSelectDayOpen}
 									isDay={isDay}
-									date={location.state.task.date}
+									date={taskEdit.date}
 									handlerSetDate={changeDate}
 									isSelectDay={isSelectDay}
 									handlerSelectValueDay={handlerSelectValueDay}
@@ -140,7 +143,7 @@ const TaskDetailt = () => {
 							<Priority 
 								task={taskEdit}
 								isSelecPriority={isSelecPriority} 
-								isPriorityClass={location.state.task.priority === 4 ? '' : `priority-${location.state.task.priority}`}
+								isPriorityClass={taskEdit.priority === 4 ? '' : `priority-${taskEdit.priority}`}
 								handlerSelectValuePriority={handlerSelectValuePriority}
 								setIsSelectPriorityOpen={handlerPriorityOpen}
 								isSelectPriorityOpen={isSelectPriorityOpen}
